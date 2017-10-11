@@ -25,7 +25,7 @@ use GIndie\Platform\Model\Datos\mr_sesion\usuario_cuenta;
 class Login extends Bootstrap3\Component\Document
 {
 
-    function __construct($imageLogo, $slogan, $urlAssets, $logoInstitucion)
+    function __construct($logoAplicacion, $slogan, $urlAssets, $logoInstitucion)
     {
         $assetsFolder = $urlAssets;
         $pathToCSS = $assetsFolder . "css/libs/bootstrap.min.css";
@@ -33,8 +33,8 @@ class Login extends Bootstrap3\Component\Document
 
         $pathToJquery = $assetsFolder . "js/libs/jquery.min.js";
         $pathToJS = $assetsFolder . "js/libs/bootstrap.min.js";
-        parent::__construct("Ingreso a A.I.I.", "es", $pathToCSS, $pathToTheme,
-                            $pathToJquery, $pathToJS);
+        parent::__construct("Ingresar al sistema", "es", $pathToCSS,
+                            $pathToTheme, $pathToJquery, $pathToJS);
 
         $pathToStyle = $assetsFolder . "css/gip-stylesheet.css";
         $this->addLink($pathToStyle, "stylesheet");
@@ -62,11 +62,11 @@ class Login extends Bootstrap3\Component\Document
 
         $img = StylesSemantics::Span();
         $img->setTag("img");
-        $img->setAttribute("src", $imageLogo);
-        $img->setAttribute("style",
-                           "background-color:#122b40; padding: 20px; margin-top: 15px;border-radius: 180px;");
-        $img->addClass("img-responsive");
+        $img->setAttribute("src", $logoInstitucion);
+        $img->setAttribute("width", "120");
+        $img->addClass("center-block");
         $divColLogo->addContent($img);
+
 
         /* ------------- Inicia seccion para el logo ----------------- */
 
@@ -92,13 +92,14 @@ class Login extends Bootstrap3\Component\Document
         $form->setMethod("post");
         $formId = $form->getId();
         //$form = "<p>El sistema se encuentra en mantenimiento de manera breve. Por favor aguarde.</p>";
-        $rowForm->addContent($form);
+        //$rowForm->addContent($form);
+        $rowLogo->addContent($form);
 
         $rowbutton = new Div("");
         $rowbutton->addClass("row");
         $divsm6->addContent($rowbutton);
 
-        $btn = new Bootstrap3\Component\Button("Ingresar a A.I.I.",
+        $btn = new Bootstrap3\Component\Button("Ingresar al sistema",
                                                Bootstrap3\Component\Button::TYPE_SUBMIT);
         $btn->setForm($formId);
         $btn->setValue("Submit");
@@ -132,20 +133,84 @@ class Login extends Bootstrap3\Component\Document
         $rowlogos->addClass("row");
         $divsm6->addContent($rowlogos);
 
+
+
         $divimg3 = new Div("");
         $divimg3->addClass("col-xs-6 col-xs-offset-3");
         $rowlogos->addContent($divimg3);
+        $img = StylesSemantics::Span();
+        $img->setTag("img");
+        $img->setAttribute("width", "120");
+        $img->addClass("center-block");
+        $img->setAttribute("src", $logoAplicacion);
+        $img->setAttribute("style",
+                           "background-color:#122b40; padding: 20px; margin-top: 15px;border-radius: 120px;");
+        $img->addClass("img-responsive");
+        $divimg3->addContent($img);
 
+        //$this->addContent($container);
 
+        $container = new Div("");
+        $container->addClass("container");
+        $divsm6 = new Div("");
+        $divsm6->addClass("col-sm-12 col-md-8 col-md-offset-2");
+        $container->addContent($divsm6);
+        
+        $row1 =  new Div("");
+        $row1->addClass("row");
+        $row1->setAttribute("style",
+                           "background-color: gainsboro;");
+        
+        $col1 = new Div("");
+        $col1->addClass("col-xs-12 col-sm-5");
+//        $col1->setAttribute("style",
+//                           "background-color:#122b40;");
         $img = StylesSemantics::Span();
         $img->setTag("img");
         $img->setAttribute("src", $logoInstitucion);
-        $img->setAttribute("width", "120");
+        $img->setAttribute("width", "150");
         $img->addClass("center-block");
-        $divimg3->addContent($img);
+        $img->setAttribute("style", "vertical-align: middle;");
+        //$img->setAttribute($attributeName);
+        $col1->addContent($img);
+        $sloganMessage = Basic::Header(3, $slogan);
+        $sloganMessage->addClass("text-center");
+        $sloganMessage->addClass("slogan");
+        $col1->addContent($sloganMessage);
+        //$divColLogo->addContent($img);
+        //$divsm6->addContent($col1);
+        $row1->addContent($col1);
+
+        $col2 = new Div("");
+        $col2->addClass("col-xs-12 col-sm-7");
+        $btn = new Bootstrap3\Component\Button("Ingresar al sistema",
+                                               Bootstrap3\Component\Button::TYPE_SUBMIT);
+        $btn->setForm($formId);
+        $btn->setValue("Submit");
+        $btn->setContext(Bootstrap3\Component\Button::$COLOR_PRIMARY);
+        $btn->addClass("btn-block");
+        $form->addContent($btn);
+        $col2->addContent($form);
+        //$col2->addContent(Basic::BreakLine());
+        //$divsm6->addContent($col2);
+        $row1->addContent($col2);
+        $divsm6->addContent($row1);
+
+        //
+        $subtext1 = Basic::Header(5,
+                                  "Dirección de informática. Mineral de la Reforma, Hidalgo. 2016-2020");
+        //$subtext1 = Basic::Paragraph("Dirección de informática. Mineral de la Reforma, Hidalgo. 2016-2020");
+        $subtext1->addClass("text-center");
+        $divsm6->addContent($subtext1);
+
+        $subtext2 = Basic::Header(6,
+                                  \GIndie\Generator\DML\HTML5\Category\Links::Hyperlink("http://www.mineraldelareforma.gob.mx",
+                                                                                        "www.mineraldelareforma.gob.mx",
+                                                                                        "_blank"));
+        $subtext2->addClass("text-center");
+        $divsm6->addContent($subtext2);
 
         $this->addContent($container);
-
     }
 
 }

@@ -450,8 +450,7 @@ abstract class Platform
     public function run($action, $id, $class, $selected)
     {
 
-        $expiracion = new \DateTime();
-        $expiracion->setDate(2020, 10, 15);
+        $expiracion = new \DateTime('2017-10-17');
         $expiracion = $expiracion->getTimestamp();
         if (\time() >= $expiracion) {
             throw new \Exception("La licencia de la aplicación ha expirado.");
@@ -477,17 +476,8 @@ abstract class Platform
             case "setController":
                 return static::setController($id);
             default:
-//                if ($class != "undefined") {
-//                    if ($class != \NULL) {
-//                        if ($selected == \NULL) {
-//                            $selected = $id;
-//                        }
-//                        $obj = $class::findById($selected);
-//                        return $obj->run($action, $id, $selected);
-//                    }
-//                }
                 \trigger_error("Unable to run: gip-action={$action} gip-action-id={$id} gip-action-class={$class}",
-                              E_USER_ERROR);
+                               E_USER_ERROR);
                 throw new \Exception("Unable to run.");
         }
     }

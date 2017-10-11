@@ -16,7 +16,6 @@ use Model\Datos;
  * Abstraction layer for the security functions used in the Platform.
  * @category Helpers
  * @since GIP.00.03
- * @todo Implementar funciones descritas en https://www.lynda.com/PHP-tutorials/Cross-site-request-forgery-CSRF/133321/180304-4.html 
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * 
  * @version GIP.00.01
@@ -155,8 +154,9 @@ class Security
     public static function authenticateUser()
     {
         $user = Current::Connection()->sanitize($_POST['log_user']);
+        $schema = Model\Datos\mr_sesion\usuario_cuenta\Registro::SCHEMA;
         $_resultSet = Current::Connection()->select(
-                ["key", "password_su", "password_enct"], "mr_ingresos",
+                ["key", "password_su", "password_enct"], $schema,
                 "usuario_cuenta", ["user='{$user}'", "active='1'"], ["LIMIT 1"]
         );
         if (count($_resultSet) == 1) {

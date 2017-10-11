@@ -246,7 +246,7 @@ abstract class Record implements RecordINT
             //return "CREADO";
         } catch (\GIndie\Platform\ExceptionMySQL $exc) {
             //
-            return \GIndie\Platform\ExceptionMySQL::handleException($exc);
+            return static::NAME . " " . \GIndie\Platform\ExceptionMySQL::handleException($exc);
         }
         //return $_resultSet;
         if ($_resultSet) {

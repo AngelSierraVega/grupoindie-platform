@@ -163,7 +163,8 @@ abstract class Module extends Platform implements ModuleINT
                 return new \GIndie\Platform\View\TableReport($_table);
             case "tableSearch":
                 $_table = $this->_searchTable($class);
-                return new \GIndie\Platform\View\Table($_table);
+                return new \GIndie\Platform\View\TablePagination($_table);
+            //return new \GIndie\Platform\View\Table($_table);
             case "get-input":
                 $record = $class::findById($_POST["gip-record-id"]);
                 $attribute = $record->getAttribute($id);
@@ -216,12 +217,8 @@ abstract class Module extends Platform implements ModuleINT
                 $form = static::_recordForm($record, $action);
                 break;
         }
-
         $form->setAttribute("gip-action-class", $class);
         $form->setAttribute("gip-action-id", $id);
-
-        //$actionName = "";
-        //$actionContext = "";
         switch ($action)
         {
             case "form-edit":
@@ -257,10 +254,7 @@ abstract class Module extends Platform implements ModuleINT
         $modalTitle = $actionName . " <b>" .
                 $record->getName() . "</b> <i>" .
                 $record->getDisplay() . "</i>";
-
-
         $modalContent = $this->_modalWrap($modalTitle, $form);
-        //$modalContent = new Bootstrap3\Component\Modal\Content($formTitle, $form);
         $btn = new Bootstrap3\Component\Button($actionName,
                                                Bootstrap3\Component\Button::TYPE_SUBMIT);
         $btn->setForm($form->getId())->setValue("Submit");
@@ -388,9 +382,6 @@ abstract class Module extends Platform implements ModuleINT
                 throw new \Exception("Unable to run.");
                 break;
         }
-        //}
-        //$obj = $class::findById($selected);
-        //return $record->run($action);
     }
 
     /**
@@ -410,7 +401,8 @@ abstract class Module extends Platform implements ModuleINT
                         $tmp = \explode(" a ", $_POST[$attrName]);
                         if (sizeof($tmp) > 1) {
                             $searchArray[] = $attrName . ">='$tmp[0]'";
-                            $searchArray[] = $attrName . "<='$tmp[1]'";
+                            $searchArray[] = $attrName . "<='" . $tmp[1] . ' 23:59:59' . "'";
+                            //
                         } else {
                             $searchArray[] = $attrName . " LIKE '%" . $_POST[$attrName] . "%'";
                         }
@@ -418,11 +410,11 @@ abstract class Module extends Platform implements ModuleINT
                     case \GIndie\Platform\Model\Attribute::TYPE_TIMESTAMP:
                         $tmp = \explode(" a ", $_POST[$attrName]);
                         if (sizeof($tmp) > 1) {
-                            $searchArray[] = $attrName . ">='".\strtotime($tmp[0])."'";
-                            $searchArray[] = $attrName . "<='".\strtotime($tmp[1])."'";
+                            $searchArray[] = $attrName . ">='" . \strtotime($tmp[0]) . "'";
+                            $searchArray[] = $attrName . "<='" . \strtotime($tmp[1] . " 23:59:59") . "'";
                         } else {
-                            $searchArray[] = $attrName . ">='".\strtotime($_POST[$attrName])."'";
-                            $searchArray[] = $attrName . "<'".\strtotime($_POST[$attrName]."+1 days")."'";
+                            $searchArray[] = $attrName . ">='" . \strtotime($_POST[$attrName]) . "'";
+                            $searchArray[] = $attrName . "<='" . \strtotime($_POST[$attrName] . " 23:59:59") . "'";
                         }
                         break;
                     default:

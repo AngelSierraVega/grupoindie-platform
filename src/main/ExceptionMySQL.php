@@ -37,10 +37,11 @@ class ExceptionMySQL extends \Exception
                 $rtnSrt .= "SD: " . $exc->getCode();
                 break;
         }
-
-//        $rtnSrt .= "<br><br> Error original: ";
-//        $rtnSrt .= \addslashes($exc->getMessage());
-//        $rtnSrt .= "<br>";
+        if (Current::hasRole(["AS"])) {
+            $rtnSrt .= "<br><br> Error original: ";
+            $rtnSrt .= \addslashes($exc->getMessage());
+            $rtnSrt .= "<br>";
+        }
         return $rtnSrt;
         //$rtnSrt .= "El registro no se puede eliminar.";
         //return $rtnSrt;

@@ -359,7 +359,7 @@ abstract class Connection
 //        }
         //var_dump($_strQuery);
         $result = $this->query($_strQuery);
-        
+
 //        var_dump($this->insert_id());
         return $result;
     }
@@ -408,6 +408,16 @@ abstract class Connection
     {
         //var_dump($this->_conection->insert_id);
         return $this->_conection->insert_id;
+    }
+
+    public static function getUser()
+    {
+        return static::$USERNAME;
+    }
+
+    public static function getPassword()
+    {
+        return static::$PASSWORD;
     }
 
 }

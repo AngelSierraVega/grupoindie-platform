@@ -511,7 +511,7 @@ class Placeholder
                     }
                     $form->addContent($tmpAttr);
                 }
-                $widget = new Widget("Búsqueda", \FALSE, $form,
+                $widget = new Widget("Búsqueda de ".$_classname::Name(), \FALSE, $form,
                                      "<div id='tempContent'></div>");
 //                $searchButton = Widget\Buttons::CustomDefault("<span class=\"glyphicon glyphicon-refresh\"></span>", "widget-reload", \NULL, \FALSE, \NULL);
 //                $searchButton->setForm($form->getId());

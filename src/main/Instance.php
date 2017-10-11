@@ -6,7 +6,7 @@
  *
  * @package Platform
  *
- * @version GIP.00.0?
+ * @version GIP.00.06
  */
 
 namespace GIndie;
@@ -20,7 +20,6 @@ use \GIndie\Generator\DML\HTML5;
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * @since GIP.00.00
- * @version GIP.00.05
  */
 abstract class Instance
 {
@@ -29,6 +28,25 @@ abstract class Instance
      * @since GIP.00.01
      */
     const CONFIG_CLASS = \NULL;
+    
+    /**
+     * Ruta real a las facturas
+     * @version GIP.00.06
+     */
+    public function appNombre()
+    {
+        $configClass = static::CONFIG_CLASS;
+        return $configClass::appNombre();
+    }
+    
+    /**
+     * Ruta real a las facturas
+     * @version GIP.00.06
+     */
+    public function urlInstitucion(){
+        $configClass = static::CONFIG_CLASS;
+        return $configClass::urlInstitucion();
+    }
 
     public function hostAplicacion()
     {
@@ -85,6 +103,8 @@ abstract class Instance
         $configClass = static::CONFIG_CLASS;
         return $configClass::urlRecibos();
     }
+    
+    
 
     /**
      * Ruta real a las facturas
@@ -471,14 +491,36 @@ abstract class Instance
             switch ($_SERVER["REQUEST_METHOD"])
             {
                 case "GET":
-                    $instance = new static();
-                    Platform\Current::setInstance($instance);
-                    Platform\Current::setInstance($instance);
-                    Platform\Current::setModule(new Platform\Controller\Module\Welcome());
-                    $_class = \NULL;
-                    $_action = "load";
-                    $_action_id = "document";
-                    $_selected_id = \NULL;
+                    if (isset($_GET["gip-action"])) {
+                        switch ($_GET["gip-action"])
+                        {
+                            case "descargar-pdf":
+                                $_class = \NULL;
+                                $_action = "descargar-pdf";
+                                $_action_id = \NULL;
+                                $_selected_id = \NULL;
+                                break;
+                            default:
+                                $instance = new static();
+                                Platform\Current::setInstance($instance);
+                                Platform\Current::setInstance($instance);
+                                Platform\Current::setModule(new Platform\Controller\Module\Welcome());
+                                $_class = \NULL;
+                                $_action = "load";
+                                $_action_id = "document";
+                                $_selected_id = \NULL;
+                                break;
+                        }
+                    } else {
+                        $instance = new static();
+                        Platform\Current::setInstance($instance);
+                        Platform\Current::setInstance($instance);
+                        Platform\Current::setModule(new Platform\Controller\Module\Welcome());
+                        $_class = \NULL;
+                        $_action = "load";
+                        $_action_id = "document";
+                        $_selected_id = \NULL;
+                    }
                     break;
                 case "POST":
                     $_action = isset($_POST["gip-action"]) ? $_POST["gip-action"] : \NULL;

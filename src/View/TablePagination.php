@@ -13,7 +13,24 @@ namespace GIndie\Platform\View;
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  */
-class TablePagination
+class TablePagination extends TableSimple
 {
-    //put your code here
+    public function defineScript()
+    {
+        $tableModel = $this->_model;
+        $title = $tableModel::Name();
+        ob_start();
+        ?>
+        <script>
+            var columns = [<?= $this->_getColumns(); ?>];
+            var title = "<?= $title; ?>";
+            $(document).ready(function () {
+                create_datatable("<?= $this->getId(); ?>", {"title":title, "columns": columns, "search": false, "export": false, "pagination": true, "selectable": true});
+            });
+        </script>
+        <?php
+        $str = ob_get_contents();
+        ob_end_clean();
+        return $str;
+    }
 }

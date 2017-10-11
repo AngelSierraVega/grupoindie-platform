@@ -68,7 +68,7 @@ class Document extends Bootstrap3\Component\Document
         $pathToTheme = $assetsFolder . "css/libs/bootstrap-pan.css";
         $pathToJquery = $assetsFolder . "js/libs/jquery.min.js";
         $pathToJS = $assetsFolder . "js/libs/bootstrap.min.js";
-        parent::__construct("Admin. I.I. ", "es", $pathToCSS, $pathToTheme,
+        parent::__construct(\GIndie\Platform\Current::Instance()->appNombre(), "es", $pathToCSS, $pathToTheme,
                             $pathToJquery, $pathToJS);
 
         $this->addLink($assetsFolder . 'css/gip-stylesheet.css?version=3',

@@ -58,11 +58,11 @@ class Welcome extends \GIndie\Platform\Controller\Module
         $img->addClass("center-block logoAI");
         $col->addContent($img);
         $row->addContent($col);
-        $col = new Div("", ["class" => "col-sm-7"]);
+        $col = new Div("", ["class" => "col-sm-8"]);
 
         $h1 = StylesSemantics::Span();
         $h1->setTag("h1");
-        $h1->addContent("Admnistración Integral de Ingresos");
+        $h1->addContent(Current::Instance()->appNombre());
         $col->addContent($h1);
 
         $h2 = StylesSemantics::Span();
@@ -82,7 +82,7 @@ class Welcome extends \GIndie\Platform\Controller\Module
         $rowimg->addClass("row");
         //$row->addContent($col);
 
-        $div2 = new Div("", ["class" => "col-xs-12"]);
+        //$div2 = new Div("", ["class" => "col-xs-12"]);
         $div2 = new Div("");
 
         $media = new Div("", ["class" => "media-body"]);
@@ -91,7 +91,7 @@ class Welcome extends \GIndie\Platform\Controller\Module
         $img->setTag("img");
         $media->addContent($img);
 
-        $media = new Div("", ["class" => "media-bod"]);
+        $media = new Div("", ["class" => "media-body"]);
         $div2->addContent($media);
         $img = StylesSemantics::Span();
         $img->setTag("img");
@@ -104,19 +104,19 @@ class Welcome extends \GIndie\Platform\Controller\Module
 
         $footer = new Div("", ["class" => "row"]);
 
-        $footer1 = new Div("", ["class" => "col-xs-6 text-center"]);
-        $url1 = new Anchor("www.mineraldelareforma.gob.mx");
+        $footer1 = new Div("", ["class" => "col-xs-12 text-center"]);
+        $url1 = new Anchor(Current::Instance()->urlInstitucion());
         $url1->setAttribute("target", "_blank");
-        $url1->setAttribute("href", "http://www.mineraldelareforma.gob.mx/");
+        $url1->setAttribute("href", Current::Instance()->urlInstitucion());
         $footer1->addContent($url1);
         $footer->addContent($footer1);
 
-        $footer2 = new Div("", ["class" => "col-xs-6 text-center"]);
-        $url2 = new Anchor("www.hidalgo.gob.mx");
-        $url2->setAttribute("target", "_blank");
-        $url2->setAttribute("href", "http://www.hidalgo.gob.mx/");
-        $footer2->addContent($url2);
-        $footer->addContent($footer2);
+//        $footer2 = new Div("", ["class" => "col-xs-6 text-center"]);
+//        $url2 = new Anchor("www.hidalgo.gob.mx");
+//        $url2->setAttribute("target", "_blank");
+//        $url2->setAttribute("href", "http://www.hidalgo.gob.mx/");
+//        $footer2->addContent($url2);
+//        $footer->addContent($footer2);
 
         $this->configPlaceholder("ii-i-i")->typeCustom($heading, false, $row,
                                                        false, $footer);

@@ -1,17 +1,20 @@
 <?php
-/*
- * Copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+/**
+ * WidgetMain
+ * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
  *
- * This software is protected under GNU: you can use, study and modify it
- * but not distribute it under the terms of the GNU General Public License 
- * as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * @package Platform
+ *
+ * @version GIP.00.01
  */
 
 namespace GIndie\Platform\View;
 
 use GIndie\Platform\View\Widget\Buttons;
 
+/**
+ * 
+ */
 class WidgetMain extends Widget
 {
 
@@ -21,23 +24,21 @@ class WidgetMain extends Widget
      */
     protected $_record;
 
+    /**
+     * 
+     * @param \GIndie\Platform\Model\Record $record
+     * @param string $title
+     */
     public function __construct(\GIndie\Platform\Model\Record $record,
                                 $title = \NULL)
     {
         $this->_record = $record;
-//        $heading = \FALSE, $heading_body = \FALSE,
-//            $body =\FALSE, $body_footer = \FALSE, $footer = \FALSE
+        //$record::ICON
         parent::__construct($title !== \NULL ? $title : $record::NAME, \FALSE,
-                            $this->tmpContent()
-                , FALSE);
+                            $this->tmpContent(), \FALSE);
         $this->setContext(static::$COLOR_SUCCESS);
-
         $this->addButtonHeading(Buttons::Reload(\urlencode(\get_class($record)),
                                                                       $record->getId()));
-
-//        $this->_record = $record;
-//
-//        $relatedRecord = $record::RELATED_RECORD;
         if (\GIndie\Platform\Current::hasRole($record->getValidRolesFor("gip-edit"))) {
             $this->addButtonEdit(\urlencode(\get_class($record)),
                                                        $record->getId());
@@ -54,44 +55,58 @@ class WidgetMain extends Widget
     }
 
     /**
-     * @todo Quitar HTML crudo, usar clases.
-     * @return string
+     * 
      */
     protected function tmpContent()
     {
-        ob_start();
-        ?>
-        <div class="media">
-            <div class="media-left"> 
-                <span class="<?php
-                $record = $this->_record;
-                echo $record::ICON;
-                ?>" aria-hidden="true" style="font-size: 64px;"></span>
-            </div> 
-            <div class="media-body"> 
-                <dl>
-                    <?php
-                    foreach ($this->_record->getAttributesDisplay() as $attrName) {
-                        $_display = $this->_record->getDisplayOf($attrName);
-                        switch ($_display)
-                        {
-                            case "":
-                                break;
-                            default:
-                                echo "<dt>" . $this->_record->getLabelOf($attrName) . "</dt>";
-                                echo "<dd>" . $_display . "</dd>";
-                                break;
+        $mainRow = new \GIndie\Generator\DML\HTML5\Node("div", \FALSE,
+                                                        ["class" => "row"]);
+        if (\sizeof($this->_record->getAttributesDisplay()) > 4) {
+            $_counter = 0;
+            $_size = \intval(\sizeof($this->_record->getAttributesDisplay()));
+            $_limit = \intval($_size / 2);
+            $_firstCol = new \GIndie\Generator\DML\HTML5\Node("div", \FALSE,
+                                                              ["class" => "col-sm-6"]);
+            $_secondCol = new \GIndie\Generator\DML\HTML5\Node("div", \FALSE,
+                                                               ["class" => "col-sm-6"]);
+            foreach ($this->_record->getAttributesDisplay() as $attrName) {
+                $_display = $this->_record->getDisplayOf($attrName);
+                switch ($_display)
+                {
+                    case "":
+                        break;
+                    default:
+                        if ($_counter < $_limit) {
+                            $_firstCol->addContent("<dt>" . $this->_record->getLabelOf($attrName) . "</dt>");
+                            $_firstCol->addContent("<dd>" . $_display . "</dd>");
+                        } else {
+                            $_secondCol->addContent("<dt>" . $this->_record->getLabelOf($attrName) . "</dt>");
+                            $_secondCol->addContent("<dd>" . $_display . "</dd>");
                         }
-                    }
-                    ?>
-                </dl>
-            </div>
-
-        </div>
-        <?php
-        $str = ob_get_contents();
-        ob_end_clean();
-        return $str;
+                        break;
+                }
+                $_counter++;
+            }
+            $mainRow->addContent($_firstCol);
+            $mainRow->addContent($_secondCol);
+        } else {
+            $singleCol = new \GIndie\Generator\DML\HTML5\Node("div", \FALSE,
+                                                              ["class" => "col-xs-12"]);
+            foreach ($this->_record->getAttributesDisplay() as $attrName) {
+                $_display = $this->_record->getDisplayOf($attrName);
+                switch ($_display)
+                {
+                    case "":
+                        break;
+                    default:
+                        $singleCol->addContent("<dt>" . $this->_record->getLabelOf($attrName) . "</dt>");
+                        $singleCol->addContent("<dd>" . $_display . "</dd>");
+                        break;
+                }
+            }
+            $mainRow->addContent($singleCol);
+        }
+        return $mainRow;
     }
 
     protected function addButtonEdit($gipClass, $gipActionId = \NULL)

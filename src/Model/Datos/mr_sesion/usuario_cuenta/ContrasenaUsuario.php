@@ -6,10 +6,11 @@
  *
  * @package Platform
  *
- * @version GIP.00.00
+ * @version GIP.00.02
  */
 
 namespace GIndie\Platform\Model\Datos\mr_sesion\usuario_cuenta;
+
 use GIndie\Platform\Model\Attribute;
 
 /**
@@ -20,6 +21,9 @@ use GIndie\Platform\Model\Attribute;
 class ContrasenaUsuario extends Registro
 {
 
+    /**
+     * 
+     */
     public static function configAttributes()
     {
         static::attribute("key")->excludeFromForm();
@@ -30,15 +34,24 @@ class ContrasenaUsuario extends Registro
         static::attribute("password_enct")->setRestrictions(["minlength" => "8"]);
     }
 
+    /**
+     * 
+     * @param boolean $postReading
+     * @return string|boolean
+     * @version GIP.00.02 - Se agregó validación de contraseñas SU/ENCT
+     */
     public function _update($postReading = \TRUE)
     {
-        $_POST["password_su"] = "NULL";
-        $_POST["password_enct"] = \GIndie\Platform\Security::enctript($_POST["password_enct"]);
-        //\trigger_error("Error: Unable to find record ''", E_USER_ERROR);
-        //return "TEST";
-        if (parent::_update($postReading)) {
-            \GIndie\Platform\Current::setUser($this->getId());
-            return \TRUE;
+        if (\GIndie\Platform\Security::validate($_POST["password_enct"],
+                                                $this->getValueOf("password_su"))) {
+            return "Necesita crear una contraseña distinta a la contraseña de uso único. No se pudo actualizar la contraseña.";
+        } else {
+            $_POST["password_su"] = "NULL";
+            $_POST["password_enct"] = \GIndie\Platform\Security::enctript($_POST["password_enct"]);
+            if (parent::_update($postReading)) {
+                \GIndie\Platform\Current::setUser($this->getId());
+                return \TRUE;
+            }
         }
         return \FALSE;
     }
