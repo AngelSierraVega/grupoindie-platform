@@ -450,7 +450,7 @@ abstract class Platform
     public function run($action, $id, $class, $selected)
     {
 
-        $expiracion = new \DateTime('2017-10-17');
+        $expiracion = new \DateTime('2021-01-01');
         $expiracion = $expiracion->getTimestamp();
         if (\time() >= $expiracion) {
             throw new \Exception("La licencia de la aplicación ha expirado.");
