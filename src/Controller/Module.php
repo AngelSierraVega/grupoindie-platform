@@ -7,6 +7,7 @@
  * @package Platform
  *
  * @version GIP.00.0?
+ * @lastChange GIP.00.07
  */
 
 namespace GIndie\Platform\Controller;
@@ -17,7 +18,6 @@ use \GIndie\Platform\Model\Datos\mr_sesion;
 
 /**
  * Description of Module
-  @version GIP.00.06
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  */
@@ -142,12 +142,29 @@ abstract class Module extends Platform implements ModuleINT
     }
 
     /**
+     * @param type $id
+     * @param type $class
+     * @param type $selected
+     * 
+     * @since GIP.00.07
+     * 
+     * @return null|\GIndie\Platform\Controller\Main\WidgetInterface
+     */
+    protected function widgetReload($id, $class, $selected)
+    {
+        $placeholder = \GIndie\Platform\Current::Module()->getWidget($id);
+        $placeholder = $placeholder->call($selected);
+        return $placeholder;
+    }
+
+    /**
      * 
      * 
      * @since       2017-01-05
      * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
      * 
-     * @version     GIP.00.04
+     * @version     GIP.00.07 
+     * - use widgetReload on $action = widget-reload
      * 
      * @param       string $action
      * @param       string $id
@@ -168,11 +185,8 @@ abstract class Module extends Platform implements ModuleINT
             case "get-input":
                 $record = $class::findById($_POST["gip-record-id"]);
                 $attribute = $record->getAttribute($id);
-                return $form_element = \GIndie\Platform\View\Input::selectFromAttribute($attribute,
-                                                                                        $record->getValueOf($attribute->getName()),
-                                                                                                            $_POST["gip-record-id"]);
-                return \GIndie\Platform\View\Input::formGroup($attribute,
-                                                              $form_element);
+                return $form_element = \GIndie\Platform\View\Input::selectFromAttribute($attribute, $record->getValueOf($attribute->getName()), $_POST["gip-record-id"]);
+                return \GIndie\Platform\View\Input::formGroup($attribute, $form_element);
             case "form-create":
             case "form-edit":
             case "form-delete":
@@ -186,9 +200,7 @@ abstract class Module extends Platform implements ModuleINT
             case "gip-deactivate":
                 return static::_recordAction($action, $id, $class);
             case "widget-reload":
-                $placeholder = \GIndie\Platform\Current::Module()->getWidget($id);
-                $placeholder = $placeholder->call($selected);
-                return $placeholder;
+                return $this->widgetReload($id, $class, $selected);
             default:
                 if ($class != "undefined") {
                     if ($class != \NULL) {
@@ -255,8 +267,7 @@ abstract class Module extends Platform implements ModuleINT
                 $record->getName() . "</b> <i>" .
                 $record->getDisplay() . "</i>";
         $modalContent = $this->_modalWrap($modalTitle, $form);
-        $btn = new Bootstrap3\Component\Button($actionName,
-                                               Bootstrap3\Component\Button::TYPE_SUBMIT);
+        $btn = new Bootstrap3\Component\Button($actionName, Bootstrap3\Component\Button::TYPE_SUBMIT);
         $btn->setForm($form->getId())->setValue("Submit");
         $btn->setContext($actionContext);
         $modalContent->addFooterButton($btn);
@@ -281,8 +292,7 @@ abstract class Module extends Platform implements ModuleINT
         }
         //$recordAction = $record->run($action);
         //if ($recordAction !== \FALSE) {
-        $btnDismiss = new Bootstrap3\Component\Button("Cerrar",
-                                                      Bootstrap3\Component\Button::TYPE_BUTTON);
+        $btnDismiss = new Bootstrap3\Component\Button("Cerrar", Bootstrap3\Component\Button::TYPE_BUTTON);
         $btnDismiss->setAttribute("data-dismiss", "modal");
         switch ($action)
         {
@@ -298,8 +308,7 @@ abstract class Module extends Platform implements ModuleINT
                     //$script .= "$('#" . $_POST["gip-id-placeholder"] . " .jstree #" . $record->getId() . " a').trigger('click');"; // 
                     $response->addScript($script);
                 } else {
-                    $modalContent = new Bootstrap3\Component\Modal\Content("Hubo un error al intentar crear el registro",
-                                                                           $recordAction);
+                    $modalContent = new Bootstrap3\Component\Modal\Content("Hubo un error al intentar crear el registro", $recordAction);
                     $modalContent->addFooterButton($btnDismiss);
                     $response->addScript("$('#gip-modal .modal-content').html('{$modalContent}');");
                 }
@@ -321,8 +330,7 @@ abstract class Module extends Platform implements ModuleINT
                     $response->addScript($script);
                     //$response->setAttribute("gip-success");
                 } else {
-                    $modalContent = new Bootstrap3\Component\Modal\Content("Hubo un error al intentar actualizar el registro",
-                                                                           $recordAction);
+                    $modalContent = new Bootstrap3\Component\Modal\Content("Hubo un error al intentar actualizar el registro", $recordAction);
                     $modalContent->addFooterButton($btnDismiss);
                     //$modalContent = \htmlentities($modalContent);
 //                    $modalContent = \addslashes($modalContent);
@@ -338,8 +346,7 @@ abstract class Module extends Platform implements ModuleINT
                     $response->addScript("$('#gip-modal .modal-content').html('{$modalContent}');");
                     $response->setAttribute("gip-success");
                 } else {
-                    $modalContent = new Bootstrap3\Component\Modal\Content("Hubo un error al intentar desactivar el registro",
-                                                                           $recordAction);
+                    $modalContent = new Bootstrap3\Component\Modal\Content("Hubo un error al intentar desactivar el registro", $recordAction);
                     $modalContent->addFooterButton($btnDismiss);
                     $response->addScript("$('#gip-modal .modal-content').html('{$modalContent}');");
                 }
@@ -352,8 +359,7 @@ abstract class Module extends Platform implements ModuleINT
                     $response->addScript("$('#gip-modal .modal-content').html('{$modalContent}');");
                     $response->setAttribute("gip-success");
                 } else {
-                    $modalContent = new Bootstrap3\Component\Modal\Content("Hubo un error al intentar activar el registro",
-                                                                           $recordAction);
+                    $modalContent = new Bootstrap3\Component\Modal\Content("Hubo un error al intentar activar el registro", $recordAction);
                     $modalContent->addFooterButton($btnDismiss);
                     $response->addScript("$('#gip-modal .modal-content').html('{$modalContent}');");
                 }
@@ -363,22 +369,19 @@ abstract class Module extends Platform implements ModuleINT
                 $recordAction = $record->run($action);
                 if (!\is_string($recordAction)) {
                     $modalContent = new Bootstrap3\Component\Modal\Content("Registro eliminado con éxito");
-                    $btnDismiss = new Bootstrap3\Component\Button("Cerrar",
-                                                                  Bootstrap3\Component\Button::TYPE_BUTTON);
+                    $btnDismiss = new Bootstrap3\Component\Button("Cerrar", Bootstrap3\Component\Button::TYPE_BUTTON);
                     $btnDismiss->setAttribute("data-dismiss", "modal");
                     $modalContent->addFooterButton($btnDismiss);
                     $response->addScript("$('#gip-modal .modal-content').html('{$modalContent}');");
                     $response->setAttribute("gip-success");
                 } else {
                     $response->addContent("Hubo un error al eliminar, intentenlo de nuevo.");
-                    $modalContent = new Bootstrap3\Component\Modal\Content("Error al eliminar",
-                                                                           $recordAction);
+                    $modalContent = new Bootstrap3\Component\Modal\Content("Error al eliminar", $recordAction);
                     $response->addScript("$('#gip-modal .modal-content').html('{$modalContent}');");
                 }
                 return $response;
             default:
-                trigger_error("Unable to run recordAction: gip-action={$action} gip-action-id={$id} gip-action-class={$class}",
-                              E_USER_ERROR);
+                trigger_error("Unable to run recordAction: gip-action={$action} gip-action-id={$id} gip-action-class={$class}", E_USER_ERROR);
                 throw new \Exception("Unable to run.");
                 break;
         }
