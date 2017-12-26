@@ -120,7 +120,7 @@ class Topbar extends Div
         $anchor->addContent($img);
         $navbar_brand->addContent($anchor);
 
-        $brand = \GIndie\Platform\Current::Platform();
+        $brand = \GIndie\Platform\Current::Instance();
         if ($brand == \NULL) {
             $brand = "ERROR";
         } else {

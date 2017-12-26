@@ -96,12 +96,12 @@ class Current
     }
 
     /**
-     * 
+     * @deprecated Use Instance() instead
      * @return \static
      */
     public static function Platform()
     {
-        \trigger_error("", \E_USER_DEPRECATED);
+        \trigger_error("Use Instance() instead", \E_USER_DEPRECATED);
         return static::Instance();
     }
 
@@ -117,7 +117,7 @@ class Current
      */
     public static function Controller()
     {
-        \trigger_error("", \E_USER_DEPRECATED);
+        \trigger_error("Use Module() instead", \E_USER_DEPRECATED);
         return static::Module();
     }
 

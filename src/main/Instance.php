@@ -28,7 +28,7 @@ abstract class Instance
      * @since GIP.00.01
      */
     const CONFIG_CLASS = \NULL;
-    
+
     /**
      * Ruta real a las facturas
      * @version GIP.00.06
@@ -38,12 +38,13 @@ abstract class Instance
         $configClass = static::CONFIG_CLASS;
         return $configClass::appNombre();
     }
-    
+
     /**
      * Ruta real a las facturas
      * @version GIP.00.06
      */
-    public function urlInstitucion(){
+    public function urlInstitucion()
+    {
         $configClass = static::CONFIG_CLASS;
         return $configClass::urlInstitucion();
     }
@@ -103,8 +104,6 @@ abstract class Instance
         $configClass = static::CONFIG_CLASS;
         return $configClass::urlRecibos();
     }
-    
-    
 
     /**
      * Ruta real a las facturas
@@ -288,10 +287,8 @@ abstract class Instance
      */
     final private function __construct()
     {
-        static::BRAND_NAME !== \NULL ?: trigger_error("Constant BRAND_NAME must be defined inside class definition of: " . get_called_class(),
-                                                      \E_USER_ERROR);
-        static::CONFIG_CLASS !== \NULL ?: trigger_error("Constant CONFIG_CLASS must be defined inside class definition of: " . get_called_class(),
-                                                        \E_USER_ERROR);
+        static::BRAND_NAME !== \NULL ?: trigger_error("Constant BRAND_NAME must be defined inside class definition of: " . get_called_class(), \E_USER_ERROR);
+        static::CONFIG_CLASS !== \NULL ?: trigger_error("Constant CONFIG_CLASS must be defined inside class definition of: " . get_called_class(), \E_USER_ERROR);
         if (Current::Instance() !== \NULL) {
             static::config();
         }
@@ -317,11 +314,9 @@ abstract class Instance
      */
     public function setModule($classname, $groupName = \NULL)
     {
-        if (!\is_subclass_of($classname, Platform\Controller\Module::class,
-                             \TRUE)) {
+        if (!\is_subclass_of($classname, Platform\Controller\Module::class, \TRUE)) {
             $sub = Platform\Controller\Module::class;
-            trigger_error("Class {$classname} is not subclass of {$sub}",
-                          E_USER_ERROR);
+            trigger_error("Class {$classname} is not subclass of {$sub}", E_USER_ERROR);
             throw new \Exception("Unable to run.");
         }
         self::$_MODULES[$classname] = $groupName;
@@ -357,8 +352,7 @@ abstract class Instance
     {
         if (!\is_subclass_of($classname, self::class, \TRUE)) {
             $class = self::class;
-            trigger_error("Classname {$classname} is not subclass of {$class} ",
-                          E_USER_ERROR);
+            trigger_error("Classname {$classname} is not subclass of {$class} ", E_USER_ERROR);
             throw new \Exception("Unable to run.");
         }
         self::$_LINKS[$classname] = $href;
@@ -447,24 +441,25 @@ abstract class Instance
                     Platform\Current::setInstance(new static());
                     Platform\Current::setInstance(new static());
                     Platform\Current::setModule(new Platform\Controller\Module\Welcome());
-                    $data = [];
-                    $data['fk_usuario_cuenta'] = \GIndie\Platform\Current::User()->getId();
-                    $data['action'] = "gip-login";
-                    $data['timestamp'] = \time();
-                    $nota = "Ingresó al sistema con correo y contraseña";
-                    $data['notas'] = \filter_var($nota,
-                                                 \FILTER_SANITIZE_SPECIAL_CHARS);
-                    $bitacora = \AdminIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
-                    $bitacora->run("gip-inner-create");
+                    /**
+                     * @todo 
+                     * $data = [];
+                      $data['fk_usuario_cuenta'] = \GIndie\Platform\Current::User()->getId();
+                      $data['action'] = "gip-login";
+                      $data['timestamp'] = \time();
+                      $nota = "Ingresó al sistema con correo y contraseña";
+                      $data['notas'] = \filter_var($nota,
+                      \FILTER_SANITIZE_SPECIAL_CHARS);
+                      $bitacora = \AdminIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
+                      $bitacora->run("gip-inner-create");
+                     */
                 }
                 if (static::_isRestartAttempt()) {
                     Platform\Security::restartSession();
                 }
             } catch (\GIndie\Platform\ExceptionLogin $e) {
                 $params = \session_get_cookie_params();
-                \setcookie(\session_name(), '', \time() - 42000,
-                           $params["path"], $params["domain"],
-                           $params["secure"], $params["httponly"]
+                \setcookie(\session_name(), '', \time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]
                 );
                 if ($_SERVER["REQUEST_METHOD"] === "POST") {//
                     $response = \GIndie\Generator\DML\HTML5\Category\Basic::Paragraph($e->getMessage());
@@ -482,10 +477,7 @@ abstract class Instance
         if (\session_status() == \PHP_SESSION_NONE) {
             $instance = new static();
 
-            return new Platform\View\Login($instance->logoAplicacion(),
-                                           $instance->sloganAplicacion(),
-                                           $instance->urlAssets(),
-                                           $instance->logoInstitucion());
+            return new Platform\View\Login($instance->logoAplicacion(), $instance->sloganAplicacion(), $instance->urlAssets(), $instance->logoInstitucion());
         }
         try {
             switch ($_SERVER["REQUEST_METHOD"])
@@ -532,8 +524,7 @@ abstract class Instance
                     throw new \Exception("Forbiden request method");
                     break;
             }
-            return Platform\Current::Module()->run($_action, $_action_id,
-                                                   $_class, $_selected_id);
+            return Platform\Current::Module()->run($_action, $_action_id, $_class, $_selected_id);
         } catch (\Exception $e) {
             //return "TEST";
             $GLOBALS["gip-error"] = static::displayException($e);

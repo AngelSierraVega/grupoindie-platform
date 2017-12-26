@@ -63,7 +63,7 @@ class Document extends Bootstrap3\Component\Document
     public function __construct()
     {
         $assetsFolder = \GIndie\Platform\Current::Instance()->urlAssets();
-        $cnt = \GIndie\Platform\Current::Controller();
+        $cnt = \GIndie\Platform\Current::Module();
         $pathToCSS = $assetsFolder . "css/libs/bootstrap.min.css";
         $pathToTheme = $assetsFolder . "css/libs/bootstrap-pan.css";
         $pathToJquery = $assetsFolder . "js/libs/jquery.min.js";
@@ -138,7 +138,7 @@ class Document extends Bootstrap3\Component\Document
         $this->addScript($assetsFolder . 'js/gip-scripts.js?version=5', true);
 
         $this->_topbar = $this->addContentGetPointer(new Document\Topbar());
-        $mainLinks = \GIndie\Platform\Current::Platform()->getPlatformLinks();
+        $mainLinks = \GIndie\Platform\Current::Instance()->getPlatformLinks();
         foreach ($mainLinks as $className => $href) {
             if (\class_exists($className, \TRUE)) {
                 $this->addSystemReference($href, $className::BRAND_NAME);
@@ -151,12 +151,12 @@ class Document extends Bootstrap3\Component\Document
         $this->_modal = $this->addContentGetPointer(new Bootstrap3\Component\Modal());
         $this->_modal->setId("gip-modal");
         $this->_container = $this->addContentGetPointer(new Document\Container());
-        $widgets = \GIndie\Platform\Current::Controller()->getWidgets();
+        $widgets = \GIndie\Platform\Current::Module()->getWidgets();
         $widgets = array_keys($widgets);
         foreach ($widgets as $id) {
             $this->_container->addWidget($id,
-                                         \GIndie\Platform\Current::Controller()->getWidget($id)
-                    != NULL ? \GIndie\Platform\Current::Controller()->getWidget($id)->call(\NULL) : NULL);
+                                         \GIndie\Platform\Current::Module()->getWidget($id)
+                    != NULL ? \GIndie\Platform\Current::Module()->getWidget($id)->call(\NULL) : NULL);
         }
         $this->addContent(HTML5\Category\StylesSemantics::Div("")->setId("gip-loader"));
         $this->_footbar = $this->addContentGetPointer(new Document\Footbar("[gip-footbar]"));

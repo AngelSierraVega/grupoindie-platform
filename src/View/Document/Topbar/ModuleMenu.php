@@ -26,7 +26,7 @@ class ModuleMenu extends HTML5\Category\Lists\Unordered
         parent::__construct([]);
         $this->addClass("nav navbar-nav");
         $this->setAttribute("id", "gip-module-menu");
-        $listControllers = \GIndie\Platform\Current::Platform()->getModules();
+        $listControllers = \GIndie\Platform\Current::Instance()->getModules();
         $tmpGroup = \NULL;
         $dropdown = "";
         foreach ($listControllers as $controllerClass => $value) {
