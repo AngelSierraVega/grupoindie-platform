@@ -1,12 +1,10 @@
 <?php
 
 /**
- * GIplatform - Instance 2017-05-23
+ * GIplatform - Instance 
  * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
  *
  * @package Platform
- *
- * @version GIP.00.06
  */
 
 namespace GIndie;
@@ -19,7 +17,13 @@ use \GIndie\Generator\DML\HTML5;
  * Description of Platform
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @since GIP.00.00
+ * @since GIP.00.00 2017-05-23
+ * 
+ * @version GIP.00.06
+ * @edit GIP.00.07 2017-12-26
+ * - Deprecated methods appNombre(), urlInstitucion(), hostAplicacion(), hostAplicacion()
+ *   hostFacturas(), hostRespaldos(), urlAssets(), urlFacturas(), urlRecibos(), rutaFacturas(),
+ *   rutaRespaldos(), logoAplicacion(), logoInstitucion(), logoFacturas(), sloganAplicacion()
  */
 abstract class Instance
 {
@@ -31,10 +35,12 @@ abstract class Instance
 
     /**
      * Ruta real a las facturas
-     * @version GIP.00.06
+     * @edit GIP.00.06
+     * @deprecated since GIP.00.07
      */
     public function appNombre()
     {
+        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::appNombre();
     }
@@ -42,15 +48,23 @@ abstract class Instance
     /**
      * Ruta real a las facturas
      * @version GIP.00.06
+     * @deprecated since GIP.00.07
      */
     public function urlInstitucion()
     {
+        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::urlInstitucion();
     }
 
+    /**
+     * 
+     * @return type
+     * @deprecated since GIP.00.07
+     */
     public function hostAplicacion()
     {
+        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::hostAplicacion();
     }
@@ -58,9 +72,11 @@ abstract class Instance
     /**
      * Host de las facturas (ruta real)
      * @version MR-ADIN.00.03
+     * @deprecated since GIP.00.07
      */
     public function hostFacturas()
     {
+        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::hostFacturas();
     }
@@ -68,9 +84,11 @@ abstract class Instance
     /**
      * Host de los respaldos (ruta real)
      * @version MR-ADIN.00.03
+     * @deprecated since GIP.00.07
      */
     public function hostRespaldos()
     {
+        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::hostRespaldos();
     }
@@ -78,9 +96,11 @@ abstract class Instance
     /**
      * Ruta a la carpeta que almacena los assets de la aplicación
      * @version MR-ADIN.00.03
+     * @deprecated since GIP.00.07
      */
     public function urlAssets()
     {
+        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::urlAssets();
     }
@@ -88,9 +108,11 @@ abstract class Instance
     /**
      * URL a la carpeta que almacena las facturas
      * @version MR-ADIN.00.03
+     * @deprecated since GIP.00.07
      */
     public function urlFacturas()
     {
+        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::urlFacturas();
     }
@@ -98,9 +120,11 @@ abstract class Instance
     /**
      * URL a la carpeta que almacena los recibos
      * @version MR-ADIN.00.03
+     * @deprecated since GIP.00.07
      */
     public function urlRecibos()
     {
+        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::urlRecibos();
     }
@@ -108,9 +132,11 @@ abstract class Instance
     /**
      * Ruta real a las facturas
      * @version MR-ADIN.00.03
+     * @deprecated since GIP.00.07
      */
     public function rutaFacturas()
     {
+        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::rutaFacturas();
     }
@@ -118,9 +144,11 @@ abstract class Instance
     /**
      * Ruta real a los respaldos
      * @version MR-ADIN.00.03
+     * @deprecated since GIP.00.07
      */
     public function rutaRespaldos()
     {
+        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::rutaRespaldos();
     }
@@ -128,9 +156,11 @@ abstract class Instance
     /**
      * Ruta real a los recibos
      * @version MR-ADIN.00.03
+     * @deprecated since GIP.00.07
      */
     public function rutaRecibos()
     {
+        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::rutaRecibos();
     }
@@ -138,9 +168,11 @@ abstract class Instance
     /**
      * URL al logotipo de la aplicación
      * @version MR-ADIN.00.03
+     * @deprecated since GIP.00.07
      */
     public function logoAplicacion()
     {
+        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::logoAplicacion();
     }
@@ -148,9 +180,11 @@ abstract class Instance
     /**
      * URL al logotipo de la institución
      * @version MR-ADIN.00.03
+     * @deprecated since GIP.00.07
      */
     public function logoInstitucion()
     {
+        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::logoInstitucion();
     }
@@ -158,9 +192,11 @@ abstract class Instance
     /**
      * URL al logotipo de las facturas
      * @version MR-ADIN.00.03
+     * @deprecated since GIP.00.07
      */
     public function logoFacturas()
     {
+        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::logoFacturas();
     }
@@ -168,9 +204,11 @@ abstract class Instance
     /**
      * Slogan
      * @version MR-ADIN.00.03
+     * @deprecated since GIP.00.07
      */
     public function sloganAplicacion()
     {
+        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::sloganAplicacion();
     }
@@ -193,6 +231,7 @@ abstract class Instance
      */
     public function getSloganDPR()
     {
+        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::getSlogan();
     }
@@ -209,6 +248,7 @@ abstract class Instance
      */
     public function getImageBrandDPR()
     {
+        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::getPathToBrand();
     }
@@ -219,6 +259,7 @@ abstract class Instance
      */
     public static function getProjectPathDPR()
     {
+        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         $assetsFolder = $configClass::HOST . $configClass::PATH_TO_PROJECT;
         return $assetsFolder;
@@ -230,6 +271,7 @@ abstract class Instance
      */
     public static function hostDPR()
     {
+        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::HOST;
     }
@@ -240,6 +282,7 @@ abstract class Instance
      */
     public static function pathToFacturasDPR()
     {
+        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::pathToFacturas();
     }
@@ -250,6 +293,7 @@ abstract class Instance
      */
     public static function pathToRecibosDPR()
     {
+        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::pathToRecibos();
     }
@@ -259,6 +303,7 @@ abstract class Instance
      */
     public static function getAssetsPathDPR()
     {
+        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::PATH_TO_ASSETS;
         //return $assetsFolder;
