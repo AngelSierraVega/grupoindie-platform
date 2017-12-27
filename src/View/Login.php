@@ -33,8 +33,7 @@ class Login extends Bootstrap3\Component\Document
 
         $pathToJquery = $assetsFolder . "js/libs/jquery.min.js";
         $pathToJS = $assetsFolder . "js/libs/bootstrap.min.js";
-        parent::__construct("Ingresar al sistema", "es", $pathToCSS,
-                            $pathToTheme, $pathToJquery, $pathToJS);
+        parent::__construct("Ingresar al sistema", "es", $pathToCSS, $pathToTheme, $pathToJquery, $pathToJS);
 
         $pathToStyle = $assetsFolder . "css/gip-stylesheet.css";
         $this->addLink($pathToStyle, "stylesheet");
@@ -99,8 +98,7 @@ class Login extends Bootstrap3\Component\Document
         $rowbutton->addClass("row");
         $divsm6->addContent($rowbutton);
 
-        $btn = new Bootstrap3\Component\Button("Ingresar al sistema",
-                                               Bootstrap3\Component\Button::TYPE_SUBMIT);
+        $btn = new Bootstrap3\Component\Button("Ingresar al sistema", Bootstrap3\Component\Button::TYPE_SUBMIT);
         $btn->setForm($formId);
         $btn->setValue("Submit");
         $btn->setContext(Bootstrap3\Component\Button::$COLOR_PRIMARY);
@@ -143,8 +141,7 @@ class Login extends Bootstrap3\Component\Document
         $img->setAttribute("width", "120");
         $img->addClass("center-block");
         $img->setAttribute("src", $logoAplicacion);
-        $img->setAttribute("style",
-                           "background-color:#122b40; padding: 20px; margin-top: 15px;border-radius: 120px;");
+        $img->setAttribute("style", "background-color:#122b40; padding: 20px; margin-top: 15px;border-radius: 120px;");
         $img->addClass("img-responsive");
         $divimg3->addContent($img);
 
@@ -155,12 +152,11 @@ class Login extends Bootstrap3\Component\Document
         $divsm6 = new Div("");
         $divsm6->addClass("col-sm-12 col-md-8 col-md-offset-2");
         $container->addContent($divsm6);
-        
-        $row1 =  new Div("");
+
+        $row1 = new Div("");
         $row1->addClass("row");
-        $row1->setAttribute("style",
-                           "background-color: gainsboro;");
-        
+        $row1->setAttribute("style", "background-color: gainsboro;");
+
         $col1 = new Div("");
         $col1->addClass("col-xs-12 col-sm-5");
 //        $col1->setAttribute("style",
@@ -183,8 +179,7 @@ class Login extends Bootstrap3\Component\Document
 
         $col2 = new Div("");
         $col2->addClass("col-xs-12 col-sm-7");
-        $btn = new Bootstrap3\Component\Button("Ingresar al sistema",
-                                               Bootstrap3\Component\Button::TYPE_SUBMIT);
+        $btn = new Bootstrap3\Component\Button("Ingresar al sistema", Bootstrap3\Component\Button::TYPE_SUBMIT);
         $btn->setForm($formId);
         $btn->setValue("Submit");
         $btn->setContext(Bootstrap3\Component\Button::$COLOR_PRIMARY);
@@ -197,16 +192,12 @@ class Login extends Bootstrap3\Component\Document
         $divsm6->addContent($row1);
 
         //
-        $subtext1 = Basic::Header(5,
-                                  "Dirección de informática. Mineral de la Reforma, Hidalgo. 2016-2020");
+        $subtext1 = Basic::Header(5, "Dirección de informática. Mineral de la Reforma, Hidalgo. 2016-2020");
         //$subtext1 = Basic::Paragraph("Dirección de informática. Mineral de la Reforma, Hidalgo. 2016-2020");
         $subtext1->addClass("text-center");
         $divsm6->addContent($subtext1);
 
-        $subtext2 = Basic::Header(6,
-                                  \GIndie\Generator\DML\HTML5\Category\Links::Hyperlink("http://www.mineraldelareforma.gob.mx",
-                                                                                        "www.mineraldelareforma.gob.mx",
-                                                                                        "_blank"));
+        $subtext2 = Basic::Header(6, \GIndie\Generator\DML\HTML5\Category\Links::Hyperlink("http://www.mineraldelareforma.gob.mx", "www.mineraldelareforma.gob.mx", "_blank"));
         $subtext2->addClass("text-center");
         $divsm6->addContent($subtext2);
 

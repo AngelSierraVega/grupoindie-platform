@@ -4,12 +4,12 @@
 <#if licenseFirst??>
 ${licenseFirst}
 </#if>
-${licensePrefix}${project.displayName} - ${name} ${date?date?string("yyyy-MM-dd")}
+${licensePrefix}${project.displayName} - ${name}
 ${licensePrefix}@copyright (C) ${date?date?string("yyyy")} Angel Sierra Vega. Grupo INDIE.
 ${licensePrefix?replace(" +$", "", "r")}
 ${licensePrefix}@package Platform
 ${licensePrefix?replace(" +$", "", "r")}
-${licensePrefix}@version GIP.00.00
+${licensePrefix}@version GIP.00.00 ${date?date?string("yy-MM-dd")} VERSION_DESCRIPTION
 <#if licenseLast??>
 ${licenseLast}
 </#if>

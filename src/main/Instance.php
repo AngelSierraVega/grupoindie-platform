@@ -521,7 +521,7 @@ abstract class Instance
         }
         if (\session_status() == \PHP_SESSION_NONE) {
             $instance = new static();
-
+            //\GIndie\Platform\INIHandler::getCategoryValue("app", "slogan")
             return new Platform\View\Login($instance->logoAplicacion(), $instance->sloganAplicacion(), $instance->urlAssets(), $instance->logoInstitucion());
         }
         try {
