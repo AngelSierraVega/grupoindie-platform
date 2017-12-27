@@ -12,6 +12,9 @@
  */
 $private_folder = realpath("../../../../srvr/mr-sii/private");
 
+require_once realpath("../../../GICommon/src/GIndie/autoloader.php");
+
+
 require_once "phar://" . $private_folder . '/libsGI/DML.phar/main.php';
 require_once "phar://" . $private_folder . '/libsGI/HTML5.phar/main.php';
 require_once "phar://" . $private_folder . '/libsGI/HTML5extended.phar/main.php';
