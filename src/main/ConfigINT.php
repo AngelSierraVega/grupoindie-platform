@@ -1,19 +1,24 @@
 <?php
 
 /**
- * GIplatform - ConfigINT 2017-06-17
+ * GIplatform - ConfigINT 
  * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
  *
  * @package Platform
- *
- * @version GIP.00.04
  */
 
 namespace GIndie\Platform;
 
 /**
  * Description of ConfigINT
+ * 
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * 
+ * @version GIP.00.00 17-06-17 Interface created
+ * @version GIP.00.04
+ * @version GIP.00.05 17-12-27 Deprecated interface
+ * @deprecated since GIP.00.05
+ * - Commented all methods
  */
 interface ConfigINT
 {
@@ -21,96 +26,112 @@ interface ConfigINT
     /**
      * Nombre de la aplicación
      * @version GIP.00.04
+     * public static function appNombre();
      */
-    public static function appNombre();
+    
     
     /**
      * URL a la página oficial de la institución/organismo
      * @version GIP.00.04
+     * public static function urlInstitucion();
      */
-    public static function urlInstitucion();
+    
 
     /**
      * Host de la aplicación (url)
      * @version GIP.00.03
+     *  public static function hostAplicacion();
      */
-    public static function hostAplicacion();
+   
     
     /**
      * Ruta real de la aplicación
      * @version GIP.00.03
+     * public static function rutaAplicacion();
      */
-    public static function rutaAplicacion();
+    
 
     /**
      * Host de las facturas (ruta real)
      * @version GIP.00.03
+     * public static function hostFacturas();
      */
-    public static function hostFacturas();
+    
 
     /**
      * Host de los respaldos (ruta real)
      * @version GIP.00.03
+     * public static function hostRespaldos();
      */
-    public static function hostRespaldos();
+    
 
     /**
      * URL al logotipo de la aplicación
      * @version GIP.00.03
+     * public static function logoAplicacion();
      */
-    public static function logoAplicacion();
+    
 
     /**
      * URL al logotipo de la institución
      * @version GIP.00.03
+     * public static function logoInstitucion();
      */
-    public static function logoInstitucion();
+    
 
     /**
      * URL al logotipo de las facturas
      * @version GIP.00.03
+     * public static function logoFacturas();
      */
-    public static function logoFacturas();
+    
 
     /**
      * Ruta real a las facturas
      * @version GIP.00.03
+     * public static function rutaFacturas();
      */
-    public static function rutaFacturas();
+    
 
     /**
      * Ruta real a los recibos
      * @version GIP.00.03
+     * public static function rutaRecibos();
      */
-    public static function rutaRecibos();
+    
 
     /**
      * Ruta real a los recibos
      * @version GIP.00.03
+     * public static function rutaRespaldos();
      */
-    public static function rutaRespaldos();
+    
 
     /**
      * Slogan
      * @version GIP.00.03
+     * public static function sloganAplicacion();
      */
-    public static function sloganAplicacion();
+    
 
     /**
      * Ruta a la carpeta que almacena los assets de la aplicación
      * @version GIP.00.03
+     * public static function urlAssets();
      */
-    public static function urlAssets();
+    
 
     /**
      * URL a la carpeta que almacena las facturas
      * @version GIP.00.03
+     * public static function urlFacturas();
      */
-    public static function urlFacturas();
+    
 
     /**
      * URL a la carpeta que almacena los recibos
      * @version GIP.00.03
+     * public static function urlRecibos();
      */
-    public static function urlRecibos();
+    
 }
