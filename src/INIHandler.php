@@ -17,9 +17,12 @@ namespace GIndie\Platform;
  * @edit GIP.00.01
  * - Extended class from \GIndie\INIHandler
  * - Added required methods: fileName(), pathToFile(), requiredVars()
+ * @edit GIP.00.02
+ * - Updated method requiredVars()
  */
 class INIHandler extends \GIndie\INIHandler
 {
+
     /**
      * 
      * @since GIP.00.01
@@ -44,10 +47,15 @@ class INIHandler extends \GIndie\INIHandler
      * 
      * @since GIP.00.01
      * @return array
+     * @edit GIP.00.02
      */
     public static function requiredVars()
     {
-        return ["app"=>["logo","slogan","assets_fullpath"],"vendor"=>["logo"]];
+        return [
+            "Config" => ["host", "assets_url", "slogan"],
+            "Instance" => ["logo"],
+            "Vendor" => ["logo", "url"]
+        ];
     }
 
 }
