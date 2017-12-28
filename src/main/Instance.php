@@ -20,10 +20,12 @@ use \GIndie\Generator\DML\HTML5;
  * @since GIP.00.00 2017-05-23
  * 
  * @version GIP.00.06
- * @edit GIP.00.07 2017-12-26
+ * @edit GIP.00.07 17-12-26
  * - Deprecated methods appNombre(), urlInstitucion(), hostAplicacion(), hostAplicacion()
  *   hostFacturas(), hostRespaldos(), urlAssets(), urlFacturas(), urlRecibos(), rutaFacturas(),
  *   rutaRespaldos(), logoAplicacion(), logoInstitucion(), logoFacturas(), sloganAplicacion()
+ * @edit GIP.00.08 17-12-27
+ * - Used \GIndie\Platform\INIHandler::getCategoryValue in previously deprecated methods.
  */
 abstract class Instance
 {
@@ -35,38 +37,30 @@ abstract class Instance
 
     /**
      * Ruta real a las facturas
-     * @edit GIP.00.06
-     * @deprecated since GIP.00.07
+     * @edit GIP.00.08
      */
     public function appNombre()
     {
-        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
-        $configClass = static::CONFIG_CLASS;
-        return $configClass::appNombre();
+        return static::BRAND_NAME;
     }
 
     /**
      * Ruta real a las facturas
-     * @version GIP.00.06
-     * @deprecated since GIP.00.07
+     * @edit GIP.00.08
      */
     public function urlInstitucion()
     {
-        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
-        $configClass = static::CONFIG_CLASS;
-        return $configClass::urlInstitucion();
+        return \GIndie\Platform\INIHandler::getCategoryValue("Vendor", "url");
     }
 
     /**
      * 
      * @return type
-     * @deprecated since GIP.00.07
+     * @edit GIP.00.08
      */
     public function hostAplicacion()
     {
-        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
-        $configClass = static::CONFIG_CLASS;
-        return $configClass::hostAplicacion();
+        return \GIndie\Platform\INIHandler::getCategoryValue("Config", "host");
     }
 
     /**
@@ -76,7 +70,7 @@ abstract class Instance
      */
     public function hostFacturas()
     {
-        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
+        \trigger_error("hostFacturas is to be removed", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::hostFacturas();
     }
@@ -88,21 +82,18 @@ abstract class Instance
      */
     public function hostRespaldos()
     {
-        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
+        \trigger_error("hostRespaldos is to be removed", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::hostRespaldos();
     }
 
     /**
      * Ruta a la carpeta que almacena los assets de la aplicación
-     * @version MR-ADIN.00.03
-     * @deprecated since GIP.00.07
+     * @edit GIP.00.08
      */
     public function urlAssets()
     {
-        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
-        $configClass = static::CONFIG_CLASS;
-        return $configClass::urlAssets();
+        return \GIndie\Platform\INIHandler::getCategoryValue("Config", "assets_url");
     }
 
     /**
@@ -112,7 +103,7 @@ abstract class Instance
      */
     public function urlFacturas()
     {
-        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
+        \trigger_error("urlFacturas is to be removed", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::urlFacturas();
     }
@@ -167,26 +158,20 @@ abstract class Instance
 
     /**
      * URL al logotipo de la aplicación
-     * @version MR-ADIN.00.03
-     * @deprecated since GIP.00.07
+     * @edit GIP.00.08
      */
     public function logoAplicacion()
     {
-        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
-        $configClass = static::CONFIG_CLASS;
-        return $configClass::logoAplicacion();
+        return \GIndie\Platform\INIHandler::getCategoryValue("Instance", "logo");
     }
 
     /**
      * URL al logotipo de la institución
-     * @version MR-ADIN.00.03
-     * @deprecated since GIP.00.07
+     * @edit GIP.00.08
      */
     public function logoInstitucion()
     {
-        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
-        $configClass = static::CONFIG_CLASS;
-        return $configClass::logoInstitucion();
+        return \GIndie\Platform\INIHandler::getCategoryValue("Vendor", "logo");
     }
 
     /**
@@ -203,14 +188,11 @@ abstract class Instance
 
     /**
      * Slogan
-     * @version MR-ADIN.00.03
-     * @deprecated since GIP.00.07
+     * @edit GIP.00.08
      */
     public function sloganAplicacion()
     {
-        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
-        $configClass = static::CONFIG_CLASS;
-        return $configClass::sloganAplicacion();
+        return \GIndie\Platform\INIHandler::getCategoryValue("Config", "slogan");
     }
 
     /**
