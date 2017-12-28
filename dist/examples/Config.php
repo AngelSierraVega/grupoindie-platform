@@ -15,44 +15,12 @@
  * @edit GIP.00.01
  * - Added code from external project AdminIngresos
  * @edit GIP.00.02 17-12-27
- * - Deprecated functions
+ * - Deprecated methods
+ * - Deleted methods
  */
 class Config extends \GIndie\Platform\Config
 {
 
-    /**
-     * Nombre de la aplicación
-     * @since GIP.00.01
-     * @deprecated since GIP.00.02
-     */
-    public static function appNombre()
-    {
-        \trigger_error("Use Current::instance() instead", \E_USER_DEPRECATED);
-        return "appNombre";
-    }
-
-    /**
-     * Nombre de la aplicación
-     * @since GIP.00.01
-     * @deprecated since GIP.00.02
-     */
-    public static function urlInstitucion()
-    {
-        \trigger_error("Use Current::instance() instead", \E_USER_DEPRECATED);
-        return "urlInstitucion";
-    }
-
-    /**
-     * Host de la aplicación
-     * @since GIP.00.01
-     * @deprecated since GIP.00.02
-     */
-    public static function hostAplicacion()
-    {
-        \trigger_error("Use Current::instance() instead", \E_USER_DEPRECATED);
-        return "http:\\\\local.dvlp\\Platform\\dist\\examples\\";
-        //return "http:\\\\192.168.1.19\\";
-    }
 
     /**
      * Ruta real de la aplicación
@@ -86,17 +54,6 @@ class Config extends \GIndie\Platform\Config
     {
         \trigger_error("Use Current::instance() instead", \E_USER_DEPRECATED);
         return $_SERVER['DOCUMENT_ROOT'];
-    }
-
-    /**
-     * Ruta a la carpeta que almacena los assets de la aplicación
-     * @since GIP.00.01
-     * @deprecated since GIP.00.02
-     */
-    public static function urlAssets()
-    {
-        \trigger_error("Use Current::instance() instead", \E_USER_DEPRECATED);
-        return "http:\\\\local.mr-sii\\assets\\";
     }
 
     /**
@@ -157,28 +114,6 @@ class Config extends \GIndie\Platform\Config
     }
 
     /**
-     * URL al logotipo de la aplicación
-     * @since GIP.00.01
-     * @deprecated since GIP.00.02
-     */
-    public static function logoAplicacion()
-    {
-        \trigger_error("Use Current::instance() instead", \E_USER_DEPRECATED);
-        return static::urlAssets() . "img\\icon-adminIngresos.png";
-    }
-
-    /**
-     * URL al logotipo de la institución
-     * @since GIP.00.01
-     * @deprecated since GIP.00.02
-     */
-    public static function logoInstitucion()
-    {
-        \trigger_error("Use Current::instance() instead", \E_USER_DEPRECATED);
-        return static::urlAssets() . "img\\logomunicipio1.png";
-    }
-
-    /**
      * URL al logotipo de las facturas
      * @since GIP.00.01
      * @deprecated since GIP.00.02
@@ -187,17 +122,6 @@ class Config extends \GIndie\Platform\Config
     {
         \trigger_error("Use Current::instance() instead", \E_USER_DEPRECATED);
         return static::rutaAplicacion() . "/assets/img/logo_facturas.jpg";
-    }
-
-    /**
-     * Slogan
-     * @since GIP.00.01
-     * @deprecated since GIP.00.02
-     */
-    public static function sloganAplicacion()
-    {
-        \trigger_error("Use Current::instance() instead", \E_USER_DEPRECATED);
-        return "sloganAplicacion";
     }
 
 }
