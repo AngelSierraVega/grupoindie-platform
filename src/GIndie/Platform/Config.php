@@ -1,36 +1,41 @@
 <?php
 
 /**
- * GIplatform - Config 2017-05-22
+ * GIplatform - Config 
  * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
  *
  * @package Platform
  *
- * @version GIP.00.02
+ * 
  */
 
 namespace GIndie\Platform;
 
 /**
  * Description of Config
+ * 
+ * @deprecated since GIP.00.03
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * 
+ * @version GIP.00.00 17-05-22
+ * @edit GIP.00.02
+ * @edit GIP.00.03
+ * - Deprecated class. Commented source code
  */
-abstract class Config implements ConfigINT{
-
+abstract class Config implements ConfigINT
+{
     /**
      * 
      * @todo [Configuración global para definir error_reporting de PHP ]
      * @since GIP.00.01
+     * public static $DEBUG = \FALSE;
      */
-    public static $DEBUG = \FALSE;
-
     /**
      * @deprecated since GIP.00.02
      * @since GIP.00.01
+     * public static $TOKENIZE_IDS = \TRUE;
      */
-    public static $TOKENIZE_IDS = \TRUE;
-
     /**
      * @deprecated since GIP.00.02
      * @since GIP.00.01
@@ -44,11 +49,10 @@ abstract class Config implements ConfigINT{
      *      -Leer desde archivo externo de configuración
      * @return string
      * @since GIP.00.02
+     * public function getHostDPR() {
+      return static::HOST;
+      }
      */
-    public function getHostDPR() {
-        return static::HOST;
-    }
-
     /**
      * @deprecated since GIP.00.02
      * @since GIP.00.01
@@ -62,11 +66,10 @@ abstract class Config implements ConfigINT{
      *      -Leer desde archivo externo de configuración
      * @return string
      * @since GIP.00.02
+     * public function getPathToProjectDPR() {
+      return static::PATH_TO_PROJECT;
+      }
      */
-    public function getPathToProjectDPR() {
-        return static::PATH_TO_PROJECT;
-    }
-
     /**
      * @deprecated since GIP.00.02
      * @since GIP.00.01
@@ -81,15 +84,13 @@ abstract class Config implements ConfigINT{
      * @todo Convertir a función abstracta. 
      *      -Eliminar constante. 
      *      -Leer desde archivo externo de configuración
+     * public function getPathToAssetsDPR() {
+      return static::PATH_TO_ASSETS;
+      }
      */
-    public function getPathToAssetsDPR() {
-        return static::PATH_TO_ASSETS;
-    }
-
     /**
      * @deprecated since GIP.00.02
      * @since GIP.00.01
      */
     //const SESSION_CONTROLLER = \FALSE;
-
 }
