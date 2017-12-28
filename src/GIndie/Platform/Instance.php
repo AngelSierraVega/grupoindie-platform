@@ -7,7 +7,7 @@
  * @package Platform
  */
 
-namespace GIndie;
+namespace GIndie\Platform;
 
 use GIndie\Platform\Current;
 use GIndie\Platform\Model\Datos\mr_sesion;
@@ -341,8 +341,8 @@ abstract class Instance
      */
     public function setModule($classname, $groupName = \NULL)
     {
-        if (!\is_subclass_of($classname, Platform\Controller\Module::class, \TRUE)) {
-            $sub = Platform\Controller\Module::class;
+        if (!\is_subclass_of($classname, Controller\Module::class, \TRUE)) {
+            $sub = Controller\Module::class;
             trigger_error("Class {$classname} is not subclass of {$sub}", E_USER_ERROR);
             throw new \Exception("Unable to run.");
         }
@@ -464,10 +464,10 @@ abstract class Instance
         if (\session_status() === \PHP_SESSION_NONE) {
             try {
                 if (static::_isLoginAttempt()) {
-                    Platform\Security::startSession();
-                    Platform\Current::setInstance(new static());
-                    Platform\Current::setInstance(new static());
-                    Platform\Current::setModule(new Platform\Controller\Module\Welcome());
+                    Security::startSession();
+                    Current::setInstance(new static());
+                    Current::setInstance(new static());
+                    Current::setModule(new Controller\Module\Welcome());
                     /**
                      * @todo 
                      * $data = [];
@@ -482,7 +482,7 @@ abstract class Instance
                      */
                 }
                 if (static::_isRestartAttempt()) {
-                    Platform\Security::restartSession();
+                    Security::restartSession();
                 }
             } catch (\GIndie\Platform\ExceptionLogin $e) {
                 $params = \session_get_cookie_params();
@@ -504,7 +504,7 @@ abstract class Instance
         if (\session_status() == \PHP_SESSION_NONE) {
             $instance = new static();
             //\GIndie\Platform\INIHandler::getCategoryValue("app", "slogan")
-            return new Platform\View\Login($instance->logoAplicacion(), $instance->sloganAplicacion(), $instance->urlAssets(), $instance->logoInstitucion());
+            return new View\Login($instance->logoAplicacion(), $instance->sloganAplicacion(), $instance->urlAssets(), $instance->logoInstitucion());
         }
         try {
             switch ($_SERVER["REQUEST_METHOD"])
@@ -521,9 +521,9 @@ abstract class Instance
                                 break;
                             default:
                                 $instance = new static();
-                                Platform\Current::setInstance($instance);
-                                Platform\Current::setInstance($instance);
-                                Platform\Current::setModule(new Platform\Controller\Module\Welcome());
+                                Current::setInstance($instance);
+                                Current::setInstance($instance);
+                                Current::setModule(new Controller\Module\Welcome());
                                 $_class = \NULL;
                                 $_action = "load";
                                 $_action_id = "document";
@@ -532,9 +532,9 @@ abstract class Instance
                         }
                     } else {
                         $instance = new static();
-                        Platform\Current::setInstance($instance);
-                        Platform\Current::setInstance($instance);
-                        Platform\Current::setModule(new Platform\Controller\Module\Welcome());
+                        Current::setInstance($instance);
+                        Current::setInstance($instance);
+                        Current::setModule(new Controller\Module\Welcome());
                         $_class = \NULL;
                         $_action = "load";
                         $_action_id = "document";
@@ -551,7 +551,7 @@ abstract class Instance
                     throw new \Exception("Forbiden request method");
                     break;
             }
-            return Platform\Current::Module()->run($_action, $_action_id, $_class, $_selected_id);
+            return Current::Module()->run($_action, $_action_id, $_class, $_selected_id);
         } catch (\Exception $e) {
             //return "TEST";
             $GLOBALS["gip-error"] = static::displayException($e);

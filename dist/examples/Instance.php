@@ -15,7 +15,7 @@
  * @edit GIP.00.01
  * - Added code from GIndie\DBHandler\Platform\DBHandler
  */
-class Instance extends \GIndie\Instance
+class Instance extends \GIndie\Platform\Instance
 {
 
     /**

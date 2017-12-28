@@ -80,7 +80,7 @@ class Current
      * @since GIP.00.02
      * @version GIP.00.04
      */
-    public static function setInstance(\GIndie\Instance $instance)
+    public static function setInstance(\GIndie\Platform\Instance $instance)
     {
         $_SESSION["gip-instance"] = $instance;
     }
