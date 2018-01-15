@@ -23,7 +23,7 @@ require_once "phar://" . $private_folder . '/libsGI/Bootstrap3.phar/main.php';
 
 
 require_once realpath("../../src/GIndie/Platform/autoloader.php");
-require_once 'Config.php';
+//require_once 'Config.php';
 require_once 'Module.php';
 require_once 'Instance.php';
 

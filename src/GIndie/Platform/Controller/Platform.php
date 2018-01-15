@@ -1,12 +1,7 @@
 <?php
 
 /**
- * GIplatform - Platform 2017-05-22
- * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
- *
- * @package Platform
- *
- * @version GIP.00.03
+ * GIplatform - Platform 
  */
 
 namespace GIndie\Platform\Controller;
@@ -22,6 +17,14 @@ use \GIndie\Platform\Current;
  * Description of Platform
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package Platform
+ *
+ * @since GIP.00.00 2017-05-22
+ * @version GIP.00.03
+ * @edit GIP.00.04 18-01-14
+ * - Bitácora restaurada
  */
 abstract class Platform
 {
@@ -184,6 +187,15 @@ abstract class Platform
         }
     }
 
+    /**
+     * 
+     * @param type $action
+     * @param type $id
+     * @param type $class
+     * @param type $selected
+     * 
+     * @edit GIP.00.04
+     */
     protected function _createLog($action, $id, $class, $selected)
     {
         switch ($action)
@@ -213,28 +225,28 @@ abstract class Platform
                 break;
             default:
                 /**
-                 * @todo commented code
+                 * @todo remove bitacora from platform
                  */
-//                $data = [];
-//                $data['fk_usuario_cuenta'] = \GIndie\Platform\Current::User()->getId();
-//                $data['action'] = $action;
-//                $data['action-id'] = $id;
-//                $data['action-class'] = $class;
-//                $data['selected-id'] = $selected;
-//                $data['timestamp'] = \time();
-//                switch ($action)
-//                {
-//                    case "setController":
-//                        $modulo = \urldecode($id);
-//                        $nota = "Ingresó al módulo " . $modulo::NAME;
-//                        break;
-//                    default:
-//                        \trigger_error("POR DEFINIR ACCION EN HISTORIAL. {$action}", \E_USER_ERROR);
-//                        break;
-//                }
-//                $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
-//                $bitacora = \AdminIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
-//                $bitacora->run("gip-inner-create");
+                $data = [];
+                $data['fk_usuario_cuenta'] = \GIndie\Platform\Current::User()->getId();
+                $data['action'] = $action;
+                $data['action-id'] = $id;
+                $data['action-class'] = $class;
+                $data['selected-id'] = $selected;
+                $data['timestamp'] = \time();
+                switch ($action)
+                {
+                    case "setController":
+                        $modulo = \urldecode($id);
+                        $nota = "Ingresó al módulo " . $modulo::NAME;
+                        break;
+                    default:
+                        \trigger_error("POR DEFINIR ACCION EN HISTORIAL. {$action}", \E_USER_ERROR);
+                        break;
+                }
+                $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
+                $bitacora = \AdminIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
+                $bitacora->run("gip-inner-create");
                 break;
         }
     }
@@ -248,6 +260,7 @@ abstract class Platform
      * 
      * @return mixed
      * @throws \Exception
+     * @edit GIP.00.04
      */
     protected function submit($id)
     {
@@ -294,14 +307,14 @@ abstract class Platform
 
                     /**
                      * @todo
-                     * $data['action'] = "gip-logout";
-                      $data['timestamp'] = \time();
-                      $nota = "Cerró su sesión";
-                      $data['notas'] = \filter_var($nota,
-                      \FILTER_SANITIZE_SPECIAL_CHARS);
-                      $bitacora = \AdminIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
-                      $bitacora->run("gip-inner-create");
+                     * Remove bitacora from platform
                      */
+                    $data['action'] = "gip-logout";
+                    $data['timestamp'] = \time();
+                    $nota = "Cerró su sesión";
+                    $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
+                    $bitacora = \AdminIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
+                    $bitacora->run("gip-inner-create");
                 } else {
                     $response->addContent("Failed");
                 }

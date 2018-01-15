@@ -20,16 +20,26 @@ use GIndie\Platform\Current;
 use GIndie\Generator\DML\HTML5\Category\Links\Anchor;
 use GIndie\Generator\DML\HTML5\Category\Basic\Paragraph;
 
+/**
+ * @edit GIP.00.02 17-04-23
+ * @edit GIP.00.03 17-04-28
+ * @edit GIP.00.04 18-01-07
+ * - Displays the name of the app + the name of the instance.
+ */
 class Welcome extends \GIndie\Platform\Controller\Module
 {
 
     /**
-     * @version     GIP.00.02
-     * @since       2017-04-23
+     * @edit     GIP.00.03
      * @var         string 
      */
     const NAME = "Bienvenido";
 
+    /**
+     * 
+     * @since GIP.00.0?
+     * @return array
+     */
     public static function RequiredRoles()
     {
         return ["AS", "AO"];
@@ -37,8 +47,7 @@ class Welcome extends \GIndie\Platform\Controller\Module
 
     /**
      * [description]
-     * @version     GIP.00.03
-     * @since       2017-04-28
+     * @edit GIP.00.04
      */
     public function config()
     {
@@ -62,6 +71,7 @@ class Welcome extends \GIndie\Platform\Controller\Module
 
         $h1 = StylesSemantics::Span();
         $h1->setTag("h1");
+        $h1->addContent("<b>".\GIndie\Platform\INIHandler::getCategoryValue("Instance", "name") . "</b> -");
         $h1->addContent(Current::Instance()->appNombre());
         $col->addContent($h1);
 

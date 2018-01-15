@@ -19,6 +19,7 @@ namespace GIndie\Platform;
  * - Added required methods: fileName(), pathToFile(), requiredVars()
  * @edit GIP.00.02
  * - Updated method requiredVars()
+ * @edit GIP.00.03 18-01-06
  */
 class INIHandler extends \GIndie\INIHandler
 {
@@ -37,11 +38,12 @@ class INIHandler extends \GIndie\INIHandler
      * 
      * @since GIP.00.01
      * @return string
+     * @deprecated since GIP.00.03
+     *     public static function pathToFile()
+      {
+      return __DIR__ . "/" . static::fileName() . ".ini";
+      }
      */
-    public static function pathToFile()
-    {
-        return __DIR__ . "/" . static::fileName() . ".ini";
-    }
 
     /**
      * 

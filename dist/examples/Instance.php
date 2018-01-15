@@ -20,8 +20,9 @@ class Instance extends \GIndie\Platform\Instance
 
     /**
      * @since GIP.00.01
+     * const CONFIG_CLASS = "Config";
      */
-    const CONFIG_CLASS = "Config";
+    
 
     /**
      * @since GIP.00.01

@@ -20,7 +20,8 @@ use \GIndie\Generator\DML\HTML5\Bootstrap3;
  * @since       2017-04-23
  * @version     GIP.00.10
  * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
- *
+ * @edit GIP.00.11 18-01-14
+ * - Update getDisplayOf()
  */
 abstract class Record implements RecordINT
 {
@@ -538,6 +539,8 @@ abstract class Record implements RecordINT
      * 
      * @param string $attributeName
      * @since GIP.00.09
+     * @edit GIP.00.11
+     * - Attribute::TYPE_ENUM returns empty string if no value
      */
     public function getDisplayOf($attributeName)
     {
@@ -559,6 +562,9 @@ abstract class Record implements RecordINT
                 }
                 return "*********";
             case Attribute::TYPE_ENUM:
+                if ($this->getValueOf($attributeName) == "") {
+                    return "";
+                }
                 $_typeOptions = $this->getAttribute($attributeName)->getEnumOptions();
                 return $_typeOptions[$this->getValueOf($attributeName)];
             case Attribute::TYPE_FOREIGN_KEY:

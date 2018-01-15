@@ -26,6 +26,8 @@ use \GIndie\Generator\DML\HTML5;
  *   rutaRespaldos(), logoAplicacion(), logoInstitucion(), logoFacturas(), sloganAplicacion()
  * @edit GIP.00.08 17-12-27
  * - Used \GIndie\Platform\INIHandler::getCategoryValue in previously deprecated methods.
+ * @edit GIP.00.09 18-01-14
+ * - Bitácora restaurada
  */
 abstract class Instance
 {
@@ -36,8 +38,8 @@ abstract class Instance
     const CONFIG_CLASS = \NULL;
 
     /**
-     * Ruta real a las facturas
-     * @edit GIP.00.08
+     * Nombre de la aplicación mas el nombre de la instancia.
+     * @edit GIP.00.09
      */
     public function appNombre()
     {
@@ -111,25 +113,27 @@ abstract class Instance
     /**
      * URL a la carpeta que almacena los recibos
      * @version MR-ADIN.00.03
-     * @deprecated since GIP.00.07
+     * @NOTdeprecated since GIP.00.09
      */
     public function urlRecibos()
     {
-        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
-        $configClass = static::CONFIG_CLASS;
-        return $configClass::urlRecibos();
+        return $this->rutaRecibos();
+//        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
+//        $configClass = static::CONFIG_CLASS;
+//        return $configClass::urlRecibos();
     }
 
     /**
      * Ruta real a las facturas
      * @version MR-ADIN.00.03
-     * @deprecated since GIP.00.07
+     * @NOTdeprecated since GIP.00.09
      */
     public function rutaFacturas()
     {
-        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
-        $configClass = static::CONFIG_CLASS;
-        return $configClass::rutaFacturas();
+        return $this->rutaRecibos();
+//        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
+//        $configClass = static::CONFIG_CLASS;
+//        return $configClass::rutaFacturas();
     }
 
     /**
@@ -147,13 +151,16 @@ abstract class Instance
     /**
      * Ruta real a los recibos
      * @version MR-ADIN.00.03
-     * @deprecated since GIP.00.07
+     * @NOTdeprecated since GIP.00.09
      */
     public function rutaRecibos()
     {
-        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
-        $configClass = static::CONFIG_CLASS;
-        return $configClass::rutaRecibos();
+        $ini = \GIndie\Platform\INIHandler::getCategoryValue("Path", "generatedFiles");
+        if ($ini) {
+            return $ini;
+        } else {
+            return \dirname($_SERVER['SCRIPT_FILENAME']) . "\\private\\generado\\";
+        }
     }
 
     /**
@@ -181,6 +188,7 @@ abstract class Instance
      */
     public function logoFacturas()
     {
+        throw new \Exception("Deprecated. Use INIHandler instead");
         \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
         $configClass = static::CONFIG_CLASS;
         return $configClass::logoFacturas();
@@ -315,7 +323,7 @@ abstract class Instance
     final private function __construct()
     {
         static::BRAND_NAME !== \NULL ?: trigger_error("Constant BRAND_NAME must be defined inside class definition of: " . get_called_class(), \E_USER_ERROR);
-        static::CONFIG_CLASS !== \NULL ?: trigger_error("Constant CONFIG_CLASS must be defined inside class definition of: " . get_called_class(), \E_USER_ERROR);
+        //static::CONFIG_CLASS !== \NULL ?: trigger_error("Constant CONFIG_CLASS must be defined inside class definition of: " . get_called_class(), \E_USER_ERROR);
         if (Current::Instance() !== \NULL) {
             static::config();
         }
@@ -452,6 +460,7 @@ abstract class Instance
      * 
      * @since GIP.00.01
      * @version GIP.00.05
+     * @edit GIP.00.09
      */
     final public static function run()
     {
@@ -470,16 +479,16 @@ abstract class Instance
                     Current::setModule(new Controller\Module\Welcome());
                     /**
                      * @todo 
-                     * $data = [];
-                      $data['fk_usuario_cuenta'] = \GIndie\Platform\Current::User()->getId();
-                      $data['action'] = "gip-login";
-                      $data['timestamp'] = \time();
-                      $nota = "Ingresó al sistema con correo y contraseña";
-                      $data['notas'] = \filter_var($nota,
-                      \FILTER_SANITIZE_SPECIAL_CHARS);
-                      $bitacora = \AdminIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
-                      $bitacora->run("gip-inner-create");
+                     * Remove bitacora from platform
                      */
+                    $data = [];
+                    $data['fk_usuario_cuenta'] = \GIndie\Platform\Current::User()->getId();
+                    $data['action'] = "gip-login";
+                    $data['timestamp'] = \time();
+                    $nota = "Ingresó al sistema con correo y contraseña";
+                    $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
+                    $bitacora = \AdminIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
+                    $bitacora->run("gip-inner-create");
                 }
                 if (static::_isRestartAttempt()) {
                     Security::restartSession();
