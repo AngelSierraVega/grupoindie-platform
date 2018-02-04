@@ -28,13 +28,13 @@ class SessionHandler extends Connection {
      * @var string 
      * @version GIP.00.01
      */
-    protected static $USERNAME = "mrdemo_sesion";
+    protected static $USERNAME = "mrdemo_sesion";//"straffon_default";
 
     /**
      * Defines the username
      * @var string 
      * @version GIP.00.01
      */
-    protected static $PASSWORD = "WW4_cMtU(o]B";
+    protected static $PASSWORD = "WW4_cMtU(o]B";//"%wn0Zx5]EZu}";
 
 }

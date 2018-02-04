@@ -20,6 +20,8 @@ namespace GIndie\Platform;
  * @edit GIP.00.02
  * - Updated method requiredVars()
  * @edit GIP.00.03 18-01-06
+ * @edit GIP.00.04 18-01-23
+ * - Updated requiredVars()
  */
 class INIHandler extends \GIndie\INIHandler
 {
@@ -49,14 +51,15 @@ class INIHandler extends \GIndie\INIHandler
      * 
      * @since GIP.00.01
      * @return array
-     * @edit GIP.00.02
+     * @edit GIP.00.04
      */
     public static function requiredVars()
     {
         return [
             "Config" => ["host", "assets_url", "slogan"],
             "Instance" => ["logo"],
-            "Vendor" => ["logo", "url"]
+            "Vendor" => ["logo", "url"],
+            "PHPMailer" => ["SMTPDebug", "Host","Port","Username","Password","FromName"]
         ];
     }
 

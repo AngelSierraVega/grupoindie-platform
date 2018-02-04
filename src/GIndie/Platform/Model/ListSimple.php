@@ -1,12 +1,7 @@
 <?php
 
 /**
- * GIplatform - ListSimple 2017-06-26
- * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
- *
- * @package Platform
- *
- * @version GIP.00.0?
+ * GIplatform - ListSimple 
  */
 
 namespace GIndie\Platform\Model;
@@ -16,9 +11,16 @@ use GIndie\Platform\Current;
 /**
  * Description of List
  *
- * @version     GIP.00.05
- *
  * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package Platform
+ *
+ * @version GIP.00.00 17-06-26
+ * @edit GIP.00.05
+ * @edit GIP.00.06 18-01-17
+ * - Updated readFromDB()
+ * - Cleaned deprecated code
  */
 abstract class ListSimple implements ListSimpleINT
 {
@@ -48,7 +50,7 @@ abstract class ListSimple implements ListSimpleINT
         $_record = static::RelatedRecord();
         return $_record::PRIMARY_KEY;
     }
-    
+
     public static function getValidRolesFor($action){
         $_record = static::RelatedRecord();
         return $_record::getValidRolesFor($action);
@@ -77,40 +79,20 @@ abstract class ListSimple implements ListSimpleINT
      */
     public function __construct($conditions = [])
     {
-//        static::ELEMENT_ID !== \NULL ?: trigger_error("Constant ELEMENT_ID must be defined inside class definition of: " . get_called_class(),
-//                                                      \E_USER_ERROR);
-//        static::ELEMENT_NAME !== \NULL ?: trigger_error("Constant ELEMENT_NAME must be defined inside class definition of: " . get_called_class(),
-//                                                        \E_USER_ERROR);
-//        static::RELATED_RECORD !== \NULL ?: trigger_error("Constant RELATED_RECORD must be defined inside class definition of: " . get_called_class(),
-//                                                          \E_USER_ERROR);
-        //var_dump($conditions);
-
         $_recordClass = static::RelatedRecord();
         $this->_relatedRecordClass = static::RelatedRecord();
         if (\is_string($conditions)) {
-            //var_dump("ENTRO");
             if ($conditions == "gip-selected-id") {
                 if (isset($_POST["gip-selected-id"])) {
                     $conditions = [[static::DisplayKey() => $_POST["gip-selected-id"]]];
-                    // $conditions = [[static::ELEMENT_NAME => $_POST["gip-selected-id"]]];
-                    // return $_POST["gip-selected-id"];
-                    // $this->addElement(static::ELEMENT_ID,
-                    // $_POST["gip-selected-id"]);
                     return $this->readFromDB($conditions);
                 } else {
-                    //throw new \Exception("TEST");
+                    
                 }
-                // return "NONE";
+                
             } else {
                 $conditions = [[static::PrimaryKey() => $conditions]];
                 return $this->readFromDB($conditions);
-//                $tmpRow = [$conditions];
-//                $_class = static::RELATED_RECORD;
-//                $_name = \is_array(static::ELEMENT_NAME) ?
-//                        \array_keys(static::ELEMENT_NAME)[0] : static::ELEMENT_NAME;
-//                $model = new $_class($conditions);
-//                $this->addElement("RELATED_RECORD_NAME",
-//                                  $model->getAttribute($_name)->getDisplay());
             }
         } else {
             try {
@@ -121,7 +103,6 @@ abstract class ListSimple implements ListSimpleINT
                 }
                 return $this->readFromDB($conditions);
             } catch (\Exception $exc) {
-
                 $tmpRow = [];
                 foreach (array(static::PrimaryKey(), static::DisplayKey()) as $column) {
                     $tmpRow[$column] = $exc->getMessage();
@@ -135,15 +116,18 @@ abstract class ListSimple implements ListSimpleINT
      * Populates the found rows from the database.
      * 
      * @param array $conditions
+     * @param array $params
      *
      * @version     GIP.00.05
+     * @edit GIP.00.06
+     * - Protected method
+     * - Param $params added
      */
-    private function readFromDB(array $conditions = [])
+    protected function readFromDB(array $conditions = [], array $params = [])
     {
         $_recordClass = static::RelatedRecord();
         $_resultSet = Current::Connection()->select([static::PrimaryKey(),
-            static::DisplayKey()], $_recordClass::SCHEMA, $_recordClass::TABLE,
-                                                    $conditions);
+            static::DisplayKey()], $_recordClass::SCHEMA, $_recordClass::TABLE, $conditions, $params);
         if ($_resultSet) {
             while ($row = $_resultSet->fetch_assoc()) {
                 $elementName = \is_array(static::DisplayKey()) ? \array_keys(static::DisplayKey())[0] : static::DisplayKey();
@@ -152,17 +136,9 @@ abstract class ListSimple implements ListSimpleINT
                     if ($key !== \FALSE) {
                         $conditions[$key] = [static::ELEMENT_AUTONEST_ON => $row[static::PrimaryKey()]];
                     }
-                    //var_dump("ENTRO");
-                    //$params = [static::ELEMENT_AUTONEST_ON . "='" . $row[static::PrimaryKey()] . "'"];
-                    //$params = [[static::ELEMENT_AUTONEST_ON => $row[static::PrimaryKey()]]];
-                    //$params = ["key"=>"columna","value"=>"condicion"]
-                    //$conditions[]
-                    static::addElement($row[static::PrimaryKey()],
-                                      $row[$elementName], static::class,
-                                      $conditions);
+                    static::addElement($row[static::PrimaryKey()], $row[$elementName], static::class, $conditions);
                 } else {
-                    static::addElement($row[static::PrimaryKey()],
-                                      $row[$elementName]);
+                    static::addElement($row[static::PrimaryKey()], $row[$elementName]);
                 }
             }
         }
@@ -183,11 +159,6 @@ abstract class ListSimple implements ListSimpleINT
         return \FALSE;
     }
 
-//    protected $_createElement = \FALSE;
-//    protected $_editElement = \FALSE;
-//    protected $_deleteElement = \FALSE;
-//    protected $_parent = "";
-    //abstract protected function defineColumns();
 
     /**
      * @version     GIP.00.01
@@ -205,8 +176,7 @@ abstract class ListSimple implements ListSimpleINT
      * @param   $attr1
      * @param   $attr2
      */
-    public function addElement($elementId, $elementName, $chidClass = \NULL,
-                               $childParams = \NULL)
+    public function addElement($elementId, $elementName, $chidClass = \NULL, $childParams = \NULL)
     {
         $this->_data[$elementId] = new Element($elementId, $elementName);
         $this->_data[$elementId]->setValue($elementName);
@@ -245,32 +215,4 @@ abstract class ListSimple implements ListSimpleINT
         return isset($this->_data[$recordId]) ? $this->_data[$recordId] : \FALSE;
     }
 
-//    public function setOptions($create = \FALSE, $delete = \FALSE,
-//            $edit = \FALSE) {
-//        $this->_createElement = $create;
-//        $this->_deleteElement = $delete;
-//        $this->_editElement = $edit;
-//    }
-//
-//    public function getCreateOption() {
-//        return $this->_createElement;
-//    }
-//
-//    public function getEditOption() {
-//        return $this->_editElement;
-//    }
-//
-//    public function getDeleteOption() {
-//        return $this->_deleteElement;
-//    }
-//    
-//    
-//    
-//    public function setParent($parentColumnName){
-//        $this->_parent = $parentColumnName;
-//    }
-//
-//    public function getParent(){
-//        return $this->_parent;
-//    }
 }

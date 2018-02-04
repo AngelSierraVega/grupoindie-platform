@@ -26,7 +26,7 @@ class UserDefault extends Connection {
      * @var string 
      * @version GIP.00.01
      */
-    protected static $USERNAME = "mrdemo_default";
+    protected static $USERNAME = "mrdemo_default";//"straffon_default";
 
     /**
      * Defines the user password

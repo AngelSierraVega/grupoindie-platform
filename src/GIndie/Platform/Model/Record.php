@@ -43,7 +43,7 @@ abstract class Record implements RecordINT
      * The name of the database storing the record.
      * @version GIP.00.10
      */
-    const SCHEMA = "mr_ingresos";
+    const SCHEMA = "mr_ingresos";//"straffon_ingresos";
 
     /**
      * The name of the table storing the the record.

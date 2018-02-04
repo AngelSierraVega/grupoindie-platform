@@ -274,6 +274,35 @@ abstract class Module extends Platform implements ModuleINT
         return $modalContent;
     }
 
+    /**
+     * @since 18-01-24
+     * @param type $action
+     * @param type $id
+     * @param type $class
+     */
+    protected function recordActionGipEdit($action, $id, $class)
+    {
+        $record = $class::findById($id);
+        $response = HTML5\Category\StylesSemantics::Span();
+        $btnDismiss = new Bootstrap3\Component\Button("Cerrar", Bootstrap3\Component\Button::TYPE_BUTTON);
+        $btnDismiss->setAttribute("data-dismiss", "modal");
+        
+        $recordAction = $record->run($action);
+        if (!\is_string($recordAction)) {
+            $modalContent = new Bootstrap3\Component\Modal\Content("Registro actualizado con éxito");
+            $modalContent->addFooterButton($btnDismiss);
+            $script = "$('#gip-modal .modal-content').html('{$modalContent}');";
+            //$script .= "triggerParents('".$_POST["gip-id-placeholder"]."','".$record->getId()."');";
+            $response->addScript($script);
+            //$response->setAttribute("gip-success");
+        } else {
+            $modalContent = new Bootstrap3\Component\Modal\Content("Hubo un error al intentar actualizar el registro", $recordAction);
+            $modalContent->addFooterButton($btnDismiss);
+            $response->addScript("$('#gip-modal .modal-content').html('{$modalContent}');");
+        }
+        return $response;
+    }
+
     protected function _recordAction($action, $id, $class)
     {
         if (!isset($_POST["gip-token"])) {
@@ -313,31 +342,8 @@ abstract class Module extends Platform implements ModuleINT
                     $response->addScript("$('#gip-modal .modal-content').html('{$modalContent}');");
                 }
                 return $response;
-            case "gip-edit"://gip-deactivate
-                $recordAction = $record->run($action);
-//                if ($record->run($action)) {
-//                    $response->addScript("$('#gip-modal .modal-body').html('Registro actualizado.')");
-//                    $response->setAttribute("gip-success");
-//                } else {
-//                    $response->addContent("Hubo un error al actualizar, intentenlo de nuevo.");
-//                }
-
-                if (!\is_string($recordAction)) {
-                    $modalContent = new Bootstrap3\Component\Modal\Content("Registro actualizado con éxito");
-                    $modalContent->addFooterButton($btnDismiss);
-                    $script = "$('#gip-modal .modal-content').html('{$modalContent}');";
-                    //$script .= "triggerParents('".$_POST["gip-id-placeholder"]."','".$record->getId()."');";
-                    $response->addScript($script);
-                    //$response->setAttribute("gip-success");
-                } else {
-                    $modalContent = new Bootstrap3\Component\Modal\Content("Hubo un error al intentar actualizar el registro", $recordAction);
-                    $modalContent->addFooterButton($btnDismiss);
-                    //$modalContent = \htmlentities($modalContent);
-//                    $modalContent = \addslashes($modalContent);
-                    $response->addScript("$('#gip-modal .modal-content').html('{$modalContent}');");
-                }
-
-                return $response;
+            case "gip-edit":
+                return $this->recordActionGipEdit($action, $id, $class);
             case "gip-deactivate"://
                 $recordAction = $record->run($action);
                 if (!\is_string($recordAction)) {

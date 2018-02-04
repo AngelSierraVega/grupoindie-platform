@@ -152,6 +152,8 @@ abstract class Instance
      * Ruta real a los recibos
      * @version MR-ADIN.00.03
      * @NOTdeprecated since GIP.00.09
+     * @todo 
+     * - Verificar ruta automática
      */
     public function rutaRecibos()
     {
@@ -159,7 +161,7 @@ abstract class Instance
         if ($ini) {
             return $ini;
         } else {
-            return \dirname($_SERVER['SCRIPT_FILENAME']) . "\\private\\generado\\";
+            return \dirname($_SERVER['SCRIPT_FILENAME']) . "/private/generado/";
         }
     }
 
@@ -478,17 +480,19 @@ abstract class Instance
                     Current::setInstance(new static());
                     Current::setModule(new Controller\Module\Welcome());
                     /**
-                     * @todo 
-                     * Remove bitacora from platform
+                     * @todo Verify plugin data
                      */
-                    $data = [];
-                    $data['fk_usuario_cuenta'] = \GIndie\Platform\Current::User()->getId();
-                    $data['action'] = "gip-login";
-                    $data['timestamp'] = \time();
-                    $nota = "Ingresó al sistema con correo y contraseña";
-                    $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
-                    $bitacora = \AdminIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
-                    $bitacora->run("gip-inner-create");
+                    $sii = \GIndie\Platform\INIHandler::getCategoryValue("Plugins", "SistemaIntegralIngresos");
+                    if ($sii) {
+                        $data = [];
+                        $data['fk_usuario_cuenta'] = \GIndie\Platform\Current::User()->getId();
+                        $data['action'] = "gip-login";
+                        $data['timestamp'] = \time();
+                        $nota = "Ingresó al sistema con correo y contraseña";
+                        $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
+                        $bitacora = \AdminIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
+                        $bitacora->run("gip-inner-create");
+                    }
                 }
                 if (static::_isRestartAttempt()) {
                     Security::restartSession();

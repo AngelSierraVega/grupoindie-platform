@@ -147,15 +147,24 @@ abstract class Platform
                 return $rtn;
                 break;
             case "tabla-bitacora":
-                $beginOfDay = \DateTime::createFromFormat('Y-m-d H:i:s', (new \DateTime())->setTimestamp(\time())->format('Y-m-d 00:00:00'))->getTimestamp();
-                $endOfDay = \DateTime::createFromFormat('Y-m-d H:i:s', (new \DateTime())->setTimestamp(\time())->format('Y-m-d 23:59:59'))->getTimestamp();
-                $restrictions = "fk_usuario_cuenta='" . Current::User()->getId();
-                //$restrictions .= "' AND timestamp < 1601539400";
-                $restrictions .= "' AND timestamp > " . $beginOfDay;
-                //$restrictions .= "' AND timestamp < " . $endOfDay;
-                $bitacora = new \GIndie\Platform\View\TableSimple(new \AdminIngresos\Datos\mr_sesion\bitacora\Tabla(
-                        [$restrictions]));
-                $modalContent = $this->_modalWrap("Bitácora de actividades", $bitacora);
+                /**
+                 * @todo Verify plugin data
+                 */
+                $sii = \GIndie\Platform\INIHandler::getCategoryValue("Plugins", "SistemaIntegralIngresos");
+                if ($sii) {
+                    $beginOfDay = \DateTime::createFromFormat('Y-m-d H:i:s', (new \DateTime())->setTimestamp(\time())->format('Y-m-d 00:00:00'))->getTimestamp();
+                    $endOfDay = \DateTime::createFromFormat('Y-m-d H:i:s', (new \DateTime())->setTimestamp(\time())->format('Y-m-d 23:59:59'))->getTimestamp();
+                    $restrictions = "fk_usuario_cuenta='" . Current::User()->getId();
+                    //$restrictions .= "' AND timestamp < 1601539400";
+                    $restrictions .= "' AND timestamp > " . $beginOfDay;
+                    //$restrictions .= "' AND timestamp < " . $endOfDay;
+                    $bitacora = new \GIndie\Platform\View\TableSimple(new \AdminIngresos\Datos\mr_sesion\bitacora\Tabla(
+                            [$restrictions]));
+                    $modalContent = $this->_modalWrap("Bitácora de actividades", $bitacora);
+                } else {
+                    $modalContent = $this->_modalWrap("Bitácora de actividades", "@todo");
+                }
+
                 return $modalContent;
 
                 break;
@@ -225,28 +234,31 @@ abstract class Platform
                 break;
             default:
                 /**
-                 * @todo remove bitacora from platform
+                 * @todo Verify plugin data
                  */
-                $data = [];
-                $data['fk_usuario_cuenta'] = \GIndie\Platform\Current::User()->getId();
-                $data['action'] = $action;
-                $data['action-id'] = $id;
-                $data['action-class'] = $class;
-                $data['selected-id'] = $selected;
-                $data['timestamp'] = \time();
-                switch ($action)
-                {
-                    case "setController":
-                        $modulo = \urldecode($id);
-                        $nota = "Ingresó al módulo " . $modulo::NAME;
-                        break;
-                    default:
-                        \trigger_error("POR DEFINIR ACCION EN HISTORIAL. {$action}", \E_USER_ERROR);
-                        break;
+                $sii = \GIndie\Platform\INIHandler::getCategoryValue("Plugins", "SistemaIntegralIngresos");
+                if ($sii) {
+                    $data = [];
+                    $data['fk_usuario_cuenta'] = \GIndie\Platform\Current::User()->getId();
+                    $data['action'] = $action;
+                    $data['action-id'] = $id;
+                    $data['action-class'] = $class;
+                    $data['selected-id'] = $selected;
+                    $data['timestamp'] = \time();
+                    switch ($action)
+                    {
+                        case "setController":
+                            $modulo = \urldecode($id);
+                            $nota = "Ingresó al módulo " . $modulo::NAME;
+                            break;
+                        default:
+                            \trigger_error("POR DEFINIR ACCION EN HISTORIAL. {$action}", \E_USER_ERROR);
+                            break;
+                    }
+                    $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
+                    $bitacora = \AdminIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
+                    $bitacora->run("gip-inner-create");
                 }
-                $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
-                $bitacora = \AdminIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
-                $bitacora->run("gip-inner-create");
                 break;
         }
     }
@@ -306,15 +318,17 @@ abstract class Platform
                     $response->addScript("location.replace(location.pathname);");
 
                     /**
-                     * @todo
-                     * Remove bitacora from platform
+                     * @todo Verify plugin data
                      */
-                    $data['action'] = "gip-logout";
-                    $data['timestamp'] = \time();
-                    $nota = "Cerró su sesión";
-                    $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
-                    $bitacora = \AdminIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
-                    $bitacora->run("gip-inner-create");
+                    $sii = \GIndie\Platform\INIHandler::getCategoryValue("Plugins", "SistemaIntegralIngresos");
+                    if ($sii) {
+                        $data['action'] = "gip-logout";
+                        $data['timestamp'] = \time();
+                        $nota = "Cerró su sesión";
+                        $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
+                        $bitacora = \AdminIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
+                        $bitacora->run("gip-inner-create");
+                    }
                 } else {
                     $response->addContent("Failed");
                 }
