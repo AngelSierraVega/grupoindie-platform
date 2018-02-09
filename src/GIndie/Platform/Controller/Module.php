@@ -1,28 +1,48 @@
 <?php
 
 /**
- * GIplatform - Module 2017-05-23
- * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
- *
- * @package Platform
- *
- * @version GIP.00.0?
- * @lastChange GIP.00.07
+ * GIplatform - Module
  */
 
 namespace GIndie\Platform\Controller;
 
-use \GIndie\Generator\DML\HTML5;
-use \GIndie\Generator\DML\HTML5\Bootstrap3;
-use \GIndie\Platform\Model\Datos\mr_sesion;
+use GIndie\Generator\DML\HTML5;
+use GIndie\Generator\DML\HTML5\Bootstrap3;
+use GIndie\Platform\Model\Datos\mr_sesion;
+use GIndie\Platform\View\Widget;
 
 /**
  * Description of Module
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * 
+ * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package Platform
+ * @version GIP.00.00 17-05-23
+ * @version GIP.00.0?
+ * @edit GIP.00.07
+ * @edit GIP.00.08 18-03-05
+ * - Created widgetTableFromModel()
  */
 abstract class Module extends Platform implements ModuleINT
 {
+    
+    /**
+     * @since GIP.00.08
+     * @param string $classname
+     * @param array $params
+     * @return \GIndie\Platform\View\Widget\WidgetTable
+     */
+    protected function widgetTableFromModel($classname, $params = [])
+    {
+        if (\is_subclass_of($classname, \GIndie\Platform\Model\Table::class, true)) {
+            $rtnWidget = new Widget\WidgetTable(new $classname($params));
+            return $rtnWidget;
+        }
+        \trigger_error($classname . " is not subclass of \GIndie\Platform\Model\Table", \E_USER_ERROR);
+    }
+    
     //use \GIndie\Platform\WidgetsDefinition;
 
     /**
