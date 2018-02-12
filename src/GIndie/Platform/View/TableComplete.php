@@ -15,6 +15,13 @@ namespace GIndie\Platform\View;
  */
 class TableComplete extends Table
 {
+    
+    public function __construct(\GIndie\Platform\Model\Table $table,
+                                $showFooter = \FALSE, $selectedId = \NULL)
+    {
+        parent::__construct($table, \TRUE, $selectedId);
+    }
+    
     public function defineScript()
     {
         $tableModel = $this->_model;
@@ -25,7 +32,14 @@ class TableComplete extends Table
             var columns = [<?= $this->_getColumns(); ?>];
             var title = "<?= $title; ?>";
             $(document).ready(function () {
-                create_datatable("<?= $this->getId(); ?>", {"title":title, "columns": columns, "search": true, "export": false, "pagination": true, "selectable": true});
+                create_datatable("<?= $this->getId(); ?>", {
+                    "title":title, 
+                    "columns": columns, 
+                    "search": true, 
+                    "export": false, 
+                    "pagination": true, 
+                    "selectable": true
+                });
             });
         </script>
         <?php
