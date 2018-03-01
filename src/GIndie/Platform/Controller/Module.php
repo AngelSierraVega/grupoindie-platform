@@ -27,7 +27,63 @@ use GIndie\Platform\View\Widget;
  */
 abstract class Module extends Platform implements ModuleINT
 {
-    
+
+    /**
+     * 
+     * @param type $_classname
+     * @param array $_searchColumns
+     * @param array $_params
+     * @param array $buttons
+     * @return \GIndie\Platform\View\Widget
+     */
+    protected function widgetTableSearch($_classname, array $_searchColumns, array $_params = [],
+                                         array $buttons = [])
+    {
+//        $_classname = $this->_dynamicClass;
+//        $_searchColumns = $this->_columnsSearch;
+//        $_params = $this->_startParams;
+        $record = $_classname::RelatedRecord();
+        $record::instance();
+        $form = new \GIndie\Platform\View\Form(\NULL, \FALSE, "#tempContent");
+        $form->setAttribute("gip-action", "tableSearch");
+        $form->setAttribute("gip-action-class", $_classname);
+        foreach ($_searchColumns as $attribute) {
+            if (\is_array($attribute)) {
+                foreach ($attribute as $key => $value) {
+                    $tmpAttr = \GIndie\Platform\View\Input::constructFromAttribute($record::getAttribute($key), $value, \NULL);
+                }
+            } else {
+                $tmpAttr = \GIndie\Platform\View\Input::constructFromAttribute($record::getAttribute($attribute), "", \NULL);
+            }
+            $form->addContent($tmpAttr);
+        }
+        $widget = new \GIndie\Platform\View\Widget("Búsqueda de " . $_classname::Name(), \FALSE, $form, "<div id='tempContent'></div>");
+//                $searchButton = Widget\Buttons::CustomDefault("<span class=\"glyphicon glyphicon-refresh\"></span>", "widget-reload", \NULL, \FALSE, \NULL);
+//                $searchButton->setForm($form->getId());
+//                $searchButton = Widget\Buttons::Reload();
+//                $widget->addButtonHeading($searchButton);
+
+        $searchButton = \GIndie\Platform\View\Widget\Buttons::CustomPrimary("<span class=\"glyphicon glyphicon-search\"></span>", \NULL, \NULL, \FALSE, \NULL);
+        $searchButton->setForm($form->getId());
+        $widget->addButtonHeading($searchButton);
+
+//        foreach ($buttons as $tmpButton) {
+//            $_actionId = $tmpButton["gipActionId"];
+//            if (strcmp($_actionId, "gip-selected-id") == 0) {
+//                if (isset($_POST["gip-selected-id"])) {
+//                    $_actionId = $_POST["gip-selected-id"];
+//                    $this->_selectedId = $_actionId;
+//                } else {
+//                    //this->_selectedId = "NONE";
+//                    $_actionId = $this->_selectedId;
+//                }
+//            }
+//            $tmpButton = \GIndie\Platform\View\Widget\Buttons::Custom($tmpButton["context"], $tmpButton["icon"], $tmpButton["gipAction"], $_actionId, $tmpButton["gipModal"], $tmpButton["gipClass"]);
+//            $widget->addButtonHeading($tmpButton);
+//        }
+        return $widget;
+    }
+
     /**
      * @since GIP.00.08
      * @param string $classname
@@ -42,7 +98,7 @@ abstract class Module extends Platform implements ModuleINT
         }
         \trigger_error($classname . " is not subclass of \GIndie\Platform\Model\Table", \E_USER_ERROR);
     }
-    
+
     //use \GIndie\Platform\WidgetsDefinition;
 
     /**
@@ -179,6 +235,16 @@ abstract class Module extends Platform implements ModuleINT
 
     /**
      * 
+     * @param type $class
+     * @return \GIndie\Platform\View\TablePagination
+     */
+    protected function tableSearch($class)
+    {
+        return new \GIndie\Platform\View\TablePagination($this->_searchTable($class));
+    }
+
+    /**
+     * 
      * 
      * @since       2017-01-05
      * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
@@ -199,8 +265,9 @@ abstract class Module extends Platform implements ModuleINT
                 $_table = $this->_searchTable($class);
                 return new \GIndie\Platform\View\TableReport($_table);
             case "tableSearch":
-                $_table = $this->_searchTable($class);
-                return new \GIndie\Platform\View\TablePagination($_table);
+                return static::tableSearch($class);
+                //$_table = $this->_searchTable($class);
+                //return new \GIndie\Platform\View\TablePagination($_table);
             //return new \GIndie\Platform\View\Table($_table);
             case "get-input":
                 $record = $class::findById($_POST["gip-record-id"]);
@@ -306,7 +373,7 @@ abstract class Module extends Platform implements ModuleINT
         $response = HTML5\Category\StylesSemantics::Span();
         $btnDismiss = new Bootstrap3\Component\Button("Cerrar", Bootstrap3\Component\Button::TYPE_BUTTON);
         $btnDismiss->setAttribute("data-dismiss", "modal");
-        
+
         $recordAction = $record->run($action);
         if (!\is_string($recordAction)) {
             $modalContent = new Bootstrap3\Component\Modal\Content("Registro actualizado con éxito");

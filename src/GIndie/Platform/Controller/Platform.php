@@ -7,7 +7,7 @@
 namespace GIndie\Platform\Controller;
 
 use \GIndie\Generator\DML\HTML5;
-use \GIndie\Generator\DML\HTML5\Bootstrap3;
+use \GIndie\Generator\DML\HTML5\Bootstrap3; //\GIndie\ScriptGenerator\Bootstrap3;
 use \GIndie\Platform\Model\Datos\mr_sesion;
 use \GIndie\Platform\Current;
 
@@ -334,7 +334,7 @@ abstract class Platform
                 }
                 return $response;
             default:
-                trigger_error("No se pudo ejecutar el comando submit. id {$id}", E_USER_ERROR);
+                \trigger_error("No se pudo ejecutar el comando submit. id {$id}", \E_USER_ERROR);
                 throw new \Exception("No se pudo ejecutar el comando submit.");
                 break;
         }
@@ -349,6 +349,7 @@ abstract class Platform
      */
     protected function _modalWrap($modalTitle, $modalContent, $closeButton = \TRUE)
     {
+        //$modalContent = new Bootstrap3\Component\Modal\Content($modalTitle, $modalContent);
         $modalContent = new Bootstrap3\Component\Modal\Content($modalTitle, $modalContent);
         if ($closeButton === \TRUE) {
             $btnDismiss = new Bootstrap3\Component\Button("Cerrar", Bootstrap3\Component\Button::TYPE_BUTTON);
