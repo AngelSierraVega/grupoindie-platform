@@ -191,8 +191,13 @@ class Login extends Bootstrap3\Component\Document
         $row1->addContent($col2);
         $divsm6->addContent($row1);
 
-        //
-        $subtext1 = Basic::Header(5, "Dirección de informática. Mineral de la Reforma, Hidalgo. 2016-2020");
+        $msj = \GIndie\Platform\INIHandler::getCategoryValue("Vendor", "msj");
+        if($msj){
+            
+        }else{
+            $msj = "";
+        }
+        $subtext1 = Basic::Header(5, $msj);
         //$subtext1 = Basic::Paragraph("Dirección de informática. Mineral de la Reforma, Hidalgo. 2016-2020");
         $subtext1->addClass("text-center");
         $divsm6->addContent($subtext1);

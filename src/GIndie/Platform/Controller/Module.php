@@ -376,14 +376,14 @@ abstract class Module extends Platform implements ModuleINT
 
         $recordAction = $record->run($action);
         if (!\is_string($recordAction)) {
-            $modalContent = new Bootstrap3\Component\Modal\Content("Registro actualizado con éxito");
+            $modalContent = new Bootstrap3\Component\Modal\Content("Registro actualizado.");
+            $modalContent->addContent("El registro ha sido actualizado exitosamente.");
             $modalContent->addFooterButton($btnDismiss);
             $script = "$('#gip-modal .modal-content').html('{$modalContent}');";
             //$script .= "triggerParents('".$_POST["gip-id-placeholder"]."','".$record->getId()."');";
             $response->addScript($script);
-            //$response->setAttribute("gip-success");
         } else {
-            $modalContent = new Bootstrap3\Component\Modal\Content("Hubo un error al intentar actualizar el registro", $recordAction);
+            $modalContent = new Bootstrap3\Component\Modal\Content("Error de usuario", $recordAction);
             $modalContent->addFooterButton($btnDismiss);
             $response->addScript("$('#gip-modal .modal-content').html('{$modalContent}');");
         }
@@ -424,7 +424,7 @@ abstract class Module extends Platform implements ModuleINT
                     //$script .= "$('#" . $_POST["gip-id-placeholder"] . " .jstree #" . $record->getId() . " a').trigger('click');"; // 
                     $response->addScript($script);
                 } else {
-                    $modalContent = new Bootstrap3\Component\Modal\Content("Hubo un error al intentar crear el registro", $recordAction);
+                    $modalContent = new Bootstrap3\Component\Modal\Content("Error de usuario", $recordAction);
                     $modalContent->addFooterButton($btnDismiss);
                     $response->addScript("$('#gip-modal .modal-content').html('{$modalContent}');");
                 }
@@ -439,7 +439,7 @@ abstract class Module extends Platform implements ModuleINT
                     $response->addScript("$('#gip-modal .modal-content').html('{$modalContent}');");
                     $response->setAttribute("gip-success");
                 } else {
-                    $modalContent = new Bootstrap3\Component\Modal\Content("Hubo un error al intentar desactivar el registro", $recordAction);
+                    $modalContent = new Bootstrap3\Component\Modal\Content("Algo salió mal al intentar desactivar el registro", $recordAction);
                     $modalContent->addFooterButton($btnDismiss);
                     $response->addScript("$('#gip-modal .modal-content').html('{$modalContent}');");
                 }
@@ -452,7 +452,7 @@ abstract class Module extends Platform implements ModuleINT
                     $response->addScript("$('#gip-modal .modal-content').html('{$modalContent}');");
                     $response->setAttribute("gip-success");
                 } else {
-                    $modalContent = new Bootstrap3\Component\Modal\Content("Hubo un error al intentar activar el registro", $recordAction);
+                    $modalContent = new Bootstrap3\Component\Modal\Content("Algo salió mal al intentar activar el registro", $recordAction);
                     $modalContent->addFooterButton($btnDismiss);
                     $response->addScript("$('#gip-modal .modal-content').html('{$modalContent}');");
                 }
@@ -468,13 +468,13 @@ abstract class Module extends Platform implements ModuleINT
                     $response->addScript("$('#gip-modal .modal-content').html('{$modalContent}');");
                     $response->setAttribute("gip-success");
                 } else {
-                    $response->addContent("Hubo un error al eliminar, intentenlo de nuevo.");
-                    $modalContent = new Bootstrap3\Component\Modal\Content("Error al eliminar", $recordAction);
+                    $response->addContent("Algo salió mal al eliminar, es posible que no se pueda eliminar debido a la integridad de la base de datos, inténtenlo de nuevo por favor.");
+                    $modalContent = new Bootstrap3\Component\Modal\Content("Algo salió mal.", $recordAction);
                     $response->addScript("$('#gip-modal .modal-content').html('{$modalContent}');");
                 }
                 return $response;
             default:
-                trigger_error("Unable to run recordAction: gip-action={$action} gip-action-id={$id} gip-action-class={$class}", E_USER_ERROR);
+                \trigger_error("Unable to run recordAction: gip-action={$action} gip-action-id={$id} gip-action-class={$class}", E_USER_ERROR);
                 throw new \Exception("Unable to run.");
                 break;
         }

@@ -94,8 +94,8 @@ class Document extends Bootstrap3\Component\Document
                        "stylesheet");
 
         $this->addScript($assetsFolder . 'js/libs/jquery.form.js', true);
-        $this->addScript($assetsFolder . 'js/libs/jquery.validate.js', true);
-        $this->addScript($assetsFolder . 'js/libs/additional-methods.js', true);
+        $this->addScript($assetsFolder . 'js/libs/jquery.validate.js?version=2', true);
+        $this->addScript($assetsFolder . 'js/libs/additional-methods.js?version=2', true);
         $this->addScript($assetsFolder . 'js/libs/jquery.blockUI.js', true);
         $this->addScript($assetsFolder . 'js/libs/jquery.form.js', true); //otra vez?
         $this->addScript($assetsFolder . 'js/libs/bootstrap-select.min.js', true);
