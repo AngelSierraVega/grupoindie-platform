@@ -1,14 +1,5 @@
 <?php
 
-/*
- * Copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
- *
- * This software is protected under GNU: you can use, study and modify it
- * but not distribute it under the terms of the GNU General Public License 
- * as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- */
-
 namespace GIndie\Platform\Model;
 
 use GIndie\Platform\Current;
@@ -16,10 +7,12 @@ use GIndie\Platform\Current;
 /**
  * Description of Table
  * 
- * @version     GIP.00.06
- * @since       2017-06-26
+ * @version GIP.00.06
+ * @since 2017-06-26
  *
- * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @edit 18-03-13
+ * - Autoformated class
  */
 abstract class Table implements TableINT
 {
@@ -80,8 +73,7 @@ abstract class Table implements TableINT
         try {
             $this->readFromDB($conditions);
         } catch (\Exception $exc) {
-            trigger_error($exc->getMessage() . " on " . get_called_class(),
-                          \E_USER_ERROR);
+            trigger_error($exc->getMessage() . " on " . get_called_class(), \E_USER_ERROR);
             $tmpRow = [];
             foreach ($this->getColumnNames() as $column) {
                 $tmpRow[$column] = $exc->getMessage();
@@ -101,10 +93,7 @@ abstract class Table implements TableINT
     {
         //var_dump(Current::Connection());
         $_relatedRecord = static::RelatedRecord();
-        $_resultSet = Current::Connection()->select(static::ColumnNames(),
-                                                    static::Schema(),
-                                                    static::Table(),
-                                                    $conditions, $params);
+        $_resultSet = Current::Connection()->select(static::ColumnNames(), static::Schema(), static::Table(), $conditions, $params);
         //var_dump(Current::Connection());
 
         while ($row = $_resultSet->fetch_assoc()) {
@@ -138,8 +127,7 @@ abstract class Table implements TableINT
         $_relatedRecord = static::RelatedRecord();
         foreach ($_relatedRecord::getAttributesDisplay() as $attributeName) {
             //$this->defineColumn($attributeName) = $_relatedRecord::getAttribute($attributeName);
-            $this->defineColumn($attributeName,
-                                $_relatedRecord::getAttribute($attributeName));
+            $this->defineColumn($attributeName, $_relatedRecord::getAttribute($attributeName));
         }
     }
 
@@ -185,13 +173,11 @@ abstract class Table implements TableINT
                 } else {
                     $list = $this->getColumn($attributeName)->getFkClass();
                     $list = new $list($this->getValueOf($rowId, $attributeName));
-                    return $list->getElementAt($this->getValueOf($rowId,
-                                                                 $attributeName))->getValue();
+                    return $list->getElementAt($this->getValueOf($rowId, $attributeName))->getValue();
                 }
 
             case Attribute::TYPE_TIMESTAMP:
-                return \date("Y-m-d H:i:s",
-                             $this->getValueOf($rowId, $attributeName));
+                return \date("Y-m-d H:i:s", $this->getValueOf($rowId, $attributeName));
 //                return \date(\DateTime::COOKIE,
 //                             $this->getValueOf($attributeName));
             case Attribute::TYPE_BOOLEAN:
@@ -303,8 +289,7 @@ abstract class Table implements TableINT
     public function getLabel($columnName)
     {
         if (!\array_key_exists($columnName, $this->_columns)) {
-            \trigger_error("Columna {$columnName} no definida en " . static::class,
-                           \E_USER_ERROR);
+            \trigger_error("Columna {$columnName} no definida en " . static::class, \E_USER_ERROR);
         }
         return $this->_columns[$columnName]->getLabel();
     }

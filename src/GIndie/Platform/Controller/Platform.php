@@ -7,7 +7,8 @@
 namespace GIndie\Platform\Controller;
 
 use \GIndie\Generator\DML\HTML5;
-use \GIndie\Generator\DML\HTML5\Bootstrap3; //\GIndie\ScriptGenerator\Bootstrap3;
+use \GIndie\Generator\DML\HTML5\Bootstrap3; 
+//use \GIndie\ScriptGenerator\Bootstrap3;
 use \GIndie\Platform\Model\Datos\mr_sesion;
 use \GIndie\Platform\Current;
 

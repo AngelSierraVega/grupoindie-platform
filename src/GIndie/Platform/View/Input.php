@@ -141,6 +141,14 @@ class Input
         return $rtnStr;
     }
 
+    /**
+     * 
+     * @param type $label
+     * @param type $name
+     * @param type $formElement
+     * @return string
+     * @edit 18-03-12
+     */
     public static function FomGroupClean($label, $name, $formElement)
     {
         $rtnStr = '<div class="form-group';

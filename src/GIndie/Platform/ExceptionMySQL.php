@@ -1,26 +1,29 @@
 <?php
 
-/**
- * @copyright (c) 2017 Angel Sierra Vega. Grupo INDIE.
- *
- * @package Platform
- * 
- * @version GIP.00.01
- */
-
 namespace GIndie\Platform;
 
 /**
  * Description of ExceptionMySQL
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2017 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package Platform
+ * 
+ * @version GIP.00.01
  */
 class ExceptionMySQL extends \Exception
 {
 
+    /**
+     * 
+     * @param type $exc
+     * @return string
+     * @edit 18-03-13
+     * - Handle range error
+     */
     public static function handleException($exc)
     {
-        //return "TEST";
         $rtnSrt = "";
         switch ($exc->getCode())
         {
@@ -33,6 +36,9 @@ class ExceptionMySQL extends \Exception
             case 1062:
                 $rtnSrt .= "El registro ya existe.";
                 break;
+            case 1264:
+                $rtnSrt .= "Rango no válido.";
+                break;
             default:
                 $rtnSrt .= "SD: " . $exc->getCode();
                 break;
@@ -43,8 +49,6 @@ class ExceptionMySQL extends \Exception
             $rtnSrt .= "<br>";
         }
         return $rtnSrt;
-        //$rtnSrt .= "El registro no se puede eliminar.";
-        //return $rtnSrt;
     }
 
     private $_customMsg;
