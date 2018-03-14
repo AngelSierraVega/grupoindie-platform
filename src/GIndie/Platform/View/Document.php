@@ -85,7 +85,7 @@ class Document extends Bootstrap3\Component\Document
         $this->addLink($assetsFolder . 'css/libs/bootstrap-switch.min.css', "stylesheet");
         $this->addLink($assetsFolder . 'js/libs/jstree-themes/proton/style.min.css', "stylesheet");
 
-        $this->addScripts();
+        $this->addScripts($assetsFolder);
 
         $this->_topbar = $this->addContentGetPointer(new Document\Topbar());
         $mainLinks = \GIndie\Platform\Current::Instance()->getPlatformLinks();
@@ -112,7 +112,7 @@ class Document extends Bootstrap3\Component\Document
     /**
      * @since 18-03-13
      */
-    private function addScripts()
+    private function addScripts($assetsFolder)
     {
         $this->addScript($assetsFolder . 'js/libs/jquery.form.js', true);
         $this->addScript($assetsFolder . 'js/libs/jquery.validate.js?version=4', true);
