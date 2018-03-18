@@ -17,6 +17,43 @@ trait ToDeprecate
 {
 
     /**
+     * @param string $action
+     * @param string $id
+     * @param string $class
+     * @return type
+     * @deprecated since 18-03-15
+     */
+    protected function recordActionGipEdit($action, $id, $class)
+    {
+        return $this->runRecordActionGipEdit($action, $id, $class);
+    }
+
+    /**
+     * 
+     * @param string $action
+     * @param string $id
+     * @param string $class
+     * @return type
+     * @deprecated since 18-03-15
+     */
+    protected function runFormRequest($action, $id, $class)
+    {
+        return $this->runRecordForm($action, $id, $class);
+    }
+
+    /**
+     * @param string $action
+     * @param string $id
+     * @param string $class
+     * @return type
+     * @deprecated since 18-03-15
+     */
+    protected function actionHandlerRecord($action, $id, $class)
+    {
+        return $this->runRecordAction($action, $id, $class);
+    }
+
+    /**
      * 
      * @param type $action
      * @param type $id
@@ -27,7 +64,7 @@ trait ToDeprecate
      */
     protected function _recordAction($action, $id, $class)
     {
-        return $this->actionHandlerRecord($action, $id, $class);
+        return $this->runRecordAction($action, $id, $class);
     }
 
     /**

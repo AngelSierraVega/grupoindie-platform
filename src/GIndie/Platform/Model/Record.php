@@ -27,6 +27,12 @@ abstract class Record implements RecordINT
 {
 
     /**
+     * @var boolean
+     * @since 18-03-13
+     */
+    const IS_VIEW = false;
+
+    /**
      * The name of the record
      * @var string NAME
      * @since GIP.00.02
@@ -43,7 +49,7 @@ abstract class Record implements RecordINT
      * The name of the database storing the record.
      * @version GIP.00.10
      */
-    const SCHEMA = "mr_ingresos";//"straffon_ingresos";
+    const SCHEMA = "mr_ingresos"; //"straffon_ingresos";
 
     /**
      * The name of the table storing the the record.
@@ -102,8 +108,7 @@ abstract class Record implements RecordINT
     public static function instance(array $data = [])
     {
         static::configAttributes();
-        \array_key_exists(static::PRIMARY_KEY, $data) ?: $data[static::PRIMARY_KEY]
-                        = "GIP-UNDEFINED";
+        \array_key_exists(static::PRIMARY_KEY, $data) ?: $data[static::PRIMARY_KEY] = "GIP-UNDEFINED";
         foreach (\array_keys(static::$_attribute[static::class]) as $attribute) {
             \array_key_exists($attribute, $data) ?: $data[$attribute] = "";
         }
@@ -117,10 +122,8 @@ abstract class Record implements RecordINT
     {
 //        static::SCHEMA !== \NULL ?: trigger_error(\get_called_class() . " Necesita definir la constante SCHEMA",
 //                                                  E_USER_ERROR);
-        static::TABLE !== \NULL ?: trigger_error(\get_called_class() . " Necesita definir la constante TABLE",
-                                                 E_USER_ERROR);
-        static::DISPLAY_KEY !== \NULL ?: trigger_error(\get_called_class() . " Necesita definir la constante DISPLAY_KEY",
-                                                       E_USER_ERROR);
+        static::TABLE !== \NULL ?: trigger_error(\get_called_class() . " Necesita definir la constante TABLE", E_USER_ERROR);
+        static::DISPLAY_KEY !== \NULL ?: trigger_error(\get_called_class() . " Necesita definir la constante DISPLAY_KEY", E_USER_ERROR);
 
         $this->_recordId = $data[static::PRIMARY_KEY];
         $this->_updatedFields = [];
@@ -154,9 +157,7 @@ abstract class Record implements RecordINT
         //var_dump(static::$_attribute);
         //var_dump(get_called_class());
         $connection = Current::Connection();
-        $_resultSet = $connection->findByPK(static::PRIMARY_KEY, $recordId,
-                                            static::getAttributeNames(),
-                                            static::SCHEMA, static::TABLE);
+        $_resultSet = $connection->findByPK(static::PRIMARY_KEY, $recordId, static::getAttributeNames(), static::SCHEMA, static::TABLE);
         if ($_resultSet) {
             return static::instance($_resultSet);
             //return new static($_resultSet);
@@ -166,8 +167,7 @@ abstract class Record implements RecordINT
         } else {
 //            var_dump(Current::Connection()->getLastError());
             return static::instance([static::PRIMARY_KEY => "GIP-UNDEFINED"]);
-            \trigger_error("Error: Unable to find record '{$recordId}'",
-                           \E_USER_ERROR);
+            \trigger_error("Error: Unable to find record '{$recordId}'", \E_USER_ERROR);
             //return static::instance([]);
             //return new static([]);
 
@@ -189,8 +189,7 @@ abstract class Record implements RecordINT
         $selectors = [static::PRIMARY_KEY, $attribute];
         $connection = Current::Connection();
         $conditions = ["`{$table}`.`{$attribute}`='{$value}'"];
-        $_resultSet = $connection->select(static::getAttributeNames(), $schema,
-                                          $table, $conditions, ["Limit 1"]);
+        $_resultSet = $connection->select(static::getAttributeNames(), $schema, $table, $conditions, ["Limit 1"]);
         //var_dump($_resultSet);
         if ($_resultSet->num_rows != 0) {
             return static::instance($_resultSet->fetch_assoc());
@@ -204,13 +203,15 @@ abstract class Record implements RecordINT
      * 
      * @author      Izmir Sanchez Juarez <izmirreffi@gmail.com
      * @version     GIP.00.02
+     * @edit 18-03-15
+     * - 
      */
     protected function _delete()
     {
-
+        $connection = Current::Connection();
+        $action = $connection->delete($this);
         try {
-            $connection = Current::Connection();
-            $action = $connection->delete($this);
+            
         } catch (\GIndie\Platform\ExceptionMySQL $exc) {
             return \GIndie\Platform\ExceptionMySQL::handleException($exc);
         }
@@ -242,22 +243,13 @@ abstract class Record implements RecordINT
         if ($postReading) {
             $this->_handleBooleanPost();
         }
-        try {
-            $_resultSet = $connection->create($this);
-            //return "CREADO";
-        } catch (\GIndie\Platform\ExceptionMySQL $exc) {
-            //
-            return static::NAME . " " . \GIndie\Platform\ExceptionMySQL::handleException($exc);
-        }
-        //return $_resultSet;
+        $_resultSet = $connection->create($this);
         if ($_resultSet) {
             $recordId = Current::Connection()->insert_id();
             if ($recordId == 0) {
                 $recordId = $this->getId();
             }
-            $tmp = $connection->select([static::PRIMARY_KEY], static::SCHEMA,
-                                       static::TABLE,
-                                       [[static::PRIMARY_KEY => $recordId]]);
+            $tmp = $connection->select([static::PRIMARY_KEY], static::SCHEMA, static::TABLE, [[static::PRIMARY_KEY => $recordId]]);
             $tmp = $tmp->fetch_array()[0];
             $nota = "Creación de '" . static::NAME . "' con los datos ";
             switch (static::TABLE)
@@ -282,8 +274,7 @@ abstract class Record implements RecordINT
                                 break;
                         }
                     }
-                    $data['notas'] = \filter_var($nota,
-                                                 \FILTER_SANITIZE_SPECIAL_CHARS);
+                    $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
                     $bitacora = \AdminIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
                     $bitacora->run("gip-inner-create");
                     break;
@@ -352,8 +343,7 @@ abstract class Record implements RecordINT
                             break;
                     }
                 }
-                $data['notas'] = \filter_var($nota,
-                                             \FILTER_SANITIZE_SPECIAL_CHARS);
+                $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
                 $bitacora = \AdminIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
                 $bitacora->run("gip-inner-create");
         }
@@ -387,15 +377,13 @@ abstract class Record implements RecordINT
         {
             case "gip-deactivate":
                 if (static::STATE_ATTRIBUTE == \NULL) {
-                    \trigger_error("Constant STATE_ATTRIBUTE must be declared in " . static::class,
-                                   \E_USER_ERROR);
+                    \trigger_error("Constant STATE_ATTRIBUTE must be declared in " . static::class, \E_USER_ERROR);
                 }
                 static::setValueOf(static::STATE_ATTRIBUTE, "0", \FALSE);
                 return static::_update(\FALSE);
             case "gip-activate":
                 if (static::STATE_ATTRIBUTE == \NULL) {
-                    \trigger_error("Constant STATE_ATTRIBUTE must be declared in " . static::class,
-                                   \E_USER_ERROR);
+                    \trigger_error("Constant STATE_ATTRIBUTE must be declared in " . static::class, \E_USER_ERROR);
                 }
                 static::setValueOf(static::STATE_ATTRIBUTE, "1", \FALSE);
                 return static::_update(\FALSE);
@@ -426,8 +414,7 @@ abstract class Record implements RecordINT
     final public static function getAttributeNames()
     {
         static::configAttributes();
-        if (!\array_key_exists(static::PRIMARY_KEY,
-                               static::$_attribute[static::class])) {
+        if (!\array_key_exists(static::PRIMARY_KEY, static::$_attribute[static::class])) {
             //if (!Current::hasRole("DEV")) {
             static::attribute(static::PRIMARY_KEY)->excludeFromDisplay(\TRUE);
             //}
@@ -488,13 +475,12 @@ abstract class Record implements RecordINT
             $value = \GIndie\Platform\Current::Connection()->sanitize($value);
         }
         if (isset($this->_data[static::SCHEMA][static::TABLE][$this->_recordId][$attributeName])) {
-            if (\strcmp($this->_data[static::SCHEMA][static::TABLE][$this->_recordId][$attributeName],
-                        $value) != 0) {
+            if (\strcmp($this->_data[static::SCHEMA][static::TABLE][$this->_recordId][$attributeName], $value)
+                    != 0) {
                 $this->_updatedFields[] = $attributeName;
             }
         }
-        $this->_data[static::SCHEMA][static::TABLE][$this->_recordId][$attributeName]
-                = $value;
+        $this->_data[static::SCHEMA][static::TABLE][$this->_recordId][$attributeName] = $value;
 
         return $this;
     }
@@ -576,8 +562,7 @@ abstract class Record implements RecordINT
                     $value = $list->getElementAt($this->getValueOf($attributeName));
                     if ($value == \NULL) {
                         return "Sin definir";
-                        trigger_error(" es Nulo " . \get_called_class(),
-                                      \E_USER_ERROR);
+                        trigger_error(" es Nulo " . \get_called_class(), \E_USER_ERROR);
                     } else {
                         return $value->getValue();
                     }
@@ -610,13 +595,10 @@ abstract class Record implements RecordINT
         if (!\array_key_exists(static::TABLE, $this->_data[static::SCHEMA])) {
             \trigger_error("TABLE not found", \E_USER_ERROR);
         }
-        if (!\array_key_exists($this->_recordId,
-                               $this->_data[static::SCHEMA][static::TABLE])) {
-            \trigger_error("_recordId {$this->_recordId} not found",
-                           \E_USER_ERROR);
+        if (!\array_key_exists($this->_recordId, $this->_data[static::SCHEMA][static::TABLE])) {
+            \trigger_error("_recordId {$this->_recordId} not found", \E_USER_ERROR);
         }
-        if (!\array_key_exists($attributeName,
-                               $this->_data[static::SCHEMA][static::TABLE][$this->_recordId])) {
+        if (!\array_key_exists($attributeName, $this->_data[static::SCHEMA][static::TABLE][$this->_recordId])) {
             \trigger_error("attribute {$attributeName} not found", \E_USER_ERROR);
         }
         //var_dump($this->_data[static::SCHEMA][static::TABLE]);
@@ -631,8 +613,7 @@ abstract class Record implements RecordINT
     public function getState()
     {
         if (static::STATE_ATTRIBUTE == \NULL) {
-            \trigger_error("Constant STATE_ATTRIBUTE must be declared in " . static::class,
-                           \E_USER_ERROR);
+            \trigger_error("Constant STATE_ATTRIBUTE must be declared in " . static::class, \E_USER_ERROR);
         }
         return static::getValueOf(static::STATE_ATTRIBUTE);
     }
@@ -648,8 +629,7 @@ abstract class Record implements RecordINT
             return static::$_attribute[static::class][$attributeName];
         } else {
             return \FALSE;
-            \trigger_error("Atributo " . static::class . "-" . $attributeName . " no declarado",
-                           \E_USER_ERROR);
+            \trigger_error("Atributo " . static::class . "-" . $attributeName . " no declarado", \E_USER_ERROR);
         }
         //return isset(static::$_attribute[static::class][$attributeName]) ? static::$_attribute[static::class][$attributeName] : \FALSE;
     }
@@ -696,12 +676,10 @@ abstract class Record implements RecordINT
             static::defineRecordRestrictions();
         }
         if (!\array_key_exists(static::class, static::$_restrictions)) {
-            \trigger_error("El registro " . \get_called_class() . " no tiene definida la restricción para el comando '{$command}'. Utilice la función static::requireRoles(command,roles)",
-                           \E_USER_ERROR);
+            \trigger_error("El registro " . \get_called_class() . " no tiene definida la restricción para el comando '{$command}'. Utilice la función static::requireRoles(command,roles)", \E_USER_ERROR);
         }
         if (!\array_key_exists($command, static::$_restrictions[static::class])) {
-            \trigger_error("El registro " . \get_called_class() . " no tiene definida la restricción para el comando '{$command}'. Utilice la función static::requireRoles(command,roles)",
-                           \E_USER_ERROR);
+            \trigger_error("El registro " . \get_called_class() . " no tiene definida la restricción para el comando '{$command}'. Utilice la función static::requireRoles(command,roles)", \E_USER_ERROR);
         }
         return static::$_restrictions[static::class][$command];
         //

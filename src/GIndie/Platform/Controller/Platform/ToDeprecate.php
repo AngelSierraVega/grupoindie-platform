@@ -6,6 +6,7 @@ use \GIndie\Generator\DML\HTML5;
 use \GIndie\Generator\DML\HTML5\Bootstrap3;
 use \GIndie\Platform\Model\Datos\mr_sesion;
 use \GIndie\Platform\Current;
+use \GIndie\Platform\View;
 
 /**
  * GI-Platform-DVLP - ToDeprecate
@@ -19,6 +20,22 @@ use \GIndie\Platform\Current;
  */
 trait ToDeprecate
 {
+
+    /**
+     * 
+     * @param mixed $modalTitle
+     * @param mixed $modalContent
+     * @param boolean $closeButton
+     * 
+     * @return \GIndie\Platform\View\Modal\Content
+     * 
+     * @since 18-03-14
+     * @deprecated since 18-03-15
+     */
+    protected function cnstrctModal($modalTitle, $modalContent, $closeButton = true)
+    {
+        return View\Modal\Content::defaultModalContent($modalTitle, $modalContent, $closeButton);
+    }
 
     /**
      * 

@@ -28,7 +28,6 @@ use \GIndie\Platform\Model\Datos\mr_sesion\usuario_cuenta;
  */
 class Current
 {
-
     //public static $CONFIG_CLASS;
 
     /**
@@ -43,24 +42,36 @@ class Current
         return $_pointer;
     }
 
+    /**
+     * 
+     * @param string $token
+     * @return string
+     * @edit 18-03-14
+     */
     public static function uniqueTokenStore($token)
     {
         if (!isset($_SESSION["gip-unique-token"])) {
             $_SESSION["gip-unique-token"] = [];
         }
-        $_SESSION["gip-unique-token"][$token] = \TRUE;
+        $_SESSION["gip-unique-token"][$token] = true;
         return $token;
     }
 
+    /**
+     * 
+     * @param type $token
+     * @return boolean
+     * @edit 18-03-14
+     */
     public static function uniqueTokenValidate($token)
     {
-        switch (\TRUE)
+        switch (true)
         {
             case isset($_SESSION["gip-unique-token"][$token]):
                 unset($_SESSION["gip-unique-token"][$token]);
-                return \TRUE;
+                return true;
         }
-        return \FALSE;
+        return false;
     }
 
     /**
@@ -208,8 +219,7 @@ class Current
      */
     private static function session_start_info()
     {
-        $_SESSION["gip-session-info"] = new \GIndie\Platform\Model\Session\Information(\time(),
-                                                                                       "User login");
+        $_SESSION["gip-session-info"] = new \GIndie\Platform\Model\Session\Information(\time(), "User login");
         if (!isset($_SESSION["gip-log"])) {
             $_SESSION["gip-log"] = "";
         }
@@ -387,8 +397,7 @@ class Current
         // Note: This will destroy the session, and not just the session data!
         //if (ini_get("session.use_cookies")) {
         $params = \session_get_cookie_params();
-        \setcookie(\session_name(), '', time() - 42000, $params["path"],
-                   $params["domain"], $params["secure"], $params["httponly"]
+        \setcookie(\session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]
         );
         //var_dump(\session_status());
         return \session_destroy();

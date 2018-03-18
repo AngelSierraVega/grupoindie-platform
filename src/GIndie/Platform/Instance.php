@@ -353,7 +353,7 @@ abstract class Instance
     {
         if (!\is_subclass_of($classname, Controller\Module::class, \TRUE)) {
             $sub = Controller\Module::class;
-            trigger_error("Class {$classname} is not subclass of {$sub}", E_USER_ERROR);
+            \trigger_error("Class {$classname} is not subclass of {$sub}", \E_USER_ERROR);
             throw new \Exception("Unable to run.");
         }
         self::$_MODULES[$classname] = $groupName;

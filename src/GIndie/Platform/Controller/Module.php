@@ -6,11 +6,10 @@
 
 namespace GIndie\Platform\Controller;
 
-use GIndie\Platform\Model\Datos\mr_sesion;
-use GIndie\Platform\View;
-use GIndie\Platform\View\Widget;
 use GIndie\ScriptGenerator\HTML5;
 use GIndie\ScriptGenerator\Bootstrap3;
+use GIndie\Platform\Model;
+use GIndie\Platform\View;
 
 /**
  * Description of Module
@@ -36,6 +35,80 @@ abstract class Module extends Platform implements ModuleINT
     use Module\ToUpgrade;
     use Module\ToDeprecate;
     use Module\Upgrading;
+
+    /**
+     * @version     GIP.00.02
+     * @since       2017-04-23
+     * @var         string 
+     */
+    const NAME = "UnnamedModule";
+
+    /**
+     * @version     GIP.00.03
+     * @since       2017-04-21
+     */
+    public function __construct()
+    {
+        $this->config();
+    }
+
+    /**
+     * 
+     * @param type $record
+     * @param type $gipAction
+     * @param type $uniqueToken
+     * @param type $customTarget
+     * @return \GIndie\Platform\View\Form
+     * @since 18-06-14
+     */
+    protected function cnstrctForm($record, $gipAction = null, $uniqueToken = true, $customTarget = false)
+    {
+        switch ($gipAction)
+        {
+            case "form-edit":
+            case "form-create":
+                $form = new View\Form($record, $uniqueToken, $customTarget);
+                break;
+            case "form-delete":
+            case "form-deactivate":
+            case "form-activate":
+                $form = new View\Form(null, $uniqueToken, $customTarget);
+                break;
+        }
+        switch ($gipAction)
+        {
+            case "form-edit":
+                $form->setAttribute("gip-action", "gip-edit");
+                break;
+            case "form-create":
+                $form->setAttribute("gip-action", "gip-create");
+                break;
+            case "form-delete":
+                $form->setAttribute("gip-action", "gip-delete");
+                break;
+            case "form-deactivate":
+                $form->setAttribute("gip-action", "gip-deactivate");
+                break;
+            case "form-activate":
+                $form->setAttribute("gip-action", "gip-activate");
+                break;
+            case null:
+                break;
+            default:
+                $form->setAttribute("gip-action", $gipAction);
+                \trigger_error("To verify", \E_USER_WARNING);
+                break;
+        }
+        return $form;
+    }
+
+    /**
+     * [description]
+     * @abstract
+     * @version     GIP.00.03
+     * @since       2017-04-28
+     */
+    abstract public function config();
 
     /**
      * 
@@ -117,26 +190,38 @@ abstract class Module extends Platform implements ModuleINT
     }
 
     /**
-     * @version     GIP.00.02
-     * @since       2017-04-23
-     * @var         string 
+     * 
+     * @param string $action
+     * @param string $id
+     * @param string $class
+     * @return \GIndie\ScriptGenerator\Bootstrap3\Component\Modal\Content
+     * @edit 18-03-13
+     * - Handler for form on non editable record
+     * @edit 18-03-14
+     * - Return ModalContent
      */
-    const NAME = "UnnamedModule";
-
-    /**
-     * @version     GIP.00.03
-     * @since       2017-04-21
-     */
-    public function __construct()
+    protected function runRecordForm($action, $id, $class)
     {
-        $this->config();
+        if ($class::IS_VIEW) {
+            $class = $class::getClassnameRecord();
+        }
+        $record = $class::findById($id);
+        $form = $this->cnstrctForm($record, $action);
+        $form->setAttribute("gip-action-class", $class);
+        $form->setAttribute("gip-action-id", $id);
+        $actionName = static::getActionName($action);
+        $actionContext = static::getActionContext($action);
+        $modalTitle = $actionName . " <b>" .
+                $record->getName() . "</b> <i>" .
+                $record->getDisplay() . "</i>";
+        //$modalContent = View\Modal\Content::primary($modalTitle, $form);
+        $modalContent = $this->cnstrctModal($modalTitle, $form);
+        $modalContent->getHeader()->setBackground("primary");
+        $btn = new Bootstrap3\Component\Button($actionName, Bootstrap3\Component\Button::TYPE_SUBMIT);
+        $btn->setForm($form->getId())->setValue("Submit");
+        $btn->setContext($actionContext);
+        $modalContent->addFooterButton($btn);
+        return $modalContent;
     }
 
-    /**
-     * [description]
-     * @abstract
-     * @version     GIP.00.03
-     * @since       2017-04-28
-     */
-    abstract public function config();
 }

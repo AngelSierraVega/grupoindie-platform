@@ -81,9 +81,10 @@ trait ToUpgrade
 //        $reloadButton = Widget\Buttons::Reload($_classname);
 //        $widget->addButtonHeading($reloadButton);
 
-        $searchButton = \GIndie\Platform\View\Widget\Buttons::CustomPrimary("<span class=\"glyphicon glyphicon-search\"></span>", \NULL, \NULL, \FALSE, \NULL);
+        $searchButton = \GIndie\Platform\View\Widget\Buttons::CustomSuccess("<span class=\"glyphicon glyphicon-search\"></span>", \NULL, \NULL, \FALSE, \NULL);
         $searchButton->setForm($form->getId());
         $widget->addButtonHeading($searchButton);
+        $widget->addContent(\GIndie\Platform\View\Javascript::submitOnChange($form->getId()));
         $widget->addScriptOnDocumentReady("$('#" . $form->getId() . "').submit();");
 //        foreach ($buttons as $tmpButton) {
 //            $_actionId = $tmpButton["gipActionId"];
@@ -116,66 +117,6 @@ trait ToUpgrade
             return $rtnWidget;
         }
         \trigger_error($classname . " is not subclass of \GIndie\Platform\Model\Table", \E_USER_ERROR);
-    }
-
-    /**
-     * 
-     * 
-     * @since       2017-01-05
-     * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
-     * 
-     * @version     GIP.00.07 
-     * - use widgetReload on $action = widget-reload
-     * 
-     * @param       string $action
-     * @param       string $id
-     * @return      mixed
-     */
-    public function run($action, $id, $class, $selected)
-    {
-        $this->_createLog($action, $id, $class, $selected);
-        switch ($action)
-        {
-            case "reportSearch":
-                $_table = $this->_searchTable($class);
-                return new \GIndie\Platform\View\TableReport($_table);
-            case "tableSearch":
-                return static::tableSearch($class);
-            //$_table = $this->_searchTable($class);
-            //return new \GIndie\Platform\View\TablePagination($_table);
-            //return new \GIndie\Platform\View\Table($_table);
-            case "get-input":
-                $record = $class::findById($_POST["gip-record-id"]);
-                $attribute = $record->getAttribute($id);
-                return $form_element = \GIndie\Platform\View\Input::selectFromAttribute($attribute, $record->getValueOf($attribute->getName()), $_POST["gip-record-id"]);
-                return \GIndie\Platform\View\Input::formGroup($attribute, $form_element);
-            case "form-create":
-            case "form-edit":
-            case "form-delete":
-            case "form-activate":
-            case "form-deactivate":
-                return static::runFormRequest($action, $id, $class);
-                return static::_recordModalForm($action, $id, $class);
-            case "gip-create":
-            case "gip-edit":
-            case "gip-delete":
-            case "gip-activate":
-            case "gip-deactivate":
-                return static::actionHandlerRecord($action, $id, $class);
-            case "widget-reload":
-                return $this->widgetReload($id, $class, $selected);
-            default:
-                if ($class != "undefined") {
-                    if ($class != \NULL) {
-                        if ($selected == \NULL) {
-                            $selected = $id;
-                        }
-                        $obj = $class::findById($selected);
-                        return $obj->run($action, $id, $selected);
-                    }
-                }
-                return parent::run($action, $id, $class, $selected);
-        }
     }
 
     /**

@@ -6,7 +6,7 @@
 
 namespace GIndie\Platform\Controller;
 
-use \GIndie\ScriptGenerator\Bootstrap3;
+use \GIndie\Platform\View;
 
 /**
  * Description of Platform
@@ -32,23 +32,6 @@ abstract class Platform
     use Platform\ToDeprecate;
     use Platform\ToUpgrade;
 
-    /**
-     * 
-     * @param mixed $modalTitle
-     * @param mixed $modalContent
-     * @param boolean $closeButton
-     * @return \GIndie\ScriptGenerator\Bootstrap3\Component\Modal\Content
-     * @since 18-03-14
-     */
-    protected function cnstrctModal($modalTitle, $modalContent, $closeButton = true)
-    {
-        $modalContent = new Bootstrap3\Component\Modal\Content($modalTitle, $modalContent);
-        if ($closeButton) {
-            $btnDismiss = new Bootstrap3\Component\Button("Cerrar ventana", Bootstrap3\Component\Button::TYPE_BUTTON);
-            $btnDismiss->setAttribute("data-dismiss", "modal");
-            $modalContent->addFooterButton($btnDismiss);
-        }
-        return $modalContent;
-    }
+
 
 }

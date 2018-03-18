@@ -28,7 +28,7 @@ class Content extends Bootstrap3\Component\Modal\Content
      * 
      * @return \GIndie\Platform\View\Modal\Content
      */
-    public static function defaultModal($title, $content, $closeButton = true)
+    public static function defaultModalContent($title, $content, $closeButton = true)
     {
         $modalContent = new Content($title, $content);
         if ($closeButton) {
@@ -49,9 +49,9 @@ class Content extends Bootstrap3\Component\Modal\Content
      * 
      * @return \GIndie\Platform\View\Modal\Content
      */
-    public static function modalSucccess($title, $content, $closeButton = true)
+    public static function success($title, $content, $closeButton = true)
     {
-        $modalContent = static::defaultModal($title, $content, $closeButton);
+        $modalContent = static::defaultModalContent($title, $content, $closeButton);
         $modalContent->addClass("gip-modal-success");
         $modalContent->getHeader()->setBackground("success");
         return $modalContent;
@@ -67,9 +67,24 @@ class Content extends Bootstrap3\Component\Modal\Content
      * 
      * @return \GIndie\Platform\View\Modal\Content
      */
-    public static function modalDanger($title, $content, $closeButton = true)
+    public static function succcess($title, $content, $closeButton = true)
     {
-        $modalContent = static::defaultModal($title, $content, $closeButton);
+        return static::success($title, $content, $closeButton);
+    }
+
+    /**
+     * 
+     * @since 18-03-15
+     * 
+     * @param mixed|string $title
+     * @param mixed $content
+     * @param boolean $closeButton
+     * 
+     * @return \GIndie\Platform\View\Modal\Content
+     */
+    public static function danger($title, $content, $closeButton = true)
+    {
+        $modalContent = static::defaultModalContent($title, $content, $closeButton);
         $modalContent->addClass("gip-modal-danger");
         $modalContent->getHeader()->setBackground("danger");
         return $modalContent;
@@ -85,9 +100,9 @@ class Content extends Bootstrap3\Component\Modal\Content
      * 
      * @return \GIndie\Platform\View\Modal\Content
      */
-    public static function modalWarning($title, $content, $closeButton = true)
+    public static function warning($title, $content, $closeButton = true)
     {
-        $modalContent = static::defaultModal($title, $content, $closeButton);
+        $modalContent = static::defaultModalContent($title, $content, $closeButton);
         $modalContent->addClass("gip-modal-warning");
         $modalContent->getHeader()->setBackground("warning");
         return $modalContent;
@@ -103,9 +118,9 @@ class Content extends Bootstrap3\Component\Modal\Content
      * 
      * @return \GIndie\Platform\View\Modal\Content
      */
-    public static function modalPrimary($title, $content, $closeButton = true)
+    public static function primary($title, $content, $closeButton = true)
     {
-        $modalContent = static::defaultModal($title, $content, $closeButton);
+        $modalContent = static::defaultModalContent($title, $content, $closeButton);
         $modalContent->addClass("gip-modal-primary");
         $modalContent->getHeader()->setBackground("primary");
         return $modalContent;
@@ -121,9 +136,9 @@ class Content extends Bootstrap3\Component\Modal\Content
      * 
      * @return \GIndie\Platform\View\Modal\Content
      */
-    public static function modalInfo($title, $content, $closeButton = true)
+    public static function info($title, $content, $closeButton = true)
     {
-        $modalContent = static::defaultModal($title, $content, $closeButton);
+        $modalContent = static::defaultModalContent($title, $content, $closeButton);
         $modalContent->addClass("gip-modal-info");
         $modalContent->getHeader()->setBackground("info");
         return $modalContent;
