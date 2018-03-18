@@ -5,6 +5,8 @@
  * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
  *
  * @package Platform
+ * @edit 18-03-18
+ * - Renamed file from autoloader.php to AutoloaderPlatform.php
  */
 
 namespace GIndie\Platform;

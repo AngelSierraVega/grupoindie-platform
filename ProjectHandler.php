@@ -21,8 +21,9 @@ class ProjectHandler extends \GIndie\ProjectHandler
      * 
      * @return string
      * @since GIP.00.01
+     * @deprecated since 18-03-18
      */
-    public static function autoloaderFilename()
+    public static function autoloaderFilenameDPR()
     {
         return "autoloader.php";
     }
