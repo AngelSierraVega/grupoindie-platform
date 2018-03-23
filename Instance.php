@@ -28,6 +28,8 @@ use \GIndie\Generator\DML\HTML5;
  * - Used \GIndie\Platform\INIHandler::getCategoryValue in previously deprecated methods.
  * @edit GIP.00.09 18-01-14
  * - Bitácora restaurada
+ * @todo
+ * - Move \Straffsa\SistemaIntegralIngresos funcionality 
  */
 abstract class Instance
 {
@@ -138,14 +140,20 @@ abstract class Instance
 
     /**
      * Ruta real a los respaldos
+     * @since GIP.00.07
      * @version MR-ADIN.00.03
-     * @deprecated since GIP.00.07
+     * @NOTdeprecated 18-03-23
+     * @edit 18-03-23
      */
     public function rutaRespaldos()
     {
-        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
-        $configClass = static::CONFIG_CLASS;
-        return $configClass::rutaRespaldos();
+        $ini = \GIndie\Platform\INIHandler::getCategoryValue("Path", "generatedFiles");
+        if ($ini) {
+            return $ini;
+        } else {
+            \GIndie\Common\PHP\Directories::createFolderStructure(\dirname($_SERVER['SCRIPT_FILENAME']), "\\private\\respaldos\\");
+            return \dirname($_SERVER['SCRIPT_FILENAME']) . "\\private\\respaldos\\";
+        }
     }
 
     /**
@@ -490,7 +498,7 @@ abstract class Instance
                         $data['timestamp'] = \time();
                         $nota = "Ingresó al sistema con correo y contraseña";
                         $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
-                        $bitacora = \AdminIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
+                        $bitacora = \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
                         $bitacora->run("gip-inner-create");
                     }
                 }

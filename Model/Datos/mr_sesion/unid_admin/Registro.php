@@ -10,7 +10,7 @@
  * @version MR-ADIN.00.01
  */
 
-namespace AdminIngresos\Datos\mr_sesion\unid_admin;
+namespace Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\unid_admin;
 
 use GIndie\Platform\Model\Database\Record;
 
@@ -19,6 +19,8 @@ use GIndie\Platform\Model\Database\Record;
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * @since MR-ADIN.00.01
+ * @todo
+ * - Move \Straffsa\SistemaIntegralIngresos funcionality 
  */
 class Registro extends Record {
 

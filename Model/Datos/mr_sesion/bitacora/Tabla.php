@@ -18,6 +18,8 @@ use GIndie\Platform\Model\Database\Table;
  * <b>Tabla</b> de la bitacora de registros del sistema.
  * @author Izmir Sanchez Juarez <izmirrreffi@gmail.com>
  * @since MR-ADIN.00.01
+ * @todo
+ * - Move \Straffsa\SistemaIntegralIngresos funcionality 
  */
 class Tabla extends Table {
 
@@ -50,7 +52,7 @@ class Tabla extends Table {
      * Modelo de datos relacionado con la lista.
      * @since MR-ADIN.00.01
      */
-    //const RELATED_RECORD = "AdminIngresos\Datos\mr_sesion\usuario_cuenta\Registro";
+    //const RELATED_RECORD = "Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\usuario_cuenta\Registro";
 
 
     /**

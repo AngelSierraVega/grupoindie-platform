@@ -20,6 +20,8 @@ class Javascript
      * @param type $widgetId
      * @return string
      * @since 18-03-14
+     * @edit 18-03-18
+     * - Expanted waiter timeout
      */
     public static function submitOnChange($formId)
     {
@@ -31,7 +33,7 @@ class Javascript
                 clearTimeout(timerid);
                 timerid = setTimeout(function () {
                     $("#<?= $formId; ?>").submit();
-                }, 500);
+                }, 1200);
             });
             $("#<?= $formId; ?> select").change(function () {
                 $("#<?= $formId; ?>").submit();

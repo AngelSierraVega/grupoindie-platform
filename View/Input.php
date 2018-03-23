@@ -132,8 +132,8 @@ class Input
                 }
                 $rtnStr .= $attribute->getLabel() . "</label>";
                 $rtnStr .= $form_element;
-                if(!\is_null($attribute->getHelp())){
-                    $rtnStr .= "<i>Nota: ". $attribute->getHelp() . "</i>";
+                if (!\is_null($attribute->getHelp())) {
+                    $rtnStr .= "<i>Nota: " . $attribute->getHelp() . "</i>";
                 }
                 $rtnStr .= '</div>';
                 break;
@@ -176,7 +176,21 @@ class Input
         return $form_element;
     }
 
-    public static function Text($name, $value, $required = \false, $placeholder = "",$helpBlock=null)
+    /**
+     * 
+     * @param type $name
+     * @param type $value
+     * @return string
+     * @since 18-03-22
+     */
+    public static function hidden($name, $value)
+    {
+        $form_element = "<input type='hidden' id='{$name}' name='{$name}' value='" .
+                $value . "' >";
+        return $form_element;
+    }
+
+    public static function Text($name, $value, $required = \false, $placeholder = "", $helpBlock = null)
     {
         $required = "";
         if ($required) {
@@ -184,12 +198,12 @@ class Input
         }
         $form_element = "<input class='form-control' type='text' placeholder='{$placeholder}' id='{$name}' name='{$name}' value='" .
                 $value . "' " . $required . " >";
-        if($helpBlock!==null){
-            $form_element.= "<p class='help-block'>{$helpBlock}</p>";
+        if ($helpBlock !== null) {
+            $form_element .= "<p class='help-block'>{$helpBlock}</p>";
         }
         return $form_element;
     }
-    
+
     public static function Disabled($name, $value, $required = \false, $placeholder = "")
     {
         $required = "";
@@ -208,43 +222,43 @@ class Input
         <br>
         <input type="checkbox" name="<?= $name; ?>" 
                value="<?= $value; ?>"
-        <?= $value == "1" ? " checked " : "" ?>
+               <?= $value == "1" ? " checked " : "" ?>
                >
-        <?php
-        $form_element = ob_get_contents();
-        ob_end_clean();
-        return $form_element;
-    }
+               <?php
+               $form_element = ob_get_contents();
+               ob_end_clean();
+               return $form_element;
+           }
 
-    public static function selectFromAttribute(\GIndie\Platform\Model\Attribute $attribute, $selectedId,
-                                               $recordId)
-    {
-        $recordClass = $attribute->getRecordClass();
-        $required = "";
-        if ($attribute->getRestrictionRequired()) {
-            $required = "required='required'";
-        }
-        $class = $attribute->getFkClass();
-        $options = $attribute->getFkRestrictions();
-        //$recordClass = \get_class($this->_record);
-        if (\strcmp($recordClass, $class::RelatedRecord()) == 0) {
-            $options[] = $recordClass::PRIMARY_KEY . " != '" . $recordId . "'";
-        }
-        $form_element = "<select class='form-control selectpicker' "
-                . "data-live-search='true' id='{$attribute->getName()}' "
-                . "name='{$attribute->getName()}' " . $required . " >"
-                . static::_selectOptionsFromList($selectedId, $class, $options, $attribute->getNotNull())
+           public static function selectFromAttribute(\GIndie\Platform\Model\Attribute $attribute,
+                                                      $selectedId, $recordId)
+           {
+               $recordClass = $attribute->getRecordClass();
+               $required = "";
+               if ($attribute->getRestrictionRequired()) {
+                   $required = "required='required'";
+               }
+               $class = $attribute->getFkClass();
+               $options = $attribute->getFkRestrictions();
+               //$recordClass = \get_class($this->_record);
+               if (\strcmp($recordClass, $class::RelatedRecord()) == 0) {
+                   $options[] = $recordClass::PRIMARY_KEY . " != '" . $recordId . "'";
+               }
+               $form_element = "<select class='form-control selectpicker' "
+                       . "data-live-search='true' id='{$attribute->getName()}' "
+                       . "name='{$attribute->getName()}' " . $required . " >"
+                       . static::_selectOptionsFromList($selectedId, $class, $options, $attribute->getNotNull())
 //                    . $this->_dynamicOptionsForSelect($value, $class, $options)
-                . "</select>";
+                       . "</select>";
 
-        $form_element .= '<script>
+               $form_element .= '<script>
                 $(document).ready(function () {
                 $("#' . $attribute->getName() . '").selectpicker({size: 8});});</script>';
-        $scriptTemp = "";
-        if (($slaveAttr = $attribute->getSlave()) !== \NULL) {
-            $recordClass = urlencode($recordClass);
-            ob_start();
-            ?>
+               $scriptTemp = "";
+               if (($slaveAttr = $attribute->getSlave()) !== \NULL) {
+                   $recordClass = urlencode($recordClass);
+                   ob_start();
+                   ?>
             <script>
                 $(document).ready(function () {
                     $("#<?= $attribute->getName(); ?>").change(function () {
@@ -269,7 +283,7 @@ class Input
                     setTimeout(function () {
                         $("#<?= $attribute->getName(); ?>").change();
                     }, 50);
-                    //$("#<?= ""; //$attribute->getName();            ?>").change();
+                    //$("#<?= ""; //$attribute->getName();             ?>").change();
                 });
             </script>
             <?php

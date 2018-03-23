@@ -11,10 +11,11 @@
 
 namespace GIndie\Platform\View;
 
-use GIndie\Generator\DML\HTML5\Category\StylesSemantics;
-use GIndie\Generator\DML\HTML5\Bootstrap3\Component\Panel;
-use \GIndie\Generator\DML\HTML5\Bootstrap3\Component\Button;
-use GIndie\Platform\View\Widget\Buttons;
+//use GIndie\Generator\DML\HTML5\Category\StylesSemantics;
+//use GIndie\Generator\DML\HTML5\Bootstrap3\Component\Panel;
+//use \GIndie\Generator\DML\HTML5\Bootstrap3\Component\Button;
+//use GIndie\Platform\View\Widget\Buttons;
+use GIndie\ScriptGenerator\Dashboard;
 
 /**
  * Description of Widget
@@ -24,33 +25,42 @@ use GIndie\Platform\View\Widget\Buttons;
  * 
  * @version GIP.00.00
  */
-class Widget extends Panel {
+class Widget extends Dashboard\Widget
+{
 
-    private $_btnGroup;
-
-    public function __construct($heading = \FALSE, $heading_body = \FALSE,
-            $body = \FALSE, $body_footer = \FALSE, $footer = \FALSE,
-            $buttons = \NULL) {
-        if(is_subclass_of($heading, Panel\Heading::class,\FALSE)){
-            $heading_new = $heading;
-        }else{
-            $heading_new = new Panel\Heading();
+    /**
+     * 
+     * @param array $params
+     * @return $this
+     */
+    public function addActionHeading(array $params)
+    {
+        $form = new \GIndie\Platform\View\Form(null, true, isset($params["target"]) ? $params["target"] : false);
+        !isset($params["gip-action"]) ?: $form->setAttribute("gip-action", $params["gip-action"]);
+        switch (false)
+        {
+            case \is_null($this->getHeadingBody()):
+                $this->getHeadingBody()->addContent($form);
+                break;
+            case \is_null($this->getBody()):
+                $this->getBody()->addContent($form);
+                break;
+            case \is_null($this->getBodyFooter()):
+                $this->getBodyFooter()->addContent($form);
+                break;
+            case \is_null($this->getFooter()):
+                $this->getFooter()->addContent($form);
+                break;
+            default:
+                $this->getHeading()->addContent($form);
+                break;
         }
-        
-        $this->_btnGroup = $heading_new->addContentGetPointer(StylesSemantics::Div("",
-                        ["class" => "btn-group pull-right"]));
-        $heading_new->setTitle($heading);
-        //$this->addButtonReload();
-        parent::__construct($heading_new, $heading_body, $body, $body_footer,
-                $footer);
+        $button = new \GIndie\ScriptGenerator\Bootstrap3\Component\Button(isset($params["action-name"]) ? $params["action-name"] : "Submit", "submit");
+        $button->addClass("btn-sm");
+        !isset($params["context"]) ?: $button->setContext($params["context"]);
+        $button->setForm($form->getId());
+        $this->addButtonHeading($button);
+        return $this;
     }
-
-    public function addButtonHeading(Button $button) {
-        $this->_btnGroup->addContent($button);
-    }
-
-//    public function addButtonReload() {
-//        
-//    }
 
 }

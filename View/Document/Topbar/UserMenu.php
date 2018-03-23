@@ -34,7 +34,7 @@ class UserMenu extends Bootstrap3\Component\Dropdown
 //            $perfil->setAttribute("gip-action-id", \GIndie\Platform\Current::User()->getId());
 //            $perfil->setAttribute("gip-action","form-edit");
 //            $perfil->setAttribute("gip-modal","1");
-//            $perfil->setAttribute("gip-action-class", urlencode("AdminIngresos\Datos\mr_catalogos\usuario_perfil\Registro"));
+//            $perfil->setAttribute("gip-action-class", urlencode("Straffsa\SistemaIntegralIngresos\Datos\mr_catalogos\usuario_perfil\Registro"));
 //
 //            $listElements = [$perfil];
 //
@@ -58,7 +58,7 @@ class UserMenu extends Bootstrap3\Component\Dropdown
         $perfil->setAttribute("gip-action", "form-edit");
         $perfil->setAttribute("gip-modal", "1");
         $perfil->setAttribute("gip-action-class",
-                              urlencode("AdminIngresos\Datos\mr_catalogos\usuario_perfil\Registro"));
+                              urlencode("Straffsa\SistemaIntegralIngresos\Datos\mr_catalogos\usuario_perfil\Registro"));
 
         $listElements = [$perfil];
 

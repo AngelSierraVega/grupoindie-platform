@@ -251,13 +251,9 @@ trait Upgrading
             $record->run($action);
             $msj = "El registro ha sido actualizado exitosamente.";
             $modalContent = View\Modal\Content::succcess("Registro actualizado.", $msj);
-//            $modalContent = $this->cnstrctModal("Registro actualizado.", $msj);
-//            $modalContent->getHeader()->setBackground("success");
         } catch (\GIndie\Platform\ExceptionMySQL $exc) {
             $msj = \GIndie\Platform\ExceptionMySQL::handleException($exc);
             $modalContent = View\Modal\Content::warning("Error de usuario", $msj);
-//            $modalContent = $this->cnstrctModal("Error de usuario", $msj);
-//            $modalContent->getHeader()->setBackground("warning");
         }
         return $modalContent;
     }

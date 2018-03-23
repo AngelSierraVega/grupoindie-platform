@@ -10,7 +10,7 @@
  * @version MR-ADIN.00.01
  */
 
-//namespace AdminIngresos\Datos\mr_sesion\unid_admin;
+//namespace Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\unid_admin;
 
 use GIndie\Platform\Model\Database\ListSimple;
 
@@ -19,6 +19,8 @@ use GIndie\Platform\Model\Database\ListSimple;
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * @since MR-ADIN.00.01
+ * @todo
+ * - Move \Straffsa\SistemaIntegralIngresos funcionality 
  */
 class Lista extends ListSimple {
 
@@ -63,6 +65,6 @@ class Lista extends ListSimple {
      * Registro
      * @since MR-ADIN.00.01
      */
-    const RELATED_RECORD = "\AdminIngresos\Datos\mr_sesion\unid_admin\Registro";
+    const RELATED_RECORD = "\Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\unid_admin\Registro";
 
 }

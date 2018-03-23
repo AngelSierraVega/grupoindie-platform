@@ -123,8 +123,10 @@ trait ToUpgrade
      * @since 17-??-??
      * @param string $class
      * @return \GIndie\Platform\View\Table
+     * @edit 18-03-20
+     * - Renamed from _searchTable to  cnstrctTableFromSearch
      */
-    protected function _searchTable($class)
+    protected function cnstrctTableFromSearch($class)
     {
         $record = $class::RelatedRecord();
         $searchArray = [];
@@ -202,9 +204,9 @@ trait ToUpgrade
     }
 
     /**
-     * @param type $id
-     * @param type $class
-     * @param type $selected
+     * @param string $id
+     * @param string $class
+     * @param string $selected
      * 
      * @since GIP.00.07
      * 
@@ -224,7 +226,7 @@ trait ToUpgrade
      */
     protected function tableSearch($class)
     {
-        $table = new \GIndie\Platform\View\TablePagination($this->_searchTable($class));
+        $table = new \GIndie\Platform\View\TablePagination($this->cnstrctTableFromSearch($class));
         return $table;
     }
 
@@ -276,7 +278,7 @@ trait ToUpgrade
     }
 
     /**
-     * 
+     * Use placeholder() instead
      * @deprecated since GIP.00.06
      * @version GIP.00.05
      * @var string $widgetPlaceholder

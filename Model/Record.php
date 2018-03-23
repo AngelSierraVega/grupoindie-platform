@@ -22,6 +22,9 @@ use \GIndie\Generator\DML\HTML5\Bootstrap3;
  * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
  * @edit GIP.00.11 18-01-14
  * - Update getDisplayOf()
+ * 
+ * @todo
+ * - Move \Straffsa\SistemaIntegralIngresos funcionality 
  */
 abstract class Record implements RecordINT
 {
@@ -210,11 +213,15 @@ abstract class Record implements RecordINT
     {
         $connection = Current::Connection();
         $action = $connection->delete($this);
-        try {
-            
-        } catch (\GIndie\Platform\ExceptionMySQL $exc) {
-            return \GIndie\Platform\ExceptionMySQL::handleException($exc);
-        }
+//        try {
+//            
+//        } catch (\GIndie\Platform\ExceptionMySQL $exc) {
+//            return \GIndie\Platform\ExceptionMySQL::handleException($exc);
+//        }
+        /**
+         * @todo
+         * - Move \Straffsa\SistemaIntegralIngresos funcionality 
+         */
         if ($action) {
             $data = [];
             $data['fk_usuario_cuenta'] = \GIndie\Platform\Current::User()->getId();
@@ -222,7 +229,7 @@ abstract class Record implements RecordINT
             $data['timestamp'] = \time();
             $nota = static::NAME . " eliminado(a): " . $this->getDisplay();
             $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
-            $bitacora = \AdminIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
+            $bitacora = \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
             $bitacora->run("gip-inner-create");
         }
         return $action;
@@ -243,6 +250,10 @@ abstract class Record implements RecordINT
         if ($postReading) {
             $this->_handleBooleanPost();
         }
+        /**
+         * @todo
+         * - Move \Straffsa\SistemaIntegralIngresos funcionality 
+         */
         $_resultSet = $connection->create($this);
         if ($_resultSet) {
             $recordId = Current::Connection()->insert_id();
@@ -275,7 +286,7 @@ abstract class Record implements RecordINT
                         }
                     }
                     $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
-                    $bitacora = \AdminIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
+                    $bitacora = \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
                     $bitacora->run("gip-inner-create");
                     break;
             }
@@ -322,6 +333,10 @@ abstract class Record implements RecordINT
         }
         $id = isset($_POST["gip-action-id"]) ? $_POST["gip-action-id"] : \NULL;
         $action = $connection->update($this, $id);
+        /**
+         * @todo
+         * - Move \Straffsa\SistemaIntegralIngresos funcionality 
+         */
         switch (static::TABLE)
         {
             case "bitacora_usuario":
@@ -344,7 +359,7 @@ abstract class Record implements RecordINT
                     }
                 }
                 $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
-                $bitacora = \AdminIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
+                $bitacora = \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
                 $bitacora->run("gip-inner-create");
         }
 //        if ($action) {

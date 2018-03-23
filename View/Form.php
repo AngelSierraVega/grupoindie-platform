@@ -40,19 +40,17 @@ class Form extends HTML5\Category\FormInput\Form
      * @edit 2017-06-18 <angel.sierra@grupoindie.com>
      *      - Se agregó token único en formularios
      */
-    public function __construct(Record $record = \NULL, $uniqueToken = \TRUE,
-                                $customTarget = \FALSE)
+    public function __construct(Record $record = \NULL, $uniqueToken = \TRUE, $customTarget = \FALSE)
     {
         parent::__construct();
         $this->_record = $record;
-        $this->setId(\GIndie\Platform\Security::tokenize(\time()));
+        $this->setId(\GIndie\Platform\Security::tokenize(\microtime(\TRUE) . \mt_rand()));
 
         //autocomplete="on"
         //$this->setAttribute("autocomplete","off");
         //$this->setAction("login");
         $this->setMethod("post");
-        $this->addContent(StylesSemantics::Div("",
-                                               ["class" => "gip-form-response"]));
+        $this->addContent(StylesSemantics::Div("", ["class" => "gip-form-response"]));
         if ($uniqueToken) {
             $secure_token = \GIndie\Platform\Security::tokenizeUnique($this->getId());
             $form_element = "<input type='hidden' "
@@ -73,18 +71,14 @@ class Form extends HTML5\Category\FormInput\Form
                 //var_dump($attrName);
                 if (strcmp($record::PRIMARY_KEY, $attrName) !== 0) {
                     $this->addContent(Input::constructFromAttribute(
-                                    $this->_record->getAttribute($attrName),
-                                                                 $this->_record->getValueOf($attrName),
-                                                                                            $record->getId()));
+                                    $this->_record->getAttribute($attrName), $this->_record->getValueOf($attrName), $record->getId()));
 //                    $this->_createInput(
 //                    $this->_record->getAttribute($attrName)
 //                    , $this->_record->getValueOf($attrName)));
                 } else {
                     if ($record::AUTOINCREMENT == \FALSE) {
                         $this->addContent(Input::constructFromAttribute(
-                                        $this->_record->getAttribute($attrName),
-                                                                     $this->_record->getValueOf($attrName),
-                                                                                                $record->getId()));
+                                        $this->_record->getAttribute($attrName), $this->_record->getValueOf($attrName), $record->getId()));
 //                        $this->addContent(
 //                                $this->_createInput(
 //                                        $this->_record->getAttribute($attrName)

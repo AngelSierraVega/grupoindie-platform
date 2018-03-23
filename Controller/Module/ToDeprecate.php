@@ -81,4 +81,15 @@ trait ToDeprecate
         return $this->runFormRequest($action, $id, $class);
     }
 
+    /**
+     * @since 17-??-??
+     * @param string $class
+     * @return \GIndie\Platform\View\Table
+     * @deprecated since 18-03-20
+     */
+    protected function _searchTable($class)
+    {
+        return $this->cnstrctTableFromSearch($class);
+    }
+
 }

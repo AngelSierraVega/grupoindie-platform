@@ -11,7 +11,7 @@
  */
 
 
-namespace AdminIngresos\Datos\mr_sesion\rol;
+namespace Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\rol;
 
 use GIndie\Platform\Model\Database\ListSimple;
 
@@ -20,6 +20,8 @@ use GIndie\Platform\Model\Database\ListSimple;
  *
  * @author Liliana Hernández Castañeda <liliana.hercast@gmail.com>
  * @since MR-ADIN.00.01
+ * @todo
+ * - Move \Straffsa\SistemaIntegralIngresos funcionality 
  */
 class Lista extends ListSimple {
 
@@ -64,7 +66,7 @@ class Lista extends ListSimple {
     * Registro
     * @since MR-ADIN.00.01
     */
-    //const RELATED_RECORD = '\AdminIngresos\Datos\mr_sesion\rol\Registro';
+    //const RELATED_RECORD = '\Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\rol\Registro';
     public static function RelatedRecord()
     {
         return Registro::class;

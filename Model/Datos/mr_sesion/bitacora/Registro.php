@@ -19,6 +19,8 @@ use \GIndie\Platform\Model;
  * Registro de la <b>bitácora de usuario</b>
  *
  * @since MR-ADIN.00.01
+ * @todo
+ * - Move \Straffsa\SistemaIntegralIngresos funcionality 
  */
 class Registro extends Record
 {
@@ -57,7 +59,7 @@ class Registro extends Record
         static::attribute("id")->excludeFromDisplay();
         static::attribute("fk_usuario_cuenta")->setLabel("Usuario");
         static::attribute("fk_usuario_cuenta")->setSize("col-sm-6");
-        static::attribute("fk_usuario_cuenta")->setTypeFK(\AdminIngresos\Datos\mr_sesion\usuario_cuenta\Lista::class);
+        static::attribute("fk_usuario_cuenta")->setTypeFK(\Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\usuario_cuenta\Lista::class);
         static::attribute("action")->setType(Model\Attribute::TYPE_STRING)->setLabel("action")->excludeFromDisplay();
         static::attribute("action-id")->setType(Model\Attribute::TYPE_STRING)->setLabel("action-id")->excludeFromDisplay();
         static::attribute("action-class")->setType(Model\Attribute::TYPE_STRING)->setLabel("action-class")->excludeFromDisplay();

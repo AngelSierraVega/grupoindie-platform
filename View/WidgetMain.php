@@ -11,7 +11,7 @@
 namespace GIndie\Platform\View;
 
 use GIndie\Platform\View\Widget\Buttons;
-
+use GIndie\ScriptGenerator\HTML5\Category\StylesSemantics;
 /**
  * 
  */
@@ -55,20 +55,24 @@ class WidgetMain extends Widget
     }
 
     /**
-     * 
+     * @edit 18-03-23
+     * - Updated div libs
      */
     protected function tmpContent()
     {
-        $mainRow = new \GIndie\Generator\DML\HTML5\Node("div", \FALSE,
-                                                        ["class" => "row"]);
+        $mainRow = StylesSemantics::div(null, ["class" => "row"]);
+//        $mainRow = new \GIndie\Generator\DML\HTML5\Node("div", \FALSE,
+//                                                        ["class" => "row"]);
         if (\sizeof($this->_record->getAttributesDisplay()) > 4) {
             $_counter = 0;
             $_size = \intval(\sizeof($this->_record->getAttributesDisplay()));
             $_limit = \intval($_size / 2);
-            $_firstCol = new \GIndie\Generator\DML\HTML5\Node("div", \FALSE,
-                                                              ["class" => "col-sm-6"]);
-            $_secondCol = new \GIndie\Generator\DML\HTML5\Node("div", \FALSE,
-                                                               ["class" => "col-sm-6"]);
+            $_firstCol = StylesSemantics::div(null, ["class" => "col-sm-6"]);
+//            $_firstCol = new \GIndie\Generator\DML\HTML5\Node("div", \FALSE,
+//                                                              ["class" => "col-sm-6"]);
+            $_secondCol = StylesSemantics::div(null, ["class" => "col-sm-6"]);
+//            $_secondCol = new \GIndie\Generator\DML\HTML5\Node("div", \FALSE,
+//                                                               ["class" => "col-sm-6"]);
             foreach ($this->_record->getAttributesDisplay() as $attrName) {
                 $_display = $this->_record->getDisplayOf($attrName);
                 switch ($_display)
@@ -90,8 +94,9 @@ class WidgetMain extends Widget
             $mainRow->addContent($_firstCol);
             $mainRow->addContent($_secondCol);
         } else {
-            $singleCol = new \GIndie\Generator\DML\HTML5\Node("div", \FALSE,
-                                                              ["class" => "col-xs-12"]);
+            $singleCol = StylesSemantics::div(null, ["class" => "col-xs-12"]);
+//            $singleCol = new \GIndie\Generator\DML\HTML5\Node("div", \FALSE,
+//                                                              ["class" => "col-xs-12"]);
             foreach ($this->_record->getAttributesDisplay() as $attrName) {
                 $_display = $this->_record->getDisplayOf($attrName);
                 switch ($_display)

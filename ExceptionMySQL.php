@@ -17,16 +17,60 @@ class ExceptionMySQL extends \Exception
 
     /**
      * 
+     * @return string
+     * @since 18-03-20
+     */
+    private static function parseForeingKeyError($msj)
+    {
+        $tmpSrt = \explode(",", $msj);
+        $tmpSrt = \explode("(", $tmpSrt[0]);
+        return "Llave foránea con <i>" . $tmpSrt[1] . "</i>";
+    }
+
+    /**
+     * 
+     * @return string
+     * @since 18-03-20
+     */
+    private static function parseSQLError($exc)
+    {
+        $rtnSrt = "";
+        switch ($exc->getCode())
+        {
+            case 1451:
+                $rtnSrt .= static::parseForeingKeyError($exc->getMessage());
+                break;
+            default:
+                $rtnSrt .= "Mensaje SQL: " . \addslashes($exc->getMessage());
+                break;
+        }
+        return $rtnSrt;
+    }
+
+    /**
+     * 
      * @param type $exc
      * @return string
      * @edit 18-03-13
      * - Handle range error
      * @edit 18-03-15
      * - Handle reference error
+     * @edit 18-03-20
+     * - Updated visual info for AS
+     * - Exploded method into parseSQLError() and parseForeingKeyError()
      */
     public static function handleException($exc)
     {
         $rtnSrt = "";
+        if (Current::hasRole(["AS"])) {
+            $rtnSrt .= "<div class=\"well well-sm\">";
+            $rtnSrt .= "<p class=\"text-info\">";
+            $rtnSrt .= static::parseSQLError($exc);
+            $rtnSrt .= "</p>";
+            $usuario = Current::User()->getValueOf("user");
+            $rtnSrt .= "<p class=\"text-muted text-right\"><small>Administrador del Sistema: {$usuario}</small></p>";
+            $rtnSrt .= "</div>";
+        }
         switch ($exc->getCode())
         {
             case 0:
@@ -49,11 +93,6 @@ class ExceptionMySQL extends \Exception
             default:
                 $rtnSrt .= "SD: " . $exc->getCode();
                 break;
-        }
-        if (Current::hasRole(["AS"])) {
-            $rtnSrt .= "<br><br> Error original: ";
-            $rtnSrt .= \addslashes($exc->getMessage());
-            $rtnSrt .= "<br>";
         }
         return $rtnSrt;
     }

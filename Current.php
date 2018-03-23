@@ -98,7 +98,7 @@ class Current
 
     /**
      * 
-     * @return \GIndie\Instance
+     * @return \GIndie\Platform\Instance
      */
     public static function Instance()
     {

@@ -17,6 +17,8 @@ use \GIndie\Platform\Current;
  *
  * @version A0
  * @since 18-03-14
+ * @todo
+ * - Move \Straffsa\SistemaIntegralIngresos funcionality 
  */
 trait ToUpgrade
 {
@@ -105,30 +107,36 @@ trait ToUpgrade
      * @since GIP.00.01
      * @param string $id
      * @return mixed
+     * @edit 18-03-18
      */
     protected function modal($id)
     {
         switch ($id)
         {
             case "config-sesion":
-                $configSesionForm = new \GIndie\Platform\View\Form();
-                $configSesionForm->setAttribute("gip-action", "submit");
-                $configSesionForm->setAttribute("gip-action-id", "config-sesion");
-                $rolesCompletos = new \AdminIngresos\Datos\mr_sesion\rol\Lista([]);
-                foreach ($rolesCompletos->getElements() as $element) {
-                    $value = $rolesCompletos->getElementAt($element)->getValue();
-                    //$configSesionForm->addContent("<h3>$element</h3>");
-                    $checked = "";
-                    if (\GIndie\Platform\Current::hasRole($element)) {
-                        $checked = "checked";
+                $sii = \GIndie\Platform\INIHandler::getCategoryValue("Plugins", "SistemaIntegralIngresos");
+                if ($sii) {
+                    $configSesionForm = new \GIndie\Platform\View\Form();
+                    $configSesionForm->setAttribute("gip-action", "submit");
+                    $configSesionForm->setAttribute("gip-action-id", "config-sesion");
+                    $rolesCompletos = new \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\rol\Lista([]);
+                    foreach ($rolesCompletos->getElements() as $element) {
+                        $value = $rolesCompletos->getElementAt($element)->getValue();
+                        //$configSesionForm->addContent("<h3>$element</h3>");
+                        $checked = "";
+                        if (\GIndie\Platform\Current::hasRole($element)) {
+                            $checked = "checked";
+                        }
+                        $configSesionForm->addContent("<input type=\"checkbox\" name=\"{$element}\" value=\"rol\" $checked> {$value} <br><br>");
                     }
-                    $configSesionForm->addContent("<input type=\"checkbox\" name=\"{$element}\" value=\"rol\" $checked> {$value} <br><br>");
+                    $modalContent = new Bootstrap3\Component\Modal\Content("Roles de la sesión actual", $configSesionForm);
+                    $btn = new Bootstrap3\Component\Button("Guardar", Bootstrap3\Component\Button::TYPE_SUBMIT);
+                    $btn->setForm($configSesionForm->getId())->setValue("Submit");
+                    $btn->setContext(Bootstrap3\Component\Button::$COLOR_SUCCESS);
+                    $modalContent->addFooterButton($btn);
+                } else {
+                    throw new \Exception("todo");
                 }
-                $modalContent = new Bootstrap3\Component\Modal\Content("Roles de la sesión actual", $configSesionForm);
-                $btn = new Bootstrap3\Component\Button("Guardar", Bootstrap3\Component\Button::TYPE_SUBMIT);
-                $btn->setForm($configSesionForm->getId())->setValue("Submit");
-                $btn->setContext(Bootstrap3\Component\Button::$COLOR_SUCCESS);
-                $modalContent->addFooterButton($btn);
                 return $modalContent;
             case "acerca-de":
                 $acerca = new \GIndie\Platform\View\Form("gip-tabla-bitacora");
@@ -150,7 +158,7 @@ trait ToUpgrade
                     //$restrictions .= "' AND timestamp < 1601539400";
                     $restrictions .= "' AND timestamp > " . $beginOfDay;
                     //$restrictions .= "' AND timestamp < " . $endOfDay;
-                    $bitacora = new \GIndie\Platform\View\TableSimple(new \AdminIngresos\Datos\mr_sesion\bitacora\Tabla(
+                    $bitacora = new \GIndie\Platform\View\TableSimple(new \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\bitacora\Tabla(
                             [$restrictions]));
                     $modalContent = $this->_modalWrap("Bitácora de actividades", $bitacora);
                 } else {
@@ -248,7 +256,7 @@ trait ToUpgrade
                             break;
                     }
                     $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
-                    $bitacora = \AdminIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
+                    $bitacora = \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
                     $bitacora->run("gip-inner-create");
                 }
                 break;
@@ -278,7 +286,7 @@ trait ToUpgrade
                 foreach ($_POST as $rol => $value) {
                     if (strcmp($value, "rol") == 0) {
                         \GIndie\Platform\Current::Roles()->addElement($rol, $userId);
-                        $_rolTemp = \AdminIngresos\Datos\mr_sesion\rol\Registro::findById($rol);
+                        $_rolTemp = \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\rol\Registro::findById($rol);
                         $_rol[] = $_rolTemp->getDisplay();
                     }
                 }
@@ -293,7 +301,7 @@ trait ToUpgrade
 
                     $nota = "Modificó sus permisos de sesión: " . join(", ", $_rol);
                     $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
-                    $bitacora = \AdminIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
+                    $bitacora = \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
                     $bitacora->run("gip-inner-create");
                 } else {
                     $response->addContent("Failed");
@@ -318,7 +326,7 @@ trait ToUpgrade
                         $data['timestamp'] = \time();
                         $nota = "Cerró su sesión";
                         $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
-                        $bitacora = \AdminIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
+                        $bitacora = \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
                         $bitacora->run("gip-inner-create");
                     }
                 } else {

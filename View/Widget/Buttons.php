@@ -33,15 +33,14 @@ class Buttons
      * @param string|null $gipClass
      * @return \GIndie\Generator\DML\HTML5\Bootstrap3\Component\Button
      */
-    public static function Custom($context, $icon, $gipAction,
-                                  $gipActionId = \NULL, $gipModal = \FALSE,
+    public static function Custom($context, $icon, $gipAction, $gipActionId = \NULL, $gipModal = \FALSE,
                                   $gipClass = \NULL, $gipSelectedId = \NULL)
     {
         $btn = new Button("");
         $btn->addClass('btn-sm');
         $btn->setContext($context, \FALSE);
         $btn->addContent($icon);
-        if($gipAction !== \NULL){
+        if ($gipAction !== \NULL) {
             $btn->setAttribute("gip-action", $gipAction);
         }
         if ($gipActionId !== \NULL) {
@@ -63,47 +62,51 @@ class Buttons
      * 
      * @return \GIndie\Generator\DML\HTML5\Bootstrap3\Component\Button
      */
-    public static function CustomDanger($icon, $gipAction, $gipActionId = \NULL,
-                                        $gipModal = \FALSE, $gipClass = \NULL)
+    public static function CustomDanger($icon, $gipAction, $gipActionId = \NULL, $gipModal = \FALSE,
+                                        $gipClass = \NULL)
     {
-        return static::Custom(static::$COLOR_DANGER, $icon, $gipAction,
-                              $gipActionId, $gipModal, $gipClass);
+        return static::Custom(static::$COLOR_DANGER, $icon, $gipAction, $gipActionId, $gipModal, $gipClass);
+    }
+
+    /**
+     * 
+     * @return \GIndie\Generator\DML\HTML5\Bootstrap3\Component\Button
+     * @since 18-03-23
+     */
+    public static function customWarning($icon, $gipAction, $gipActionId = \NULL, $gipModal = \FALSE,
+                                         $gipClass = \NULL)
+    {
+        return static::Custom(static::$COLOR_WARNING, $icon, $gipAction, $gipActionId, $gipModal, $gipClass);
     }
 
     /**
      * 
      * @return \GIndie\Generator\DML\HTML5\Bootstrap3\Component\Button
      */
-    public static function CustomPrimary($icon, $gipAction,
-                                         $gipActionId = \NULL,
-                                         $gipModal = \FALSE, $gipClass = \NULL)
+    public static function CustomPrimary($icon, $gipAction, $gipActionId = \NULL, $gipModal = \FALSE,
+                                         $gipClass = \NULL)
     {
-        return static::Custom(Button::$COLOR_PRIMARY, $icon, $gipAction,
-                              $gipActionId, $gipModal, $gipClass);
+        return static::Custom(Button::$COLOR_PRIMARY, $icon, $gipAction, $gipActionId, $gipModal, $gipClass);
     }
 
     /**
      * 
      * @return \GIndie\Generator\DML\HTML5\Bootstrap3\Component\Button
      */
-    public static function CustomSuccess($icon, $gipAction,
-                                         $gipActionId = \NULL,
-                                         $gipModal = \FALSE, $gipClass = \NULL)
+    public static function CustomSuccess($icon, $gipAction, $gipActionId = \NULL, $gipModal = \FALSE,
+                                         $gipClass = \NULL)
     {
-        return static::Custom(Button::$COLOR_SUCCESS, $icon, $gipAction,
-                              $gipActionId, $gipModal, $gipClass);
+        return static::Custom(Button::$COLOR_SUCCESS, $icon, $gipAction, $gipActionId, $gipModal, $gipClass);
     }
 
     /**
      * 
      * @return \GIndie\Generator\DML\HTML5\Bootstrap3\Component\Button
      */
-    public static function CustomDefault($icon, $gipAction,
-                                         $gipActionId = \NULL,
-                                         $gipModal = \FALSE, $gipClass = \NULL,$gipSelectedId=\NULL)
+    public static function CustomDefault($icon, $gipAction, $gipActionId = \NULL, $gipModal = \FALSE,
+                                         $gipClass = \NULL, $gipSelectedId = \NULL)
     {
-        return static::Custom(Button::$COLOR_DEFAULT, $icon, $gipAction,
-                              $gipActionId, $gipModal, $gipClass,$gipSelectedId);
+        return static::Custom(Button::$COLOR_DEFAULT, $icon, $gipAction, $gipActionId, $gipModal, $gipClass, $gipSelectedId);
     }
 
     /**
@@ -112,9 +115,7 @@ class Buttons
      */
     public static function Create($gipClass, $gipActionId = \NULL)
     {
-        return static::CustomSuccess("<span class=\"glyphicon glyphicon-plus\"></span>",
-                                     "form-create", $gipActionId, "lg",
-                                     $gipClass);
+        return static::CustomSuccess("<span class=\"glyphicon glyphicon-plus\"></span>", "form-create", $gipActionId, "lg", $gipClass);
     }
 
     /**
@@ -123,8 +124,7 @@ class Buttons
      */
     public static function Edit($gipClass, $gipActionId = \NULL)
     {
-        return static::CustomPrimary("<span class=\"glyphicon glyphicon-edit\"></span>",
-                                     "form-edit", $gipActionId, "lg", $gipClass);
+        return static::CustomPrimary("<span class=\"glyphicon glyphicon-edit\"></span>", "form-edit", $gipActionId, "lg", $gipClass);
     }
 
     /**
@@ -133,9 +133,7 @@ class Buttons
      */
     public static function Delete($gipClass, $gipActionId = \NULL)
     {
-        return static::CustomDanger("<span class=\"glyphicon glyphicon-trash\"></span>",
-                                    "form-delete", $gipActionId, \TRUE,
-                                    $gipClass);
+        return static::CustomDanger("<span class=\"glyphicon glyphicon-trash\"></span>", "form-delete", $gipActionId, \TRUE, $gipClass);
     }
 
     /**
@@ -144,9 +142,7 @@ class Buttons
      */
     public static function Activate($gipClass, $gipActionId = \NULL)
     {
-        return static::CustomSuccess("<span class=\"glyphicon glyphicon-eye-open\"></span>",
-                                     "form-activate", $gipActionId, \TRUE,
-                                     $gipClass);
+        return static::CustomSuccess("<span class=\"glyphicon glyphicon-eye-open\"></span>", "form-activate", $gipActionId, \TRUE, $gipClass);
     }
 
     /**
@@ -155,22 +151,17 @@ class Buttons
      */
     public static function Deactivate($gipClass, $gipActionId = \NULL)
     {
-        return static::CustomDefault("<span class=\"glyphicon glyphicon-eye-close\"></span>",
-                                     "form-deactivate", $gipActionId, \TRUE,
-                                     $gipClass);
+        return static::CustomDefault("<span class=\"glyphicon glyphicon-eye-close\"></span>", "form-deactivate", $gipActionId, \TRUE, $gipClass);
     }
 
     /**
      * 
      * @return \GIndie\Generator\DML\HTML5\Bootstrap3\Component\Button
      */
-    public static function Reload($gipClass = \NULL ,
-                                  $gipSelectedId = \NULL)
+    public static function Reload($gipClass = \NULL, $gipSelectedId = \NULL)
     {
-        
-        return static::CustomDefault("<span class=\"glyphicon glyphicon-refresh\"></span>",
-                                     "widget-reload", \NULL, \FALSE,
-                                     $gipClass, $gipSelectedId);
+
+        return static::CustomDefault("<span class=\"glyphicon glyphicon-refresh\"></span>", "widget-reload", \NULL, \FALSE, $gipClass, $gipSelectedId);
     }
 
 }
