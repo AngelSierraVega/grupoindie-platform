@@ -3,7 +3,7 @@
 namespace GIndie\Platform\Model;
 
 /**
- * GI-Platform-DVLP - ViewINT
+ * GI-Platform-DVLP - View
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
@@ -11,14 +11,15 @@ namespace GIndie\Platform\Model;
  * @package Platform
  *
  * @version A0
- * @since 18-03-13
+ * @since 18-03-30
  */
-interface ViewINT
+abstract class View extends Record implements ViewINT
 {
 
     /**
-     * @since 18-03-13
-     * @return string
+     * @var boolean
+     * @since 18-03-30
      */
-    public static function getClassnameRecord();
+    const IS_VIEW = true;
+
 }
