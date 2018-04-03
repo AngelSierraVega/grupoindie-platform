@@ -39,8 +39,8 @@ class WidgetReport extends View\Widget
         $tableView = new \GIndie\Platform\View\TableReport($tableModel);
         parent::__construct($title, $tableView);
         $this->addButtonHeading(Buttons::Reload(\NULL, $selectedId));
+        $this->setContext(static::$COLOR_INFO, true);
         if (\GIndie\Platform\Current::hasRole($tableModel::getValidRolesFor("gip-create"))) {
-            $this->setContext(static::$COLOR_PRIMARY, \TRUE);
             $this->addButtonCreate(urlencode($tableModel::RelatedRecord()));
         }
     }

@@ -61,8 +61,7 @@ abstract class Connection
      */
     function __construct()
     {
-        $this->_conection = new \mysqli("p:" . self::$HOST, static::$USERNAME,
-                                        static::$PASSWORD);
+        $this->_conection = new \mysqli("p:" . self::$HOST, static::$USERNAME, static::$PASSWORD);
         $this->_conection->set_charset("utf8");
 
         if (mysqli_connect_errno()) {
@@ -106,10 +105,8 @@ abstract class Connection
             //$error = "TEST error";
             //var_dump($this->_conection);
 //            throw new \Exception($error, $this->_conection->errno);
-            throw new \GIndie\Platform\ExceptionMySQL($error,
-                                                      $this->_conection->errno);
-            \trigger_error("" . $this->_conection->error . "\n Query: {$query} ",
-                           \E_USER_ERROR);
+            throw new \GIndie\Platform\ExceptionMySQL($error, $this->_conection->errno);
+            \trigger_error("" . $this->_conection->error . "\n Query: {$query} ", \E_USER_ERROR);
             //var_dump($result);
             //var_dump($this->_conection);
 
@@ -139,8 +136,8 @@ abstract class Connection
      *                  <b>\Traversable</b> object.
      * @version GIP.00.01
      */
-    public function select(array $selectors, $schema = \NULL, $table = \NULL,
-                           array $conditions = [], array $params = [])
+    public function select(array $selectors, $schema = \NULL, $table = \NULL, array $conditions = [],
+                           array $params = [])
     {
         //$selectors = ["*"];
 
@@ -164,7 +161,15 @@ abstract class Connection
                     $concat = "CONCAT(" . join(",", $concatValues) . ")";
                     $tmpSelectors[] = "{$concat} AS {$selectorCmp}";
                 } else {
-                    $tmpSelectors[] = "`{$table}`.`{$selector}`";
+                    switch (true)
+                    {
+                        case (\substr_count($selector, " AS ") > 0):
+                            $tmpSelectors[] = "{$selector}";
+                            break;
+                        default:
+                            $tmpSelectors[] = "`{$table}`.`{$selector}`";
+                            break;
+                    }
                 }
             }
             $selectors = $tmpSelectors;
@@ -195,13 +200,14 @@ abstract class Connection
                         $_where[] = $condition;
                     }
                 }
+                //var_dump($_where);
                 $_strQuery .= " WHERE " . \join(" AND ", $_where);
             }
         }
         !empty($params) ? $_strQuery .= " " . \join(" ", $params) : \NULL;
         $_strQuery .= ";";
 //        if (strcmp($table, "contribuyente") == 0) {
-//            var_dump($_strQuery);
+//        var_dump($_strQuery);
 //        }
         return $this->query($_strQuery);
     }
@@ -373,12 +379,10 @@ abstract class Connection
      * @param type $table
      * @return array
      */
-    public function findByPK($PKname, $PKvalue, array $selectors, $schema,
-                             $table)
+    public function findByPK($PKname, $PKvalue, array $selectors, $schema, $table)
     {
         $conditions = ["`{$table}`.`{$PKname}`='{$PKvalue}'"];
-        $_resultSet = $this->select($selectors, $schema, $table, $conditions,
-                                    ["Limit 1"]);
+        $_resultSet = $this->select($selectors, $schema, $table, $conditions, ["Limit 1"]);
         return $_resultSet->num_rows < 1 ? \FALSE : $_resultSet->fetch_assoc();
 //        if ($_resultSet->num_rows < 1) {
 //            trigger_error("Error: Unable to find record '{$recordId}'",

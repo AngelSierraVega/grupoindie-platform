@@ -103,6 +103,21 @@ trait ToUpgrade
         $widget->setContext("primary");
         return $widget;
     }
+    
+    /**
+     * 
+     * @param string $classname
+     * @param string $params
+     * @return \GIndie\Platform\View\Widget\WidgetReport
+     * @since 18-03-30
+     */
+    protected function widgetReportFromModel($classname, $params = []){
+        if (\is_subclass_of($classname, \GIndie\Platform\Model\Table::class, true)) {
+            $rtnWidget = new Widget\WidgetReport(new $classname($params));
+            return $rtnWidget;
+        }
+        \trigger_error($classname . " is not subclass of \GIndie\Platform\Model\Table", \E_USER_ERROR);
+    }
 
     /**
      * @since GIP.00.08
@@ -120,13 +135,12 @@ trait ToUpgrade
     }
 
     /**
-     * @since 17-??-??
-     * @param string $class
-     * @return \GIndie\Platform\View\Table
-     * @edit 18-03-20
-     * - Renamed from _searchTable to  cnstrctTableFromSearch
+     * 
+     * @param type $class
+     * @return type
+     * @since 18-03-30
      */
-    protected function cnstrctTableFromSearch($class)
+    protected function cnstrctSearchParamsFromPost($class)
     {
         $record = $class::RelatedRecord();
         $searchArray = [];
@@ -137,17 +151,16 @@ trait ToUpgrade
                 {
                     case \GIndie\Platform\Model\Attribute::TYPE_DATE:
                         $tmp = \explode(" a ", $_POST[$attrName]);
-                        if (sizeof($tmp) > 1) {
+                        if (\sizeof($tmp) > 1) {
                             $searchArray[] = $attrName . ">='$tmp[0]'";
                             $searchArray[] = $attrName . "<='" . $tmp[1] . ' 23:59:59' . "'";
-                            //
                         } else {
                             $searchArray[] = $attrName . " LIKE '%" . $_POST[$attrName] . "%'";
                         }
                         break;
                     case \GIndie\Platform\Model\Attribute::TYPE_TIMESTAMP:
                         $tmp = \explode(" a ", $_POST[$attrName]);
-                        if (sizeof($tmp) > 1) {
+                        if (\sizeof($tmp) > 1) {
                             $searchArray[] = $attrName . ">='" . \strtotime($tmp[0]) . "'";
                             $searchArray[] = $attrName . "<='" . \strtotime($tmp[1] . " 23:59:59") . "'";
                         } else {
@@ -173,12 +186,22 @@ trait ToUpgrade
             }
         }
         if (\sizeof($searchArray) > 0) {
-            $searchArray = \join(" AND ", $searchArray);
-            $_table = new $class([$searchArray]);
+            $searchArray = [\join(" AND ", $searchArray)];
         } else {
-            $_table = new $class([]);
         }
-        //$_table->addContent($class);
+        return $searchArray;
+    }
+
+    /**
+     * @since 17-??-??
+     * @param string $class
+     * @return \GIndie\Platform\View\Table
+     * @edit 18-03-20
+     * - Renamed from _searchTable to  cnstrctTableFromSearch
+     */
+    protected function cnstrctTableFromSearch($class)
+    {
+        $_table = new $class($this->cnstrctSearchParamsFromPost($class));
         return $_table;
     }
 
@@ -195,7 +218,6 @@ trait ToUpgrade
      */
     public function getWidget($placeholderid)
     {
-        //var_dump($widgetPlaceholder);
         if (\array_key_exists($placeholderid, $this->_placeholder)) {
             return $this->_placeholder[$placeholderid];
         } else {

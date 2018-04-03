@@ -61,6 +61,7 @@ abstract class Table implements TableINT
     /**
      * @todo private verification tag for inheritance.
      * @version     GIP.00.04
+     * @edit 18-04-01
      */
     public function __construct(array $conditions = [])
     {
@@ -68,18 +69,17 @@ abstract class Table implements TableINT
         $idTable->excludeFromTable();
         $this->_columns[static::PrimaryKey()] = $idTable;
         $this->defineColumns();
-
-        //parent::__construct();
-        try {
-            $this->readFromDB($conditions);
-        } catch (\Exception $exc) {
-            trigger_error($exc->getMessage() . " on " . get_called_class(), \E_USER_ERROR);
-            $tmpRow = [];
-            foreach ($this->getColumnNames() as $column) {
-                $tmpRow[$column] = $exc->getMessage();
-            }
-            $this->addRow($tmpRow);
-        }
+        $this->readFromDB($conditions);
+//        try {
+//            $this->readFromDB($conditions);
+//        } catch (\Exception $exc) {
+//            \trigger_error($exc->getMessage() . " on " . get_called_class(), \E_USER_ERROR);
+//            $tmpRow = [];
+//            foreach ($this->getColumnNames() as $column) {
+//                $tmpRow[$column] = $exc->getMessage();
+//            }
+//            $this->addRow($tmpRow);
+//        }
     }
 
     /**
@@ -183,7 +183,7 @@ abstract class Table implements TableINT
             case Attribute::TYPE_BOOLEAN:
                 return $this->getValueOf($rowId, $attributeName) == "1" ? "Si" : "No";
             case Attribute::TYPE_CURRENCY:
-                return "$ " . $this->getValueOf($rowId, $attributeName);
+                return "$" . $this->getValueOf($rowId, $attributeName);
             default:
                 return $this->getValueOf($rowId, $attributeName);
         }

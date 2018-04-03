@@ -24,10 +24,11 @@ trait WidgetsDefinition {
     /**
      * @var         array [description]
      * @version     GIP.00.01
+     * @edit 18-04-01
      */
     protected $WidgetsDefinition = [
         "i-i-i" => "",
-        "i-ii-i" => "", "i-ii-ii" => "",
+        "i-ii-i" => "", "i-ii-ia" => "","i-ii-ib" => "","i-ii-ii" => "",
         "i-iii-i" => "", "i-iii-ii" => "", "i-iii-iii" => "",
         "ii-i-i" => "",
         "ii-ii-i" => "", "ii-ii-ii" => "",

@@ -12,7 +12,7 @@ namespace GIndie\Platform\View\Document;
 
 use \GIndie\Platform\Current;
 
-require_once __DIR__ . '/../Widget.php';
+//require_once __DIR__ . '/../Widget.php';
 
 /**
  * Description of Container
@@ -35,8 +35,7 @@ class Container
 
     private $_widgets = [];
 
-    public function addWidget($id, /* \GIndie\Platform\View\Widget */
-                              $widget = NULL)
+    public function addWidget($id, /* \GIndie\Platform\View\Widget */ $widget = NULL)
     {
         $this->_widgets[$id] = $widget == NULL ? "" : $widget;
     }
@@ -118,22 +117,22 @@ class Container
                 $.each(slaves, function (index, el) {
                     $("#" + el).find('button[gip-action="widget-reload"]').trigger('click');
 
-//                            console.log(selected);
-//                            var data = {
-//                                "gip-action": "widget-reload",
-//                                "gip-action-id": el,
-//                                "gip-selected-id": selected
-//                            };
-//        
-//                            $.ajax({
-//                                type: "POST",
-//                                data: data,
-//                                url: "?",
-//                                success: function (data) {
-//                                    $("#" + el).html(data);
-//                                },
-//                                error: ajaxErrorHandler
-//                            });
+        //                            console.log(selected);
+        //                            var data = {
+        //                                "gip-action": "widget-reload",
+        //                                "gip-action-id": el,
+        //                                "gip-selected-id": selected
+        //                            };
+        //        
+        //                            $.ajax({
+        //                                type: "POST",
+        //                                data: data,
+        //                                url: "?",
+        //                                success: function (data) {
+        //                                    $("#" + el).html(data);
+        //                                },
+        //                                error: ajaxErrorHandler
+        //                            });
                 });
             }
 
@@ -146,10 +145,18 @@ class Container
                     <?php echo $this->_widgets["i-i-i"]; ?>
                 </div>
             </div>
-
-            <div class="row">
-                <div id="i-ii-i" class="col-sm-6">
-                    <?php echo $this->_widgets["i-ii-i"]; ?>
+            
+            <div class="row ">
+                <div class="col-sm-6">
+                    <div id="i-ii-i">
+                        <?php echo $this->_widgets["i-ii-i"]; ?>
+                    </div>
+                    <div id="i-ii-ia">
+                        <?php echo $this->_widgets["i-ii-ia"]; ?>
+                    </div>
+                    <div id="i-ii-ib">
+                        <?php echo $this->_widgets["i-ii-ib"]; ?>
+                    </div>
                 </div>
                 <div id="i-ii-ii" class="col-sm-6">
                     <?php echo $this->_widgets["i-ii-ii"]; ?>

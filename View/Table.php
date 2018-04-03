@@ -252,7 +252,7 @@ class Table extends Div
                                 case \GIndie\Platform\Model\Attribute::TYPE_CURRENCY:
                                     if (isset($total)) {
                                         $total = bcadd(\strval($total), 0, 2);
-                                        echo isset($total) ? "$ " . $total : "";
+                                        echo isset($total) ? "$" . $total : "";
                                     }
                                     break;
 

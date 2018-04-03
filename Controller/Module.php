@@ -27,6 +27,15 @@ use GIndie\Platform\View;
  */
 abstract class Module extends Platform implements ModuleINT
 {
+    
+    /**
+     * @since 18-04-01
+     * @return \GIndie\ScriptGenerator\Bootstrap3\Component\Alert
+     */
+    public static function cnstrctLoadingMsj()
+    {
+        return Bootstrap3\Component\Alert::info("Cargando contenido por favor espere...");
+    }
 
     /**
      * @since 18-03-13

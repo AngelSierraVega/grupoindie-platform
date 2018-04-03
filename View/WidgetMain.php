@@ -35,7 +35,7 @@ class WidgetMain extends Widget
         $this->_record = $record;
         //$record::ICON
         parent::__construct($title !== \NULL ? $title : $record::NAME, \FALSE,
-                            $this->tmpContent(), \FALSE);
+                            $this->tmpContent(), true);
         $this->setContext(static::$COLOR_SUCCESS);
         $this->addButtonHeading(Buttons::Reload(\urlencode(\get_class($record)),
                                                                       $record->getId()));

@@ -471,6 +471,7 @@ abstract class Instance
      * @since GIP.00.01
      * @version GIP.00.05
      * @edit GIP.00.09
+     * @edit 18-04-01
      */
     final public static function run()
     {
@@ -515,11 +516,11 @@ abstract class Instance
                     return $response;
                 } else {
                     \header("Refresh: 1; url=" . $_SERVER['PHP_SELF']);
-                    return $e->getMessage();
+                    return "ExceptionLogin: ".$e->getMessage();
                 }
             } catch (\Exception $e) {
                 \header("Refresh: 1; url=" . $_SERVER['PHP_SELF']);
-                return $e->getMessage();
+                return "Exception: ".$e->getMessage();
             }
         }
         if (\session_status() == \PHP_SESSION_NONE) {
@@ -537,6 +538,12 @@ abstract class Instance
                             case "descargar-pdf":
                                 $_class = \NULL;
                                 $_action = "descargar-pdf";
+                                $_action_id = \NULL;
+                                $_selected_id = \NULL;
+                                break;
+                            case "descargar-xml":
+                                $_class = \NULL;
+                                $_action = "descargar-xml";
                                 $_action_id = \NULL;
                                 $_selected_id = \NULL;
                                 break;
