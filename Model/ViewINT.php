@@ -10,7 +10,7 @@ namespace GIndie\Platform\Model;
  *
  * @package Platform
  *
- * @version A0
+ * @version 0C.10
  * @since 18-03-13
  */
 interface ViewINT

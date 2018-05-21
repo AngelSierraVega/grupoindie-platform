@@ -20,7 +20,7 @@ use GIndie\Platform\Model\Database\Record;
  * @since       2017-02-03
  * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
  * 
- * @version     beta.00.01
+ * @version 00.B0
  */
 class User extends Record {
 

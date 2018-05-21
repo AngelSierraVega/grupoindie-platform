@@ -4,7 +4,10 @@
  * Platform - autoloader
  * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
  *
- * @package Platform
+ * @package GIndie\Platform
+ * 
+ * @version 0C.00
+ * @since 17-12-27
  * @edit 18-03-18
  * - Renamed file from autoloader.php to AutoloaderPlatform.php
  */
@@ -12,11 +15,9 @@
 namespace GIndie\Platform;
 
 /**
- * 
- * @version GIP.00.00 17-12-27
- * @version GI-CMMN.00.01
- * - Copia desde GICommon
  * Autoloader function
+ * @edit 18-03-18
+ * - Copia desde GICommon
  */
 \spl_autoload_register(function($className) {
     switch (\substr($className, 0, (\strlen(__NAMESPACE__) * 1)))

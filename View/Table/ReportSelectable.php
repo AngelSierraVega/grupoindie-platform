@@ -13,7 +13,7 @@ use GIndie\Platform\Model;
  *
  * @package Platform
  *
- * @version AO
+ * @version 0C.20
  * @since 18-03-30
  */
 class ReportSelectable extends View\Table

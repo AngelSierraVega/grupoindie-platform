@@ -17,10 +17,10 @@ use GIndie\Generator\DML\HTML5\Bootstrap3;
 /**
  * Footbar
  * 
- * @since       2017-02-08
- * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @since 2017-02-08
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * 
- * @version     beta.00.01
+ * @version 00.B0
  */
 class Footbar extends HTML5\Category\StylesSemantics\Footer {
 

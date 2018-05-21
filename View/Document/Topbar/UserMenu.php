@@ -93,9 +93,12 @@ class UserMenu extends Bootstrap3\Component\Dropdown
      * @since       2017-01-05
      * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
      * 
-     * @version     beta.00.01
+     * @version 00.B0
+     * @deprecated since 18-05-20
+     * @todo 
+     * - Delete
      */
-    final public function __construct2()
+    final public function __construct2DPR()
     {
 
         $this->_userMenu = new Bootstrap3\Dropdown($name, $_dropdownList, "a");

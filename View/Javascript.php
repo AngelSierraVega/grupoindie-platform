@@ -1,16 +1,27 @@
 <?php
 
-namespace GIndie\Platform\View;
-
 /**
  * GI-Platform-DVLP - Javascript
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
  *
- * @package Platform
+ * @package GIndie\Platform\View
+ * 
+ * 
  *
- * @version GIP.00.00 18-03-14 Empty [class/trait/interface/file] created.
+ * @version 0A.20
+ * @since 18-03-14
+ */
+
+namespace GIndie\Platform\View;
+
+/**
+ * GI-Platform-DVLP - Javascript
+ *
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @todo
+ * - Extend class from ScriptGenerator
  */
 class Javascript
 {
@@ -22,6 +33,10 @@ class Javascript
      * @since 18-03-14
      * @edit 18-03-18
      * - Expanted waiter timeout
+     * @edit 18-03-20
+     * - Remove setTimeout for input type = "radio" [type="radio"]
+     * @todo
+     * - Verify-debug submit on the rest of input changes
      */
     public static function submitOnChange($formId)
     {
@@ -29,7 +44,10 @@ class Javascript
         ?>
         <script>
             var timerid;
-            $("#<?= $formId; ?>").on("input", 'input', function () {
+            $("#<?= $formId; ?>").on('input', 'input[type="radio"]', function () {
+                $("#<?= $formId; ?>").submit();
+            });
+            $("#<?= $formId; ?>").on('input', 'input[type="text"]', function () {
                 clearTimeout(timerid);
                 timerid = setTimeout(function () {
                     $("#<?= $formId; ?>").submit();

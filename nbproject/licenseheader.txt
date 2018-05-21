@@ -11,8 +11,8 @@ ${licensePrefix}@copyright (c) ${date?date?string("yyyy")} Angel Sierra Vega. Gr
 ${licensePrefix?replace(" +$", "", "r")}
 ${licensePrefix}@package Platform
 ${licensePrefix?replace(" +$", "", "r")}
-${licensePrefix}@version ??
 ${licensePrefix}@since ${date?date?string("yy-MM-dd")}
+${licensePrefix}@version ??
 <#if licenseLast??>
 ${licenseLast}
 </#if>

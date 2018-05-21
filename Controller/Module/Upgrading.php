@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * GI-Platform-DVLP - Upgrading
+ *
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform\Controller
+ *
+ * @version 0A.10
+ * @since 18-03-14
+ */
+
 namespace GIndie\Platform\Controller\Module;
 
 use GIndie\ScriptGenerator\HTML5;
@@ -10,18 +22,23 @@ use GIndie\Generator\DML\HTML5\Bootstrap3 AS Bootstrap3ToDeprecate;
 use GIndie\Generator\DML\HTML5 AS HTML5ToDeprecate;
 
 /**
- * GI-Platform-DVLP - Upgrading
- *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
- *
- * @package Platform
- *
- * @version A0
+ * 
  * @since 18-03-14
  */
 trait Upgrading
 {
+
+    /**
+     * 
+     * @param string $placeholderId
+     * @param string $selectedId
+     * @return \GIndie\ScriptGenerator\HTML5\Category\StylesSemantics\Span
+     * @since 18-05-20
+     */
+    protected function runActionSelectRow($placeholderId, $selectedId)
+    {
+        return HTML5\Category\StylesSemantics::span()->addScriptOnDocumentReady('triggerInteraction("' . $placeholderId . '", "' . $selectedId . '");');
+    }
 
     /**
      * 
@@ -42,6 +59,9 @@ trait Upgrading
         $this->_createLog($action, $id, $class, $selected);
         switch ($action)
         {
+            case "@selectRow":
+                return $this->runActionSelectRow($_POST["@placeholderId"], $_POST["@selectedId"]);
+            //return HTML5\Category\StylesSemantics::span()->addScriptOnDocumentReady('triggerInteraction("' . $_POST["@placeholderId"] . '", "' . $_POST["@selectedId"] . '");');
             case "reportSearch":
                 $_table = $this->_searchTable($class);
                 return new \GIndie\Platform\View\TableReport($_table);

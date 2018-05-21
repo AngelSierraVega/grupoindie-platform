@@ -37,6 +37,8 @@ trait ToUpgrade
      * @return \GIndie\Platform\View\Widget
      * @edit 18-03-12
      * - Se agregó código para separar los inputs y sus errores en filas
+     * @edit 18-04-03
+     * - Removed autosubmit
      */
     protected function widgetTableSearch($_classname, array $_searchColumns, array $_params = [],
                                          array $buttons = [])
@@ -84,7 +86,7 @@ trait ToUpgrade
         $searchButton = \GIndie\Platform\View\Widget\Buttons::CustomSuccess("<span class=\"glyphicon glyphicon-search\"></span>", \NULL, \NULL, \FALSE, \NULL);
         $searchButton->setForm($form->getId());
         $widget->addButtonHeading($searchButton);
-        $widget->addContent(\GIndie\Platform\View\Javascript::submitOnChange($form->getId()));
+        //$widget->addContent(\GIndie\Platform\View\Javascript::submitOnChange($form->getId()));
         $widget->addScriptOnDocumentReady("$('#" . $form->getId() . "').submit();");
 //        foreach ($buttons as $tmpButton) {
 //            $_actionId = $tmpButton["gipActionId"];

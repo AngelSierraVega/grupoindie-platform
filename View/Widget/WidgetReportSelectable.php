@@ -14,7 +14,7 @@ use GIndie\Platform\Current;
  *
  * @package Platform
  *
- * @version AO
+ * @version 0C.20
  * @since 18-03-30
  */
 class WidgetReportSelectable extends View\Widget

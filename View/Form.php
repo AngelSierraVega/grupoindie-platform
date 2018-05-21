@@ -40,7 +40,8 @@ class Form extends HTML5\Category\FormInput\Form
      * @edit 2017-06-18 <angel.sierra@grupoindie.com>
      *      - Se agregó token único en formularios
      */
-    public function __construct(Record $record = \NULL, $uniqueToken = \TRUE, $customTarget = \FALSE)
+    public function __construct(Record $record = \NULL, $uniqueToken = \TRUE,
+                                $customTarget = \FALSE)
     {
         parent::__construct();
         $this->_record = $record;
@@ -113,6 +114,11 @@ class Form extends HTML5\Category\FormInput\Form
         $script = ob_get_contents();
         ob_end_clean();
         return $script;
+    }
+
+    public function addSubmitOnChange()
+    {
+        $this->addContent(Javascript::submitOnChange($this->getId()));
     }
 
 }

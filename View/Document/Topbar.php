@@ -146,9 +146,9 @@ class Topbar extends Div
      * @since       2017-01-05
      * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
      * 
-     * @version     beta.00.01
      * 
      * @var         type $brand
+     * @deprecated
      */
     public function setBrandDEPRECATED($brand)
     {
@@ -162,7 +162,7 @@ class Topbar extends Div
      * @since       2017-01-05
      * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
      * 
-     * @version     beta.00.01
+     * @version 00.B0
      * 
      * @var         type $href
      * @var         type $text

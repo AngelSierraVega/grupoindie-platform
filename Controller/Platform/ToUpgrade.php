@@ -15,7 +15,7 @@ use \GIndie\Platform\Current;
  *
  * @package Platform
  *
- * @version A0
+ * @version 0C.10
  * @since 18-03-14
  * @todo
  * - Move \Straffsa\SistemaIntegralIngresos funcionality 

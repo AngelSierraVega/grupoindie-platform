@@ -35,7 +35,8 @@ class Container
 
     private $_widgets = [];
 
-    public function addWidget($id, /* \GIndie\Platform\View\Widget */ $widget = NULL)
+    public function addWidget($id, /* \GIndie\Platform\View\Widget */
+                              $widget = NULL)
     {
         $this->_widgets[$id] = $widget == NULL ? "" : $widget;
     }
@@ -54,8 +55,11 @@ class Container
              * @param widget_id     Es el id logico de la base de datos (Id padre en base de datos),
              */
             function triggerInteraction(widget_id, selected = "NONE") {
+                console.log("'triggerInteraction' called widget_id(" + widget_id + ") selected(" + selected + ")");
+                console.log(relaciones);
                 if (relaciones[widget_id]) {
                     if (relaciones[widget_id].length > 0) {
+                        console.log("Calling 'gipInteraction'");
                         gipInteraction(relaciones[widget_id], selected);
                     }
             }
@@ -115,24 +119,25 @@ class Container
 
             function gipInteraction(slaves, selected) {
                 $.each(slaves, function (index, el) {
+                    console.log("'Clicking' widget-reload");
                     $("#" + el).find('button[gip-action="widget-reload"]').trigger('click');
 
-        //                            console.log(selected);
-        //                            var data = {
-        //                                "gip-action": "widget-reload",
-        //                                "gip-action-id": el,
-        //                                "gip-selected-id": selected
-        //                            };
-        //        
-        //                            $.ajax({
-        //                                type: "POST",
-        //                                data: data,
-        //                                url: "?",
-        //                                success: function (data) {
-        //                                    $("#" + el).html(data);
-        //                                },
-        //                                error: ajaxErrorHandler
-        //                            });
+                    //                            console.log(selected);
+                    //                            var data = {
+                    //                                "gip-action": "widget-reload",
+                    //                                "gip-action-id": el,
+                    //                                "gip-selected-id": selected
+                    //                            };
+                    //        
+                    //                            $.ajax({
+                    //                                type: "POST",
+                    //                                data: data,
+                    //                                url: "?",
+                    //                                success: function (data) {
+                    //                                    $("#" + el).html(data);
+                    //                                },
+                    //                                error: ajaxErrorHandler
+                    //                            });
                 });
             }
 
@@ -142,91 +147,91 @@ class Container
 
             <div class="row ">
                 <div gip-placeholder="i-i-i" class="col-xs-12">
-                    <?php echo $this->_widgets["i-i-i"]; ?>
+        <?php echo $this->_widgets["i-i-i"]; ?>
                 </div>
             </div>
-            
+
             <div class="row ">
                 <div class="col-sm-6">
                     <div id="i-ii-i">
-                        <?php echo $this->_widgets["i-ii-i"]; ?>
+        <?php echo $this->_widgets["i-ii-i"]; ?>
                     </div>
                     <div id="i-ii-ia">
-                        <?php echo $this->_widgets["i-ii-ia"]; ?>
+        <?php echo $this->_widgets["i-ii-ia"]; ?>
                     </div>
                     <div id="i-ii-ib">
-                        <?php echo $this->_widgets["i-ii-ib"]; ?>
+        <?php echo $this->_widgets["i-ii-ib"]; ?>
                     </div>
                 </div>
                 <div id="i-ii-ii" class="col-sm-6">
-                    <?php echo $this->_widgets["i-ii-ii"]; ?>
+        <?php echo $this->_widgets["i-ii-ii"]; ?>
                 </div>
             </div>
 
             <div class="row">
                 <div id="i-iii-i" class="col-sm-4">
-                    <?php echo $this->_widgets["i-iii-i"]; ?>
+        <?php echo $this->_widgets["i-iii-i"]; ?>
                 </div>
                 <div id="i-iii-ii" class="col-sm-4">
-                    <?php echo $this->_widgets["i-iii-ii"]; ?>
+        <?php echo $this->_widgets["i-iii-ii"]; ?>
                 </div>
                 <div id="i-iii-iii" class="col-sm-4">
-                    <?php echo $this->_widgets["i-iii-iii"]; ?>
+        <?php echo $this->_widgets["i-iii-iii"]; ?>
                 </div>
             </div>
 
 
             <div class="row ">
                 <div id="ii-i-i" class="col-xs-12">
-                    <?php echo $this->_widgets["ii-i-i"]; ?>
+        <?php echo $this->_widgets["ii-i-i"]; ?>
                 </div>
             </div>
 
             <div class="row ">
                 <div id="ii-ii-i" class="col-sm-6">
-                    <?php echo $this->_widgets["ii-ii-i"]; ?>
+        <?php echo $this->_widgets["ii-ii-i"]; ?>
                 </div>
                 <div id="ii-ii-ii" class="col-sm-6">
-                    <?php echo $this->_widgets["ii-ii-ii"]; ?>
+        <?php echo $this->_widgets["ii-ii-ii"]; ?>
                 </div>
             </div>
 
             <div class="row ">
                 <div id="ii-iii-i" class="col-sm-4">
-                    <?php echo $this->_widgets["ii-iii-i"]; ?>
+        <?php echo $this->_widgets["ii-iii-i"]; ?>
                 </div>
                 <div id="ii-iii-ii" class="col-sm-4">
-                    <?php echo $this->_widgets["ii-iii-ii"]; ?>
+        <?php echo $this->_widgets["ii-iii-ii"]; ?>
                 </div>
                 <div id="ii-iii-iii" class="col-sm-4">
-                    <?php echo $this->_widgets["ii-iii-iii"]; ?>
+        <?php echo $this->_widgets["ii-iii-iii"]; ?>
                 </div>
             </div>
 
 
             <div class="row ">
                 <div id="iii-i-i" class="col-xs-12">
-                    <?php echo $this->_widgets["iii-i-i"]; ?>
+        <?php echo $this->_widgets["iii-i-i"]; ?>
                 </div>
             </div>
             <div class="row">
                 <div id="iii-ii-i" class="col-sm-6">
-                    <?php echo $this->_widgets["iii-ii-i"]; ?>
+        <?php echo $this->_widgets["iii-ii-i"]; ?>
                 </div>
                 <div id="iii-ii-ii" class="col-sm-6">
-                    <?php echo $this->_widgets["iii-ii-ii"]; ?>
+        <?php echo $this->_widgets["iii-ii-ii"]; ?>
                 </div>
             </div>
 
             <div class="row ">
                 <div id="iii-iii-i" class="col-sm-4">
-                    <?php echo $this->_widgets["iii-iii-i"]; ?>
+        <?php echo $this->_widgets["iii-iii-i"]; ?>
                 </div>
                 <div id="iii-iii-ii" class="col-sm-4">
-                    <?php echo $this->_widgets["iii-iii-ii"]; ?>
+        <?php echo $this->_widgets["iii-iii-ii"]; ?>
                 </div>
                 <div id="iii-iii-iii" class="col-sm-4">
-                    <?php echo $this->_widgets["iii-iii-iii"]; ?>
+        <?php echo $this->_widgets["iii-iii-iii"]; ?>
                 </div>
             </div>
         </div>
