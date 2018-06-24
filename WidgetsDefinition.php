@@ -30,7 +30,7 @@ trait WidgetsDefinition
         "ii-iii-i" => "", "ii-iii-ii" => "", "ii-iii-iii" => "",
         "iii-i-i" => "",
         "iii-ii-i" => "", "iii-ii-ii" => "",
-        "iii-iii-i" => "", "iii-iii-ii" => "", "iii-iii-iii" => "",
+        "iii-iii-i" => "", "iii-iii-ii" => "", "iii-iii-iii" => ""
     ];
 
 }

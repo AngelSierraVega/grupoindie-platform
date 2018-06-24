@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\Controller\Instance
  * 
- * @version 0C.10
+ * @version 0C.13
  * @since 18-03-14
  */
 
@@ -58,10 +58,11 @@ trait ToUpgrade
         {
             case "loginDPR":
                 return new \GIndie\Platform\View\Login();
+//            case "document":
+//            case "bodyDPR":
+//                
             case "document":
-            case "bodyDPR":
                 $document = new \GIndie\Platform\View\Document();
-            case "document":
                 if (\GIndie\Platform\Current::User()->getValueOf("password_su") !== \NULL) {
                     $document->addScriptOnDocumentReady("$('#gip-modal').modal('show');");
                     $document->getGIPModal()->removeContent();
@@ -83,11 +84,12 @@ trait ToUpgrade
                     $modalContent->addFooterButton($btn);
                     $document->getGIPModal()->addContent($modalContent);
                 }
-
+                $document->setContainer($this->load("container"));
                 return $document;
-            case "bodyDPR":
-                return $document->getBody();
+//            case "bodyDPR":
+//                return $document->getBody();
             case "container":
+                return $this->cnstrctContainer();
                 $container = new \GIndie\Platform\View\Document\Container();
                 $widgets = \GIndie\Platform\Current::Module()->getWidgets();
                 $widgets = array_keys($widgets);
@@ -228,6 +230,8 @@ trait ToUpgrade
      * @param type $id
      * @param type $class
      * @param type $selected
+     * @edit 18-07-30
+     * - No log on action: @selectRow
      */
     protected function _createLog($action, $id, $class, $selected)
     {
@@ -254,7 +258,7 @@ trait ToUpgrade
             case "tabla-bitacora":
             case "acerca-de":
             case "mr-asignar-caja-usuario":
-
+            case "@selectRow":
                 break;
             default:
                 /**
@@ -473,7 +477,8 @@ trait ToUpgrade
      * @param string $id
      * 
      * @return mixed
-     * @version GIP.00.02
+     * @todo
+     * - Handle expiration only when Plugin SistemaIntegralIngresos
      */
     public function run($action, $id, $class, $selected)
     {

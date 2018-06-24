@@ -143,21 +143,21 @@ class Security
 
     /**
      * @NOTdeprecated since GIP.00.04
-     * @version     GIP.00.03
+     * @version GIP.00.03
      * 
-     * @var         string $email
-     * @var         string $password
+     * @var string $email
+     * @var string $password
      * 
-     * @todo        Quitar código manual y usar un modelo de datos.
-     * @return      boolean|string
+     * @todo Quitar código manual y usar un modelo de datos.
+     * @return boolean|string
+     * @edit 18-08-02
      */
     public static function authenticateUser()
     {
         $user = Current::Connection()->sanitize($_POST['log_user']);
         $schema = Model\Datos\mr_sesion\usuario_cuenta\Registro::SCHEMA;
         $_resultSet = Current::Connection()->select(
-                ["key", "password_su", "password_enct"], $schema,
-                "usuario_cuenta", ["user='{$user}'", "active='1'"], ["LIMIT 1"]
+                ["key", "password_su", "password_enct"], $schema, "usuario_cuenta", ["user='{$user}'", "active='1'"], ["LIMIT 1"]
         );
         if (count($_resultSet) == 1) {
             $_resultSet = $_resultSet->fetch_assoc();
@@ -168,8 +168,21 @@ class Security
                 return $_resultSet["key"];
             }
         }
+        $filename = INIHandler::getCategoryValue("Path", "generatedFiles");
+        $filename .= "login_errors.txt";
+        \GIndie\Common\PHP\Files::createFileIfNotExists($filename);
+        $logContent = "\n" . \date("Y-m-d H:i:s");
+        $logContent .= ": Usuario o contraseña no válidos U('" . $user . "')";
+        if (isset($_SERVER['REMOTE_ADDR'])) {
+            $remote = $_SERVER['REMOTE_ADDR'];
+            $logContent .= " remote('" . $remote . "')";
+        }
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $forwarded = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            $logContent .= " forwarded('" . $forwarded . "')";
+        }
+        \file_put_contents($filename, $logContent, \FILE_APPEND);
         throw new ExceptionLogin("Error de usuario o contraseña. Inténtelo de nuevo por favor.");
-        //return \FALSE;
     }
 
     /**

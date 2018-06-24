@@ -34,6 +34,7 @@ class Content extends Bootstrap3\Component\Modal\Content
         if ($closeButton) {
             $btnDismiss = new Bootstrap3\Component\Button("Cerrar ventana", Bootstrap3\Component\Button::TYPE_BUTTON);
             $btnDismiss->setAttribute("data-dismiss", "modal");
+            //$btnDismiss->setAttribute("data-dismiss", "modal");
             $modalContent->addFooterButton($btnDismiss);
         }
         return $modalContent;

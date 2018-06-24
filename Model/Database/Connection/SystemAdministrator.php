@@ -40,6 +40,6 @@ class SystemAdministrator extends Connection {
     protected static $PASSWORD = "YJiYZn5ars2";
     //mr_demo: (%C4{rg6}FrZ
     //Straffsa: %wn0Zx5]EZu}
-    //GrupoINDIE: 
+    //GrupoINDIE: YJiYZn5ars2
 
 }

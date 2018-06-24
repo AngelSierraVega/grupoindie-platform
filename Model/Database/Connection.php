@@ -42,15 +42,37 @@ abstract class Connection
 
     /**
      * @internal private static $USERNAME must be defined in inherit class.
-     * 
+     * @deprecated since 18-07-26 Use username() instead
      */
-    protected static $USERNAME = \NULL;
+    protected static $USERNAME = null;
 
     /**
      * @internal private static $PASSWORD must be defined in inherit class.
+     * @deprecated since 18-07-26 Use password() instead
+     */
+    protected static $PASSWORD = null;
+
+    /**
+     * The database username to be used in the connection.
+     * @return string
+     * @since 18-07-26
+     */
+    protected static function username()
+    {
+        //var_dump(\GIndie\DBHandler\INIHandler::getMainUsername());
+        \GIndie\DBHandler\INIHandler::getMainUsername();
+    }
+
+    /**
+     * The user password to be used in the connection.
+     * @return string
+     * @since 18-07-26
      * 
      */
-    protected static $PASSWORD = \NULL;
+    protected static function password()
+    {
+        \GIndie\DBHandler\INIHandler::getMainPassword();
+    }
 
     /**
      * Creates (opens) the connection to the database.
@@ -61,11 +83,10 @@ abstract class Connection
      */
     function __construct()
     {
-        $this->_conection = new \mysqli("p:" . self::$HOST, static::$USERNAME, static::$PASSWORD);
+        $this->_conection = new \mysqli("p:" . \GIndie\DBHandler\INIHandler::getHost(), \GIndie\DBHandler\INIHandler::getMainUsername(), \GIndie\DBHandler\INIHandler::getMainPassword());
         $this->_conection->set_charset("utf8");
-
-        if (mysqli_connect_errno()) {
-            trigger_error(mysqli_connect_errno() .
+        if (\mysqli_connect_errno()) {
+            trigger_error(\mysqli_connect_errno() .
                     ". Unnable to create connection " .
                     mysqli_connect_error(), E_USER_ERROR);
             throw new \Exception("Unnable to create connection " . mysqli_connect_error());
@@ -105,6 +126,7 @@ abstract class Connection
             //$error = "TEST error";
             //var_dump($this->_conection);
 //            throw new \Exception($error, $this->_conection->errno);
+            //var_dump($this->_conection);
             throw new \GIndie\Platform\ExceptionMySQL($error, $this->_conection->errno);
             \trigger_error("" . $this->_conection->error . "\n Query: {$query} ", \E_USER_ERROR);
             //var_dump($result);
@@ -136,8 +158,8 @@ abstract class Connection
      *                  <b>\Traversable</b> object.
      * @version GIP.00.01
      */
-    public function select(array $selectors, $schema = \NULL, $table = \NULL, array $conditions = [],
-                           array $params = [])
+    public function select(array $selectors, $schema = \NULL, $table = \NULL, array $conditions
+    = [], array $params = [])
     {
         //$selectors = ["*"];
 
@@ -416,11 +438,13 @@ abstract class Connection
 
     public static function getUser()
     {
+        return static::username();
         return static::$USERNAME;
     }
 
     public static function getPassword()
     {
+        return static::password();
         return static::$PASSWORD;
     }
 

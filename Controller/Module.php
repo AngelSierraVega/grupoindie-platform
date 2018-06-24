@@ -9,7 +9,7 @@
  *
  * @package GIndie\Platform\Controller\Instance\Module
  * 
- * @version 0C.13
+ * @version 0C.17
  * @since 17-05-23
  */
 
@@ -19,12 +19,17 @@ use GIndie\ScriptGenerator\HTML5;
 use GIndie\ScriptGenerator\Bootstrap3;
 use GIndie\Platform\Model;
 use GIndie\Platform\View;
+use GIndie\Generator\DML\HTML5\Bootstrap3 AS Bootstrap3ToDeprecate;
+use GIndie\Generator\DML\HTML5 AS HTML5ToDeprecate;
 
 /**
  * @edit 18-03-05
  * - Created widgetTableFromModel()
  * @edit 18-05-21
  * - Use Module\Deprecated;
+ * @edit 18-06-24
+ * - runActionSelectRow(), run(): Moved from \GIndie\Platform\Controller\Module.
+ * @uses GIndie\Platform\Controller\Module\RunRecordAction
  */
 abstract class Module extends Platform implements ModuleINT
 {
@@ -33,7 +38,10 @@ abstract class Module extends Platform implements ModuleINT
      * @since 18-03-13
      * @edit 18-03-14
      * @edit 18-05-21
+     * @edit 18-06-24
+     * - Added Module\RunRecordAction
      */
+    use Module\RunRecordAction;
     use Module\ToUpgrade;
     use Module\ToDeprecate;
     use Module\Upgrading;
@@ -50,6 +58,79 @@ abstract class Module extends Platform implements ModuleINT
             $this->_placeholder[$placeholderId] = new \GIndie\Platform\Controller\Module\Placeholder();
         $rnt = &$this->_placeholder[$placeholderId];
         return $rnt;
+    }
+
+    /**
+     * 
+     * @param string $action
+     * @param string $id
+     * @return mixed
+     * @since 17-01-05
+     * @edit 18-03-15
+     * @edit 18-05-20
+     * - Handle action @selectRow
+     * @edit 18-06-24
+     * - Moved token validation funcionality to runRecordAction()
+     */
+    public function run($action, $id, $class, $selected)
+    {
+        $this->_createLog($action, $id, $class, $selected);
+        switch ($action)
+        {
+            case "@selectRow":
+                return $this->runActionSelectRow($_POST["@placeholderId"],
+                                                 $_POST["@selectedId"]);
+            case "reportSearch":
+                $_table = $this->_searchTable($class);
+                return new \GIndie\Platform\View\TableReport($_table);
+            case "tableSearch":
+                return static::tableSearch($class);
+            case "get-input":
+                $record = $class::findById($_POST["gip-record-id"]);
+                $attribute = $record->getAttribute($id);
+                return $form_element = \GIndie\Platform\View\Input::selectFromAttribute($attribute,
+                                                                                        $record->getValueOf($attribute->getName()),
+                                                                                                            $_POST["gip-record-id"]);
+                return \GIndie\Platform\View\Input::formGroup($attribute,
+                                                              $form_element);
+            case "form-create":
+            case "form-edit":
+            case "form-delete":
+            case "form-activate":
+            case "form-deactivate":
+                return static::runRecordForm($action, $id, $class);
+            case "gip-create":
+            case "gip-edit":
+            case "gip-delete":
+            case "gip-activate":
+            case "gip-deactivate":
+                return static::runRecordAction($action, $id, $class);
+            case "widget-reload":
+                return $this->widgetReload($id, $class, $selected);
+            default:
+                if ($class != "undefined") {
+                    if ($class != \NULL) {
+                        if ($selected == \NULL) {
+                            $selected = $id;
+                        }
+                        $obj = $class::findById($selected);
+                        return $obj->run($action, $id, $selected);
+                    }
+                }
+                return parent::run($action, $id, $class, $selected);
+        }
+    }
+
+    /**
+     * 
+     * @param string $placeholderId
+     * @param string $selectedId
+     * @return \GIndie\ScriptGenerator\HTML5\Category\StylesSemantics\Span
+     * @since 18-05-20
+     */
+    protected function runActionSelectRow($placeholderId, $selectedId)
+    {
+        return HTML5\Category\StylesSemantics::span()->addScriptOnDocumentReady('triggerInteraction("' . $placeholderId . '", "' . $selectedId . '");');
     }
 
     /**
@@ -222,6 +303,8 @@ abstract class Module extends Platform implements ModuleINT
      * - Handler for form on non editable record
      * @edit 18-03-14
      * - Return ModalContent
+     * @edit 18-07-13
+     * - Use View\Modal\Content
      */
     protected function runRecordForm($action, $id, $class)
     {
@@ -237,8 +320,8 @@ abstract class Module extends Platform implements ModuleINT
         $modalTitle = $actionName . " <b>" .
                 $record->getName() . "</b> <i>" .
                 $record->getDisplay() . "</i>";
-        //$modalContent = View\Modal\Content::primary($modalTitle, $form);
-        $modalContent = $this->cnstrctModal($modalTitle, $form);
+        $modalContent = View\Modal\Content::defaultModalContent($modalTitle,
+                                                                $form, true);
         $modalContent->getHeader()->setBackground("primary");
         $btn = new Bootstrap3\Component\Button($actionName,
                                                Bootstrap3\Component\Button::TYPE_SUBMIT);

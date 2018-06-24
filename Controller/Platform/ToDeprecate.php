@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\Controller\Instance
  * 
- * @version 0C.10
+ * @version 0C.1F
  * @since 18-03-14
  */
 
@@ -22,49 +22,11 @@ use \GIndie\Platform\View;
 
 /**
  * 
- * 
+ * @edit 18-06-24
+ * - Fully deprecated cnstrctModal(), _modalWrap()
  */
 trait ToDeprecate
 {
 
-    /**
-     * 
-     * @param mixed $modalTitle
-     * @param mixed $modalContent
-     * @param boolean $closeButton
-     * 
-     * @return \GIndie\Platform\View\Modal\Content
-     * 
-     * @since 18-03-14
-     * @deprecated since 18-03-15
-     */
-    protected function cnstrctModal($modalTitle, $modalContent,
-                                    $closeButton = true)
-    {
-        return View\Modal\Content::defaultModalContent($modalTitle,
-                                                       $modalContent,
-                                                       $closeButton);
-    }
-
-    /**
-     * 
-     * @param string $modalTitle
-     * @param mixed $modalContent
-     * @param boolean $closeButton
-     * @return \GIndie\Generator\DML\HTML5\Bootstrap3\Component\Modal\Content
-     */
-    protected function _modalWrap($modalTitle, $modalContent,
-                                  $closeButton = \TRUE)
-    {
-        $modalContent = new Bootstrap3\Component\Modal\Content($modalTitle,
-                                                               $modalContent);
-        if ($closeButton === \TRUE) {
-            $btnDismiss = new Bootstrap3\Component\Button("Cerrar",
-                                                          Bootstrap3\Component\Button::TYPE_BUTTON);
-            $btnDismiss->setAttribute("data-dismiss", "modal");
-            $modalContent->addFooterButton($btnDismiss);
-        }
-        return $modalContent;
-    }
 
 }

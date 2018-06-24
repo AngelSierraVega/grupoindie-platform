@@ -1,66 +1,95 @@
 <?php
 
 /**
- * GIplatform - Registro 2017-06-11
+ * GIplatform - Registro
  * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
  *
- * @package Platform
+ * @package GIndie\Platform\DataModel
  *
- * @version GIP.00.01
+ * @version DOING 0D.00
+ * @since 17-06-11
  */
 
 namespace GIndie\Platform\Model\Datos\mr_sesion\usuario_cuenta;
 
 use GIndie\Platform\Model\Record;
-use \GIndie\Platform\Model;
+use GIndie\Platform\Model;
 
 /**
- * Description of Registro
- *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @edit 18-08-19
+ * - Commented class
  */
 class Registro extends Record
 {
-    
-    /**
-     * Stores attribute definition
-     * @var array 
-     */
-    //protected static $_attribute = [];
 
+    /**
+     * @since 17-??-??
+     */
     const ICON = "glyphicon glyphicon-user";
+
+    /**
+     * @since 17-??-??
+     */
     const NAME = "Cuenta de usuario";
 
     /**
-     * The name of the database storing the record.
-     * @version     GIP.00.01
-     */
-    //const SCHEMA = "mrdemo_sesion";
-
-    /**
      * The name of the table storing the the record.
-     * @version     GIP.00.01
+     * @since 17-??-??
      */
     const TABLE = "usuario_cuenta";
 
     /**
      * The primary key of the record.
-     * @version     GIP.00.01
+     * @since 17-??-??
      */
     const PRIMARY_KEY = "key";
-    const AUTOINCREMENT = \FALSE;
-    
+
+    /**
+     * @since 17-??-??
+     */
+    const AUTOINCREMENT = false;
+
+    /**
+     * @since 17-??-??
+     */
     const DISPLAY_KEY = "user";
 
+    /**
+     * @edit 18-08-19
+     * - Upgraded and commented code
+     */
     public static function configAttributes()
     {
-        static::attribute("key")->setLabel("Llave")->excludeFromDisplay()->excludeFromForm();
-        static::attribute("user")->setType(Model\Attribute::TYPE_EMAIL)->setLabel("Clave de usuario (correo)");
-        static::attribute("password_su")->setType(Model\Attribute::TYPE_PASSWORD)->setLabel("Contraseña de uso único");
-        static::attribute("password_enct")->setType(Model\Attribute::TYPE_PASSWORD)->setLabel("Contraseña encriptada")->excludeFromForm();
-        static::attribute("active")->setType(Model\Attribute::TYPE_BOOLEAN)->setLabel("Activo");
+        /**
+         * Attribute key
+         */
+        static::attribute("key")->setLabel("Llave");
+        static::attribute("key")->excludeFromDisplay()->excludeFromForm();
+        /**
+         * Attribute user
+         */
+        static::attribute("user")->setType(Model\Attribute::TYPE_EMAIL);
+        static::attribute("user")->setLabel("Clave de usuario (correo)");
+        /**
+         * Attribute password_su
+         */
+        static::attribute("password_su")->setType(Model\Attribute::TYPE_PASSWORD);
+        static::attribute("password_su")->setLabel("Contraseña de uso único");
+        /**
+         * Attribute password_enct
+         */
+        static::attribute("password_enct")->setType(Model\Attribute::TYPE_PASSWORD);
+        static::attribute("password_enct")->setLabel("Contraseña encriptada");
+        static::attribute("password_enct")->excludeFromForm();
+        /**
+         * Attribute active
+         */
+        static::attribute("active")->setType(Model\Attribute::TYPE_BOOLEAN);
+        static::attribute("active")->setLabel("Activo");
+        /**
+         * Attribute fk_unid_admin
+         */
         static::attribute("fk_unid_admin");
-        //static::attribute("gip_holder");
     }
 
 }

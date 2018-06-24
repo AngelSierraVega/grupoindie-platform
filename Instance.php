@@ -531,7 +531,8 @@ abstract class Instance
                     \header("Refresh: 1; url=" . $_SERVER['PHP_SELF']);
                     return "ExceptionLogin: " . $e->getMessage();
                 }
-            } catch (\Exception $e) {
+            } 
+            catch (\Exception $e) {
                 \header("Refresh: 1; url=" . $_SERVER['PHP_SELF']);
                 return "Exception: " . $e->getMessage();
             }

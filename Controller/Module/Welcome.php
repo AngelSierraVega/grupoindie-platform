@@ -126,7 +126,7 @@ class Welcome extends \GIndie\Platform\Controller\Module
 //        $footer2->addContent($url2);
 //        $footer->addContent($footer2);
 
-        $this->configPlaceholder("ii-i-i")->typeCustom($heading, false, $row,
+        $this->placeholder("ii-i-i")->typeCustom($heading, false, $row,
                                                        false, $footer);
     }
 
