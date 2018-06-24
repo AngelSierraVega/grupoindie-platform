@@ -1,13 +1,12 @@
 <?php
 
 /**
- * AdministracionIngresos - Registro 2017-06-22
  * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
  *
- * @package MineralDeLaReforma
- * @subpackage AdmininstracionIngresos
+ * @package GIndie\Platform\Controller\Instance\Module
  *
- * @version GIP.00.05
+ * @version 0C.00
+ * @since 17-06-22
  */
 
 namespace GIndie\Platform\Controller\Module;
@@ -15,11 +14,9 @@ namespace GIndie\Platform\Controller\Module;
 
 /**
  * WidgetInterface
- * 
- * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @since       2017-04-28
- * 
- * @version     GIP.00.04
+ * @deprecated since 18-05-21
+ * @todo
+ * - Delete file
  */
 class WidgetInterface extends Placeholder
 {

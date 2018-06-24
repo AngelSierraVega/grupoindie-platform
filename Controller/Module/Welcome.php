@@ -1,19 +1,17 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: robertogs.soft@hotmail.com	
- * Date: 13/06/2017
- * Time: 11:05
+ * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * 
+ * @package GIndie\Platform\Deprecated
+ * 
+ * @version 0C.00
+ * @since 17-06-13
  */
 
 namespace GIndie\Platform\Controller\Module;
 
-//require_once __DIR__ . '/../model/Login.php';
-/* use GIndie\Generator\DML\HTML5;
-  use GIndie\Generator\DML\HTML5\Bootstrap3;
-  use GIndie\Generator\DML\HTML5\Category\Meta\Head;
-  use GIndie\Platform\Current; */
 use GIndie\Generator\DML\HTML5\Category\StylesSemantics;
 use GIndie\Generator\DML\HTML5\Category\StylesSemantics\Div;
 use GIndie\Platform\Current;
@@ -21,23 +19,24 @@ use GIndie\Generator\DML\HTML5\Category\Links\Anchor;
 use GIndie\Generator\DML\HTML5\Category\Basic\Paragraph;
 
 /**
- * @edit GIP.00.02 17-04-23
- * @edit GIP.00.03 17-04-28
- * @edit GIP.00.04 18-01-07
+ * @edit 17-04-23
+ * @edit 17-04-28
+ * @edit 18-01-07
  * - Displays the name of the app + the name of the instance.
+ * @deprecated since 18-05-21
+ * @todo
+ * - Verify delete
  */
 class Welcome extends \GIndie\Platform\Controller\Module
 {
 
     /**
-     * @edit     GIP.00.03
-     * @var         string 
+     * @var string 
      */
     const NAME = "Bienvenido";
 
     /**
      * 
-     * @since GIP.00.0?
      * @return array
      */
     public static function RequiredRoles()
@@ -46,8 +45,7 @@ class Welcome extends \GIndie\Platform\Controller\Module
     }
 
     /**
-     * [description]
-     * @edit GIP.00.04
+     * 
      */
     public function config()
     {
@@ -71,7 +69,8 @@ class Welcome extends \GIndie\Platform\Controller\Module
 
         $h1 = StylesSemantics::Span();
         $h1->setTag("h1");
-        $h1->addContent("<b>".\GIndie\Platform\INIHandler::getCategoryValue("Instance", "name") . "</b> -");
+        $h1->addContent("<b>" . \GIndie\Platform\INIHandler::getCategoryValue("Instance",
+                                                                              "name") . "</b> -");
         $h1->addContent(Current::Instance()->appNombre());
         $col->addContent($h1);
 
@@ -91,7 +90,6 @@ class Welcome extends \GIndie\Platform\Controller\Module
         $rowimg = new Div("");
         $rowimg->addClass("row");
         //$row->addContent($col);
-
         //$div2 = new Div("", ["class" => "col-xs-12"]);
         $div2 = new Div("");
 

@@ -1,47 +1,68 @@
 <?php
-/*
- * Copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+/**
+ * GI-Platform-DVLP - Container
  *
- * This software is protected under GNU: you can use, study and modify it
- * but not distribute it under the terms of the GNU General Public License 
- * as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform\View
+ *
+ * @version 0C.00 DOING
+ * 
+ * @todo
+ * - Funcional class with node
  */
 
 namespace GIndie\Platform\View\Document;
 
 use \GIndie\Platform\Current;
-
-//require_once __DIR__ . '/../Widget.php';
+use \GIndie\ScriptGenerator\Bootstrap3;
 
 /**
- * Description of Container
- *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * 
+ * @since 17-04-21
+ * @edit 18-06-23
  */
-class Container
+class Container extends Bootstrap3\Grid
 {
 
     use \GIndie\Platform\WidgetsDefinition;
 
     /**
-     * @version     GIP.00.03
-     * @since       2017-04-21
+     * 
+     * @since 17-04-21
+     * @edit 18-06-24
+     * - Implemented constructor for Grid
      */
     public function __construct()
     {
+        parent::__construct(Bootstrap3\Grid::TYPE_CONTAINER_FLUID);
         $this->_widgets = $this->WidgetsDefinition;
+        $this->setId("gip-container");
+        
     }
 
+    /**
+     * 
+     * @since 17-04-21
+     */
     private $_widgets = [];
 
+    /**
+     * 
+     * @since 17-04-21
+     */
     public function addWidget($id, /* \GIndie\Platform\View\Widget */
                               $widget = NULL)
     {
         $this->_widgets[$id] = $widget == NULL ? "" : $widget;
     }
 
-    public function __toString()
+    /**
+     * @since 18-06-24
+     * @return string
+     */
+    public function defineScript()
     {
         ob_start();
         ?>
@@ -142,99 +163,141 @@ class Container
             }
 
         </script>
+        <?php
+        $str = ob_get_contents();
+        ob_end_clean();
+        return $str;
+    }
+    
+    /**
+     * 
+     * @return type
+     * @since 17-04-21
+     * @edit 18-06-24
+     * - Moved script to defineScript()
+     * - Moved divs to tmpContent()
+     */
+    public function __toString()
+    {
+        $this->removeContent();
+        $this->addContent($this->tmpContent());
+        return parent::__toString();
+    }
 
-        <div id="gip-container" class="container-fluid">
+    /**
+     * 
+     * @since 18-06-24
+     */
+    private function tmpContent()
+    {
+        ob_start();
+        ?>
+<!--        <div id="gip-container" class="container-fluid">-->
 
             <div class="row ">
+                <div gip-placeholder="o-o-o" class="col-xs-12">
+                    <?php echo $this->_widgets["o-o-o"]; ?>
+                </div>
+            </div>
+            <div class="row ">
                 <div gip-placeholder="i-i-i" class="col-xs-12">
-        <?php echo $this->_widgets["i-i-i"]; ?>
+                    <?php echo $this->_widgets["i-i-i"]; ?>
                 </div>
             </div>
 
             <div class="row ">
                 <div class="col-sm-6">
                     <div id="i-ii-i">
-        <?php echo $this->_widgets["i-ii-i"]; ?>
+                        <?php echo $this->_widgets["i-ii-i"]; ?>
                     </div>
                     <div id="i-ii-ia">
-        <?php echo $this->_widgets["i-ii-ia"]; ?>
+                        <?php echo $this->_widgets["i-ii-ia"]; ?>
                     </div>
                     <div id="i-ii-ib">
-        <?php echo $this->_widgets["i-ii-ib"]; ?>
+                        <?php echo $this->_widgets["i-ii-ib"]; ?>
                     </div>
                 </div>
                 <div id="i-ii-ii" class="col-sm-6">
-        <?php echo $this->_widgets["i-ii-ii"]; ?>
+                    <?php echo $this->_widgets["i-ii-ii"]; ?>
                 </div>
             </div>
 
             <div class="row">
                 <div id="i-iii-i" class="col-sm-4">
-        <?php echo $this->_widgets["i-iii-i"]; ?>
+                    <?php echo $this->_widgets["i-iii-i"]; ?>
                 </div>
                 <div id="i-iii-ii" class="col-sm-4">
-        <?php echo $this->_widgets["i-iii-ii"]; ?>
+                    <?php echo $this->_widgets["i-iii-ii"]; ?>
                 </div>
                 <div id="i-iii-iii" class="col-sm-4">
-        <?php echo $this->_widgets["i-iii-iii"]; ?>
+                    <?php echo $this->_widgets["i-iii-iii"]; ?>
                 </div>
             </div>
 
 
             <div class="row ">
                 <div id="ii-i-i" class="col-xs-12">
-        <?php echo $this->_widgets["ii-i-i"]; ?>
+                    <?php echo $this->_widgets["ii-i-i"]; ?>
+                </div>
+            </div>
+
+            <div class="row ">
+                <div id="ii-ii-i-small" class="col-sm-4">
+                    <?php echo $this->_widgets["ii-ii-i-small"]; ?>
+                </div>
+                <div id="ii-ii-ii-large" class="col-sm-8">
+                    <?php echo $this->_widgets["ii-ii-ii-large"]; ?>
                 </div>
             </div>
 
             <div class="row ">
                 <div id="ii-ii-i" class="col-sm-6">
-        <?php echo $this->_widgets["ii-ii-i"]; ?>
+                    <?php echo $this->_widgets["ii-ii-i"]; ?>
                 </div>
                 <div id="ii-ii-ii" class="col-sm-6">
-        <?php echo $this->_widgets["ii-ii-ii"]; ?>
+                    <?php echo $this->_widgets["ii-ii-ii"]; ?>
                 </div>
             </div>
 
             <div class="row ">
                 <div id="ii-iii-i" class="col-sm-4">
-        <?php echo $this->_widgets["ii-iii-i"]; ?>
+                    <?php echo $this->_widgets["ii-iii-i"]; ?>
                 </div>
                 <div id="ii-iii-ii" class="col-sm-4">
-        <?php echo $this->_widgets["ii-iii-ii"]; ?>
+                    <?php echo $this->_widgets["ii-iii-ii"]; ?>
                 </div>
                 <div id="ii-iii-iii" class="col-sm-4">
-        <?php echo $this->_widgets["ii-iii-iii"]; ?>
+                    <?php echo $this->_widgets["ii-iii-iii"]; ?>
                 </div>
             </div>
 
 
             <div class="row ">
                 <div id="iii-i-i" class="col-xs-12">
-        <?php echo $this->_widgets["iii-i-i"]; ?>
+                    <?php echo $this->_widgets["iii-i-i"]; ?>
                 </div>
             </div>
             <div class="row">
                 <div id="iii-ii-i" class="col-sm-6">
-        <?php echo $this->_widgets["iii-ii-i"]; ?>
+                    <?php echo $this->_widgets["iii-ii-i"]; ?>
                 </div>
                 <div id="iii-ii-ii" class="col-sm-6">
-        <?php echo $this->_widgets["iii-ii-ii"]; ?>
+                    <?php echo $this->_widgets["iii-ii-ii"]; ?>
                 </div>
             </div>
 
             <div class="row ">
                 <div id="iii-iii-i" class="col-sm-4">
-        <?php echo $this->_widgets["iii-iii-i"]; ?>
+                    <?php echo $this->_widgets["iii-iii-i"]; ?>
                 </div>
                 <div id="iii-iii-ii" class="col-sm-4">
-        <?php echo $this->_widgets["iii-iii-ii"]; ?>
+                    <?php echo $this->_widgets["iii-iii-ii"]; ?>
                 </div>
                 <div id="iii-iii-iii" class="col-sm-4">
-        <?php echo $this->_widgets["iii-iii-iii"]; ?>
+                    <?php echo $this->_widgets["iii-iii-iii"]; ?>
                 </div>
             </div>
-        </div>
+<!--        </div>-->
 
 
         <?php

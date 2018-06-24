@@ -27,13 +27,19 @@ class SystemAdministrator extends Connection {
      * @var string 
      * @version GIP.00.01
      */
-    protected static $USERNAME = "mrdemo_admin";//"straffon_default";
+    protected static $USERNAME = "grupoind_main";//"straffon_default";
+    //mr_demo: mrdemo_admin
+    //Straffsa: straffon_default
+    //GrupoINDIE: grupoind_main
 
     /**
      * Defines the user password
      * @var string 
      * @version GIP.00.01
      */
-    protected static $PASSWORD = "(%C4{rg6}FrZ";//"%wn0Zx5]EZu}";
+    protected static $PASSWORD = "YJiYZn5ars2";
+    //mr_demo: (%C4{rg6}FrZ
+    //Straffsa: %wn0Zx5]EZu}
+    //GrupoINDIE: 
 
 }

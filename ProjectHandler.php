@@ -10,7 +10,7 @@ namespace GIndie\Platform;
  *
  * @package GIndie\Platform
  *
- * @version 0C.50
+ * @version 0C.70
  * 
  * @edit 18-02-24
  * - Added code from GI-DBH
@@ -33,7 +33,7 @@ class ProjectHandler extends \GIndie\ProjectHandler\AbstractProjectHandler
         $rtnArray[\hexdec("0C.00")]["code"] = "One";
         $rtnArray[\hexdec("0C.00")]["threshold"] = "0C.00";
         //Two
-        $rtnArray[\hexdec("0D.00")]["description"] = "[@description]";
+        $rtnArray[\hexdec("0D.00")]["description"] = "Platform for MMR-PRDL";
         $rtnArray[\hexdec("0D.00")]["code"] = "Two";
         $rtnArray[\hexdec("0D.00")]["threshold"] = "0D.00";
         \ksort($rtnArray);

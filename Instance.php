@@ -97,7 +97,8 @@ abstract class Instance
      */
     public function urlAssets()
     {
-        return \GIndie\Platform\INIHandler::getCategoryValue("Config", "assets_url");
+        return \GIndie\Platform\INIHandler::getCategoryValue("Config",
+                                                             "assets_url");
     }
 
     /**
@@ -147,11 +148,13 @@ abstract class Instance
      */
     public function rutaRespaldos()
     {
-        $ini = \GIndie\Platform\INIHandler::getCategoryValue("Path", "generatedFiles");
+        $ini = \GIndie\Platform\INIHandler::getCategoryValue("Path",
+                                                             "generatedFiles");
         if ($ini) {
             return $ini;
         } else {
-            \GIndie\Common\PHP\Directories::createFolderStructure(\dirname($_SERVER['SCRIPT_FILENAME']), "\\private\\respaldos\\");
+            \GIndie\Common\PHP\Directories::createFolderStructure(\dirname($_SERVER['SCRIPT_FILENAME']),
+                                                                           "\\private\\respaldos\\");
             return \dirname($_SERVER['SCRIPT_FILENAME']) . "\\private\\respaldos\\";
         }
     }
@@ -165,7 +168,8 @@ abstract class Instance
      */
     public function rutaRecibos()
     {
-        $ini = \GIndie\Platform\INIHandler::getCategoryValue("Path", "generatedFiles");
+        $ini = \GIndie\Platform\INIHandler::getCategoryValue("Path",
+                                                             "generatedFiles");
         if ($ini) {
             return $ini;
         } else {
@@ -332,7 +336,8 @@ abstract class Instance
      */
     final private function __construct()
     {
-        static::BRAND_NAME !== \NULL ?: trigger_error("Constant BRAND_NAME must be defined inside class definition of: " . get_called_class(), \E_USER_ERROR);
+        static::BRAND_NAME !== \NULL ?: trigger_error("Constant BRAND_NAME must be defined inside class definition of: " . get_called_class(),
+                                                      \E_USER_ERROR);
         //static::CONFIG_CLASS !== \NULL ?: trigger_error("Constant CONFIG_CLASS must be defined inside class definition of: " . get_called_class(), \E_USER_ERROR);
         if (Current::Instance() !== \NULL) {
             static::config();
@@ -356,13 +361,16 @@ abstract class Instance
      * 
      * @return \GIndie\Platform\Controller\Platform\ModuleInterface
      * @throws \Exception
+     * @edit 18-06-13
+     * - Optimized funcionality
      */
     public function setModule($classname, $groupName = \NULL)
     {
-        if (!\is_subclass_of($classname, Controller\Module::class, \TRUE)) {
-            $sub = Controller\Module::class;
-            \trigger_error("Class {$classname} is not subclass of {$sub}", \E_USER_ERROR);
-            throw new \Exception("Unable to run.");
+        switch (false)
+        {
+            case \is_subclass_of($classname, Controller\Module::class, true):
+                \trigger_error("Class {$classname} is not subclass of " .
+                        Controller\Module::class, \E_USER_ERROR);
         }
         self::$_MODULES[$classname] = $groupName;
         return isset(self::$_MODULES[$classname]);
@@ -397,7 +405,8 @@ abstract class Instance
     {
         if (!\is_subclass_of($classname, self::class, \TRUE)) {
             $class = self::class;
-            trigger_error("Classname {$classname} is not subclass of {$class} ", E_USER_ERROR);
+            trigger_error("Classname {$classname} is not subclass of {$class} ",
+                          E_USER_ERROR);
             throw new \Exception("Unable to run.");
         }
         self::$_LINKS[$classname] = $href;
@@ -491,14 +500,16 @@ abstract class Instance
                     /**
                      * @todo Verify plugin data
                      */
-                    $sii = \GIndie\Platform\INIHandler::getCategoryValue("Plugins", "SistemaIntegralIngresos");
+                    $sii = \GIndie\Platform\INIHandler::getCategoryValue("Plugins",
+                                                                         "SistemaIntegralIngresos");
                     if ($sii) {
                         $data = [];
                         $data['fk_usuario_cuenta'] = \GIndie\Platform\Current::User()->getId();
                         $data['action'] = "gip-login";
                         $data['timestamp'] = \time();
                         $nota = "Ingresó al sistema con correo y contraseña";
-                        $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
+                        $data['notas'] = \filter_var($nota,
+                                                     \FILTER_SANITIZE_SPECIAL_CHARS);
                         $bitacora = \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
                         $bitacora->run("gip-inner-create");
                     }
@@ -508,7 +519,9 @@ abstract class Instance
                 }
             } catch (\GIndie\Platform\ExceptionLogin $e) {
                 $params = \session_get_cookie_params();
-                \setcookie(\session_name(), '', \time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]
+                \setcookie(\session_name(), '', \time() - 42000,
+                           $params["path"], $params["domain"],
+                           $params["secure"], $params["httponly"]
                 );
                 if ($_SERVER["REQUEST_METHOD"] === "POST") {//
                     $response = \GIndie\Generator\DML\HTML5\Category\Basic::Paragraph($e->getMessage());
@@ -516,17 +529,20 @@ abstract class Instance
                     return $response;
                 } else {
                     \header("Refresh: 1; url=" . $_SERVER['PHP_SELF']);
-                    return "ExceptionLogin: ".$e->getMessage();
+                    return "ExceptionLogin: " . $e->getMessage();
                 }
             } catch (\Exception $e) {
                 \header("Refresh: 1; url=" . $_SERVER['PHP_SELF']);
-                return "Exception: ".$e->getMessage();
+                return "Exception: " . $e->getMessage();
             }
         }
         if (\session_status() == \PHP_SESSION_NONE) {
             $instance = new static();
             //\GIndie\Platform\INIHandler::getCategoryValue("app", "slogan")
-            return new View\Login($instance->logoAplicacion(), $instance->sloganAplicacion(), $instance->urlAssets(), $instance->logoInstitucion());
+            return new View\Login($instance->logoAplicacion(),
+                                  $instance->sloganAplicacion(),
+                                  $instance->urlAssets(),
+                                  $instance->logoInstitucion());
         }
         try {
             switch ($_SERVER["REQUEST_METHOD"])
@@ -579,7 +595,8 @@ abstract class Instance
                     throw new \Exception("Forbiden request method");
                     break;
             }
-            return Current::Module()->run($_action, $_action_id, $_class, $_selected_id);
+            return Current::Module()->run($_action, $_action_id, $_class,
+                                          $_selected_id);
         } catch (\Exception $e) {
             //return "TEST";
             $GLOBALS["gip-error"] = static::displayException($e);

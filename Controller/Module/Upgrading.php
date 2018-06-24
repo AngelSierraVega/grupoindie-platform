@@ -6,9 +6,9 @@
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
  *
- * @package GIndie\Platform\Controller
+ * @package GIndie\Platform\Controller\Instance\Module
  *
- * @version 0A.10
+ * @version 0C.13
  * @since 18-03-14
  */
 
@@ -42,17 +42,13 @@ trait Upgrading
 
     /**
      * 
-     * 
-     * @since       2017-01-05
-     * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
-     * 
-     * @version     GIP.00.07 
-     * - use widgetReload on $action = widget-reload
-     * 
-     * @param       string $action
-     * @param       string $id
-     * @return      mixed
+     * @param string $action
+     * @param string $id
+     * @return mixed
+     * @since 17-01-05
      * @edit 18-03-15
+     * @edit 18-05-20
+     * - Handle action @selectRow
      */
     public function run($action, $id, $class, $selected)
     {
@@ -61,7 +57,6 @@ trait Upgrading
         {
             case "@selectRow":
                 return $this->runActionSelectRow($_POST["@placeholderId"], $_POST["@selectedId"]);
-            //return HTML5\Category\StylesSemantics::span()->addScriptOnDocumentReady('triggerInteraction("' . $_POST["@placeholderId"] . '", "' . $_POST["@selectedId"] . '");');
             case "reportSearch":
                 $_table = $this->_searchTable($class);
                 return new \GIndie\Platform\View\TableReport($_table);
@@ -245,8 +240,6 @@ trait Upgrading
         $record->run($action);
         $msj = "El registro ha sido eliminado exitosamente.";
         $modalContent = View\Modal\Content::succcess("Registro eliminado.", $msj);
-//        $modalContent = $this->cnstrctModal("Registro eliminado.", $msj);
-//        $modalContent->getHeader()->setBackground("success");
         return $modalContent;
     }
 

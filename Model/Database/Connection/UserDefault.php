@@ -26,13 +26,13 @@ class UserDefault extends Connection {
      * @var string 
      * @version GIP.00.01
      */
-    protected static $USERNAME = "mrdemo_default";//"straffon_default";
+    protected static $USERNAME = "grupoind_main";//"mrdemo_default";//"straffon_default";
 
     /**
      * Defines the user password
      * @var string 
      * @version GIP.00.01
      */
-    protected static $PASSWORD = "%wn0Zx5]EZu}";
+    protected static $PASSWORD = "YJiYZn5ars2";//"%wn0Zx5]EZu}";
 
 }

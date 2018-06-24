@@ -1,9 +1,12 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * 
+ * @package GIndie\Platform\Controller\Instance\Module\Placeholder
+ * 
+ * @version 0C.30
+ * @since 17-09-03
  */
 
 namespace GIndie\Platform\Controller\Module;
@@ -13,333 +16,76 @@ use \GIndie\Generator\DML\HTML5\Bootstrap3\Component\Button;
 use \GIndie\Platform\Model;
 
 /**
- * Description of Placeholder
- *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * 
+ * @edit 18-05-21
+ * - Created functional typeCallable(), $callable, callCallable()
+ * - Updated call
+ * @todo
+ * - Explode methods into sepparated classes
  */
 class Placeholder
 {
 
     /**
      *
-     * @var string 
+     * @var string|null
+     * @since 18-05-21
      */
-    private $_type = "UNDEFINED";
-
-    /**
-     *
-     * @var string 
-     */
-    private $_customContent;
-
-    /**
-     * @since GIP.00.02
-     * @var string 
-     */
-    private $_customTitle;
-
-    /**
-     * @since GIP.00.05
-     * @var string 
-     */
-    private $_buttons = [];
+    private $callable;
 
     /**
      * 
-     * 
+     * @param type $callable
+     * @since 18-05-21
+     * @return GIndie\Platform\Controller\Module\Placeholder
      */
-    public function addButton($context, $icon, $gipAction, $gipActionId = \NULL,
-                              $gipModal = \FALSE, $gipClass = \NULL)
+    public function typeCallable($callable)
     {
-        $this->_buttons[] = ["context" => $context,
-            "icon" => $icon,
-            "gipAction" => $gipAction,
-            "gipActionId" => $gipActionId,
-            "gipModal" => $gipModal,
-            "gipClass" => $gipClass];
-    }
-
-    /**
-     * 
-     * @param mixed $content
-     * @return \GIndie\Platform\Controller\Module\WidgetInterface
-     */
-    public function typeHTMLString($content)
-    {
-        $this->_customContent = $content;
-        $this->_type = "HTMLString";
-        return $this;
-    }
-
-    private $_instanceOfHeading;
-    private $_instanceOfHeadingBody;
-    private $_instanceOfBody;
-    //private $_instanceOfHeading;
-    private $_instanceOfBodyFooter;
-    private $_instanceOfFooter;
-
-    /**
-     * 
-     * @param mixed $content
-     * @return \GIndie\Platform\Controller\Module\WidgetInterface
-     */
-    public function typeCustom($heading = \FALSE, $heading_body = \FALSE,
-                               $body = \FALSE, $body_footeer = \FALSE,
-                               $footer = \FALSE)
-    {
-        //$this->_customContent = $content;
-        $this->_type = "Custom";
-        $this->_instanceOfHeading = $heading;
-        $this->_instanceOfHeadingBody = $heading_body;
-        $this->_instanceOfBody = $body;
-        $this->_instanceOfBodyFooter = $body_footeer;
-        $this->_instanceOfFooter = $footer;
-        return $this;
-    }
-
-    /**
-     * 
-     * @param mixed $content
-     * @return \GIndie\Platform\Controller\Module\WidgetInterface
-     */
-    public function setTypeCustomContent($content, $title = \FALSE)
-    {
-        $this->_customContent = $content;
-        $this->_type = "CustomContent";
-        $this->_customTitle = $title;
-        return $this;
-    }
-
-    /**
-     * @since       GIP.00.03
-     * @var         \GIndie\Platform\Model\Table 
-     */
-    private $_table_instance;
-
-    /**
-     * 
-     * @param       \GIndie\Platform\Model\Record $record
-     * @return \GIndie\Platform\Controller\Module\WidgetInterface
-     * @since       GIP.00.02
-     */
-    public function setTypeTableInstance(\GIndie\Platform\Model\Table $table,
-                                         $title = \FALSE)
-    {
-        $this->_table_instance = $table;
-        $this->_type = "TableInstance";
-        $this->_customTitle = $title;
-        return $this;
-    }
-
-    /**
-     * @since       GIP.00.02
-     * @var         \GIndie\Platform\Model\Record 
-     */
-    private $_record_instance;
-
-    /**
-     * 
-     * @param       \GIndie\Platform\Model\Record $record
-     * @return \GIndie\Platform\Controller\Module\WidgetInterface
-     * @since       GIP.00.02
-     */
-    public function setTypeRecordInstance(\GIndie\Platform\Model\Record $record,
-                                          $title = NULL)
-    {
-        $this->_record_instance = $record;
-        $this->_type = "RecordInstance";
-        $this->_customTitle = $title;
-        return $this;
-    }
-
-    /**
-     *
-     * @var string 
-     * @since GIP.00.03
-     */
-    private $_dynamicClass;
-
-    /**
-     *
-     * @var array 
-     * @since GIP.00.03
-     */
-    private $_startParams;
-    private $_selectedId;
-
-    /**
-     * 
-     * @param string $class
-     * @param array $params
-     * @param string $selectedId
-     * @return \GIndie\Platform\Controller\Module\WidgetInterface
-     * @since GIP.00.05
-     */
-    public function listSimple($class, $params = [], $selectedId = "NONE")
-    {
-        if (!\is_subclass_of($class, Model\ListSimple::class, \TRUE)) {
-            \trigger_error($class . " no es subtipo de " .
-                    Model\ListSimple::class . " en " . get_called_class(),
-                           \E_USER_ERROR);
+        $this->_type = "Callable";
+        if (\is_callable($callable) === false) {
+            switch (true)
+            {
+                case \is_string($callable):
+                    \trigger_error($callable . " is not callable.",
+                                   \E_USER_ERROR);
+                    break;
+                case \is_array($callable):
+                    \trigger_error($callable[1] . " is not callable.",
+                                   \E_USER_ERROR);
+                    break;
+                    \trigger_error("Var not callable.", \E_USER_ERROR);
+                    break;
+            }
         }
-        $this->_dynamicClass = $class;
-        $this->_startParams = $params;
-        $this->_type = "ListDynamic";
-        $this->_selectedId = $selectedId;
+        switch (true)
+        {
+            case (\is_callable($callable) == false):
+        }
+        $this->callable = $callable;
         return $this;
     }
 
     /**
-     * @deprecated since GIP.00.05
-     * @param       string $recordClass
-     * @param       string $recordId
-     * @return \GIndie\Platform\Controller\Module\WidgetInterface
-     * @since       GIP.00.02
+     * @since 18-05-21
+     * @return mixed
      */
-    public function typeListDynamic($dynamicClass, $startParams = [],
-                                    $title = \NULL, $selectedId = \NULL)
+    private function callCallable()
     {
-        $this->_dynamicClass = $dynamicClass;
-        $this->_startParams = $startParams;
-        $this->_type = "ListDynamic";
-        $this->_customTitle = $title;
-        $this->_selectedId = $selectedId;
-        return $this;
+        return \call_user_func($this->callable);
     }
 
     /**
      * 
-     * @param       string $recordClass
-     * @param       string $recordId
-     * @return \GIndie\Platform\Controller\Module\WidgetInterface
-     * @since       GIP.00.03
-     * @version GIP.00.04
-     */
-    public function typeTableDynamic($tableClass, $parameters = [],
-                                     $title = NULL, $selectedId = \NULL)
-    {
-        $this->_dynamicClass = $tableClass;
-        $this->_startParams = $parameters;
-        $this->_type = "TableDynamic";
-        $this->_customTitle = $title;
-        $this->_selectedId = $selectedId;
-        return $this;
-    }
-
-    /**
-     * 
-     * @param       string $recordClass
-     * @param       string $recordId
-     * @return \GIndie\Platform\Controller\Module\WidgetInterface
-     * @since       GIP.00.03
-     * @version GIP.00.04
-     */
-    public function typeReport($tableClass, $parameters = [], $title = NULL)
-    {
-        $this->_dynamicClass = $tableClass;
-        $this->_startParams = $parameters;
-        $this->_type = "TableReport";
-        $this->_customTitle = $title;
-        return $this;
-    }
-
-    public $_columnsSearch;
-
-    /**
-     * 
-     * @param       string $recordClass
-     * @param       string $recordId
-     * @return \GIndie\Platform\Controller\Module\WidgetInterface
-     * @since       GIP.00.03
-     * @version GIP.00.04
-     */
-    public function typeReportSearch($tableClass, $searchColumns = [],
-                                     $parameters = [])
-    {
-        $this->_dynamicClass = $tableClass;
-        $this->_columnsSearch = $searchColumns;
-        $this->_startParams = $parameters;
-        $this->_type = "ReportSearch";
-        return $this;
-    }
-
-    /**
-     * 
-     * @param       string $recordClass
-     * @param       string $recordId
-     * @return \GIndie\Platform\Controller\Module\WidgetInterface
-     * @since       GIP.00.03
-     * @version GIP.00.04
-     */
-    public function typeTableSearch($tableClass, $searchColumns = [],
-                                    $parameters = [])
-    {
-        $this->_dynamicClass = $tableClass;
-        $this->_columnsSearch = $searchColumns;
-        $this->_startParams = $parameters;
-        $this->_type = "TableSearch";
-        return $this;
-    }
-
-    /**
-     * 
-     * @param       string $recordClass
-     * @param       string $recordId
-     * @return \GIndie\Platform\Controller\Module\WidgetInterface
-     * @since       GIP.00.03
-     * @version GIP.00.04
-     */
-    public function typeRecordDynamic($recordClass,
-                                      $recordId = "gip-selected-id",
-                                      $title = NULL)
-    {
-        $this->_record_recordClass = $recordClass;
-        $this->_record_recordId = $recordId;
-        $this->_type = "RecordDynamic";
-        $this->_customTitle = $title;
-        return $this;
-    }
-
-    /**
-     *
-     * @var array 
-     * @since       GIP.00.04
-     */
-    private $_slaves = [];
-
-    /**
-     * 
-     * @param       string $placeholder
-     * @return \GIndie\Platform\Controller\Module\WidgetInterface
-     * @since       GIP.00.04
-     */
-    public function addSlave($placeholder)
-    {
-        $this->_slaves[] = $placeholder;
-        return $this;
-    }
-
-    /**
-     * 
-     * @param       string $placeholder
-     * @return      array
-     * @since       GIP.00.04
-     */
-    public function getSlaves()
-    {
-        return $this->_slaves;
-    }
-
-    /**
-     * 
-     * @return \GIndie\Platform\View\Widget
+     * @return mixed
+     * @edit 18-05-21
+     * - Added funcionality for typeCallable
      */
     public function call($id)
     {
-        //var_dump($this->_type);
         switch ($this->_type)
         {
-
+            case "Callable":
+                return $this->callCallable();
             case "HTMLString":
                 return $this->_customContent;
                 break;
@@ -511,7 +257,8 @@ class Placeholder
                     }
                     $form->addContent($tmpAttr);
                 }
-                $widget = new Widget("Búsqueda de ".$_classname::Name(), \FALSE, $form,
+                $widget = new Widget("Búsqueda de " . $_classname::Name(),
+                                     \FALSE, $form,
                                      "<div id='tempContent'></div>");
 //                $searchButton = Widget\Buttons::CustomDefault("<span class=\"glyphicon glyphicon-refresh\"></span>", "widget-reload", \NULL, \FALSE, \NULL);
 //                $searchButton->setForm($form->getId());
@@ -653,6 +400,293 @@ class Placeholder
                 trigger_error("Unrecognized type " . $this->_type, E_USER_ERROR);
                 throw new Exception("Unrecognized type ");
         }
+    }
+
+    /**
+     *
+     * @var string 
+     */
+    private $_type = "UNDEFINED";
+
+    /**
+     *
+     * @var string 
+     */
+    private $_customContent;
+
+    /**
+     * @var string 
+     */
+    private $_customTitle;
+
+    /**
+     * @var string 
+     */
+    private $_buttons = [];
+
+    /**
+     * 
+     * 
+     */
+    public function addButton($context, $icon, $gipAction, $gipActionId = \NULL,
+                              $gipModal = \FALSE, $gipClass = \NULL)
+    {
+        $this->_buttons[] = ["context" => $context,
+            "icon" => $icon,
+            "gipAction" => $gipAction,
+            "gipActionId" => $gipActionId,
+            "gipModal" => $gipModal,
+            "gipClass" => $gipClass];
+    }
+
+    /**
+     * 
+     * @param mixed $content
+     * @return \GIndie\Platform\Controller\Module\WidgetInterface
+     */
+    public function typeHTMLString($content)
+    {
+        $this->_customContent = $content;
+        $this->_type = "HTMLString";
+        return $this;
+    }
+
+    private $_instanceOfHeading;
+    private $_instanceOfHeadingBody;
+    private $_instanceOfBody;
+    //private $_instanceOfHeading;
+    private $_instanceOfBodyFooter;
+    private $_instanceOfFooter;
+
+    /**
+     * 
+     * @param mixed $content
+     * @return \GIndie\Platform\Controller\Module\WidgetInterface
+     */
+    public function typeCustom($heading = \FALSE, $heading_body = \FALSE,
+                               $body = \FALSE, $body_footeer = \FALSE,
+                               $footer = \FALSE)
+    {
+        //$this->_customContent = $content;
+        $this->_type = "Custom";
+        $this->_instanceOfHeading = $heading;
+        $this->_instanceOfHeadingBody = $heading_body;
+        $this->_instanceOfBody = $body;
+        $this->_instanceOfBodyFooter = $body_footeer;
+        $this->_instanceOfFooter = $footer;
+        return $this;
+    }
+
+    /**
+     * 
+     * @param mixed $content
+     * @return \GIndie\Platform\Controller\Module\WidgetInterface
+     */
+    public function setTypeCustomContent($content, $title = \FALSE)
+    {
+        $this->_customContent = $content;
+        $this->_type = "CustomContent";
+        $this->_customTitle = $title;
+        return $this;
+    }
+
+    /**
+     * @var \GIndie\Platform\Model\Table 
+     */
+    private $_table_instance;
+
+    /**
+     * 
+     * @param \GIndie\Platform\Model\Record $record
+     * @return \GIndie\Platform\Controller\Module\WidgetInterface
+     */
+    public function setTypeTableInstance(\GIndie\Platform\Model\Table $table,
+                                         $title = \FALSE)
+    {
+        $this->_table_instance = $table;
+        $this->_type = "TableInstance";
+        $this->_customTitle = $title;
+        return $this;
+    }
+
+    /**
+     * @var         \GIndie\Platform\Model\Record 
+     */
+    private $_record_instance;
+
+    /**
+     * 
+     * @param \GIndie\Platform\Model\Record $record
+     * @return \GIndie\Platform\Controller\Module\WidgetInterface
+     */
+    public function setTypeRecordInstance(\GIndie\Platform\Model\Record $record,
+                                          $title = NULL)
+    {
+        $this->_record_instance = $record;
+        $this->_type = "RecordInstance";
+        $this->_customTitle = $title;
+        return $this;
+    }
+
+    /**
+     *
+     * @var string 
+     */
+    private $_dynamicClass;
+
+    /**
+     *
+     * @var array 
+     */
+    private $_startParams;
+    private $_selectedId;
+
+    /**
+     * 
+     * @param string $class
+     * @param array $params
+     * @param string $selectedId
+     * @return \GIndie\Platform\Controller\Module\WidgetInterface
+     */
+    public function listSimple($class, $params = [], $selectedId = "NONE")
+    {
+        if (!\is_subclass_of($class, Model\ListSimple::class, \TRUE)) {
+            \trigger_error($class . " no es subtipo de " .
+                    Model\ListSimple::class . " en " . get_called_class(),
+                           \E_USER_ERROR);
+        }
+        $this->_dynamicClass = $class;
+        $this->_startParams = $params;
+        $this->_type = "ListDynamic";
+        $this->_selectedId = $selectedId;
+        return $this;
+    }
+
+    /**
+     * @deprecated since
+     * @param string $recordClass
+     * @param string $recordId
+     * @return \GIndie\Platform\Controller\Module\WidgetInterface
+     */
+    public function typeListDynamic($dynamicClass, $startParams = [],
+                                    $title = \NULL, $selectedId = \NULL)
+    {
+        $this->_dynamicClass = $dynamicClass;
+        $this->_startParams = $startParams;
+        $this->_type = "ListDynamic";
+        $this->_customTitle = $title;
+        $this->_selectedId = $selectedId;
+        return $this;
+    }
+
+    /**
+     * 
+     * @param string $recordClass
+     * @param string $recordId
+     * @return \GIndie\Platform\Controller\Module\WidgetInterface
+     */
+    public function typeTableDynamic($tableClass, $parameters = [],
+                                     $title = NULL, $selectedId = \NULL)
+    {
+        $this->_dynamicClass = $tableClass;
+        $this->_startParams = $parameters;
+        $this->_type = "TableDynamic";
+        $this->_customTitle = $title;
+        $this->_selectedId = $selectedId;
+        return $this;
+    }
+
+    /**
+     * 
+     * @param       string $recordClass
+     * @param       string $recordId
+     * @return \GIndie\Platform\Controller\Module\WidgetInterface
+     */
+    public function typeReport($tableClass, $parameters = [], $title = NULL)
+    {
+        $this->_dynamicClass = $tableClass;
+        $this->_startParams = $parameters;
+        $this->_type = "TableReport";
+        $this->_customTitle = $title;
+        return $this;
+    }
+
+    public $_columnsSearch;
+
+    /**
+     * 
+     * @param       string $recordClass
+     * @param       string $recordId
+     * @return \GIndie\Platform\Controller\Module\WidgetInterface
+     */
+    public function typeReportSearch($tableClass, $searchColumns = [],
+                                     $parameters = [])
+    {
+        $this->_dynamicClass = $tableClass;
+        $this->_columnsSearch = $searchColumns;
+        $this->_startParams = $parameters;
+        $this->_type = "ReportSearch";
+        return $this;
+    }
+
+    /**
+     * 
+     * @param       string $recordClass
+     * @param       string $recordId
+     * @return \GIndie\Platform\Controller\Module\WidgetInterface
+     */
+    public function typeTableSearch($tableClass, $searchColumns = [],
+                                    $parameters = [])
+    {
+        $this->_dynamicClass = $tableClass;
+        $this->_columnsSearch = $searchColumns;
+        $this->_startParams = $parameters;
+        $this->_type = "TableSearch";
+        return $this;
+    }
+
+    /**
+     * 
+     * @param       string $recordClass
+     * @param       string $recordId
+     * @return \GIndie\Platform\Controller\Module\WidgetInterface
+     */
+    public function typeRecordDynamic($recordClass,
+                                      $recordId = "gip-selected-id",
+                                      $title = NULL)
+    {
+        $this->_record_recordClass = $recordClass;
+        $this->_record_recordId = $recordId;
+        $this->_type = "RecordDynamic";
+        $this->_customTitle = $title;
+        return $this;
+    }
+
+    /**
+     *
+     * @var array 
+     */
+    private $_slaves = [];
+
+    /**
+     * 
+     * @param       string $placeholder
+     * @return \GIndie\Platform\Controller\Module\WidgetInterface
+     */
+    public function addSlave($placeholder)
+    {
+        $this->_slaves[] = $placeholder;
+        return $this;
+    }
+
+    /**
+     * 
+     * @param string $placeholder
+     * @return array
+     */
+    public function getSlaves()
+    {
+        return $this->_slaves;
     }
 
 }

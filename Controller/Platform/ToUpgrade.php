@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * GI-Platform-DVLP - ToUpgrade
+ *
+ * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ *
+ * @package GIndie\Platform\Controller\Instance
+ * 
+ * @version 0C.10
+ * @since 18-03-14
+ */
+
 namespace GIndie\Platform\Controller\Platform;
 
 use \GIndie\Generator\DML\HTML5;
@@ -8,15 +20,7 @@ use \GIndie\Platform\Model\Datos\mr_sesion;
 use \GIndie\Platform\Current;
 
 /**
- * GI-Platform-DVLP - ToUpgrade
- *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
- *
- * @package Platform
- *
- * @version 0C.10
- * @since 18-03-14
+ * 
  * @todo
  * - Move \Straffsa\SistemaIntegralIngresos funcionality 
  */
@@ -24,12 +28,11 @@ trait ToUpgrade
 {
 
     /**
-     * @deprecated since GIP.00.02 
+     * @since ??-??-??
+     * @deprecated since ??-??-??
      * @todo A VERIFICAR SI SE DEPRECA DEFINITIVAMENTE
      * @param string $id
      * @return mixed
-     * @since GIP.00.01
-     * @version GIP.00.03
      */
     protected function setController($id)
     {
@@ -44,11 +47,10 @@ trait ToUpgrade
     }
 
     /**
-     * 
+     * @since ??-??-??
      * @param string $id
      * @return mixed
      * @throws \Exception
-     * @since GIP.00.01
      */
     protected function load($id)
     {
@@ -66,12 +68,16 @@ trait ToUpgrade
                     $record = mr_sesion\usuario_cuenta\ContrasenaUsuario::findById(\GIndie\Platform\Current::User()->getId());
 //                    $record = new mr_sesion\usuario_cuenta\ContrasenaUsuario();
                     $form = new \GIndie\Platform\View\Form($record);
-                    $modalContent = new Bootstrap3\Component\Modal\Content("Necesita definir contraseña de usuario final", $form);
+                    $modalContent = new Bootstrap3\Component\Modal\Content("Necesita definir contraseña de usuario final",
+                                                                           $form);
                     $form->setAttribute("gip-action", "gip-edit");
-                    $form->setAttribute("gip-action-class", mr_sesion\usuario_cuenta\ContrasenaUsuario::class);
-                    $form->setAttribute("gip-action-id", \GIndie\Platform\Current::User()->getId());
+                    $form->setAttribute("gip-action-class",
+                                        mr_sesion\usuario_cuenta\ContrasenaUsuario::class);
+                    $form->setAttribute("gip-action-id",
+                                        \GIndie\Platform\Current::User()->getId());
 
-                    $btn = new Bootstrap3\Component\Button("Definir contraseña", Bootstrap3\Component\Button::TYPE_SUBMIT);
+                    $btn = new Bootstrap3\Component\Button("Definir contraseña",
+                                                           Bootstrap3\Component\Button::TYPE_SUBMIT);
                     $btn->setForm($form->getId())->setValue("Submit");
                     $btn->setContext(Bootstrap3\Component\Button::$COLOR_SUCCESS);
                     $modalContent->addFooterButton($btn);
@@ -89,7 +95,12 @@ trait ToUpgrade
 //                    $container->addWidget($id,
 //                                          \GIndie\Platform\Current::Controller()->getWidget($id)
 //                            != NULL ? \GIndie\Platform\Current::Controller()->getWidget($id)->call(\NULL) : \NULL);
-                    $container->addWidget($id, \GIndie\Platform\Current::Module()->getWidget($id) != NULL ? \GIndie\Platform\Current::Module()->run("widget-reload", $id, \NULL, \NULL) : \NULL);
+                    $container->addWidget($id,
+                                          \GIndie\Platform\Current::Module()->getWidget($id)
+                            != NULL ? \GIndie\Platform\Current::Module()->run("widget-reload",
+                                                                              $id,
+                                                                              \NULL,
+                                                                              \NULL) : \NULL);
                 }
 //                foreach ($this->WidgetsDefinition as $id) {
 //                    $container->addWidget($id,
@@ -97,14 +108,15 @@ trait ToUpgrade
 //                }
                 return $container;
             default:
-                trigger_error("Unable to run load: gip-action-id={$id}", E_USER_ERROR);
+                trigger_error("Unable to run load: gip-action-id={$id}",
+                              E_USER_ERROR);
                 throw new \Exception("Unable to run.");
                 break;
         }
     }
 
     /**
-     * @since GIP.00.01
+     * @since ??-??-??
      * @param string $id
      * @return mixed
      * @edit 18-03-18
@@ -114,11 +126,13 @@ trait ToUpgrade
         switch ($id)
         {
             case "config-sesion":
-                $sii = \GIndie\Platform\INIHandler::getCategoryValue("Plugins", "SistemaIntegralIngresos");
+                $sii = \GIndie\Platform\INIHandler::getCategoryValue("Plugins",
+                                                                     "SistemaIntegralIngresos");
                 if ($sii) {
                     $configSesionForm = new \GIndie\Platform\View\Form();
                     $configSesionForm->setAttribute("gip-action", "submit");
-                    $configSesionForm->setAttribute("gip-action-id", "config-sesion");
+                    $configSesionForm->setAttribute("gip-action-id",
+                                                    "config-sesion");
                     $rolesCompletos = new \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\rol\Lista([]);
                     foreach ($rolesCompletos->getElements() as $element) {
                         $value = $rolesCompletos->getElementAt($element)->getValue();
@@ -129,8 +143,10 @@ trait ToUpgrade
                         }
                         $configSesionForm->addContent("<input type=\"checkbox\" name=\"{$element}\" value=\"rol\" $checked> {$value} <br><br>");
                     }
-                    $modalContent = new Bootstrap3\Component\Modal\Content("Roles de la sesión actual", $configSesionForm);
-                    $btn = new Bootstrap3\Component\Button("Guardar", Bootstrap3\Component\Button::TYPE_SUBMIT);
+                    $modalContent = new Bootstrap3\Component\Modal\Content("Roles de la sesión actual",
+                                                                           $configSesionForm);
+                    $btn = new Bootstrap3\Component\Button("Guardar",
+                                                           Bootstrap3\Component\Button::TYPE_SUBMIT);
                     $btn->setForm($configSesionForm->getId())->setValue("Submit");
                     $btn->setContext(Bootstrap3\Component\Button::$COLOR_SUCCESS);
                     $modalContent->addFooterButton($btn);
@@ -143,26 +159,32 @@ trait ToUpgrade
                 $acerca->addContent("<h3>En desarrollo</h3>");
                 $roles = \GIndie\Platform\Current::Roles();
                 $acerca = new \GIndie\Platform\View\Widget\WidgetList($roles);
-                $rtn = new Bootstrap3\Component\Modal\Content("Acerca de", $acerca);
+                $rtn = new Bootstrap3\Component\Modal\Content("Acerca de",
+                                                              $acerca);
                 return $rtn;
                 break;
             case "tabla-bitacora":
                 /**
                  * @todo Verify plugin data
                  */
-                $sii = \GIndie\Platform\INIHandler::getCategoryValue("Plugins", "SistemaIntegralIngresos");
+                $sii = \GIndie\Platform\INIHandler::getCategoryValue("Plugins",
+                                                                     "SistemaIntegralIngresos");
                 if ($sii) {
-                    $beginOfDay = \DateTime::createFromFormat('Y-m-d H:i:s', (new \DateTime())->setTimestamp(\time())->format('Y-m-d 00:00:00'))->getTimestamp();
-                    $endOfDay = \DateTime::createFromFormat('Y-m-d H:i:s', (new \DateTime())->setTimestamp(\time())->format('Y-m-d 23:59:59'))->getTimestamp();
+                    $beginOfDay = \DateTime::createFromFormat('Y-m-d H:i:s',
+                                                              (new \DateTime())->setTimestamp(\time())->format('Y-m-d 00:00:00'))->getTimestamp();
+                    $endOfDay = \DateTime::createFromFormat('Y-m-d H:i:s',
+                                                            (new \DateTime())->setTimestamp(\time())->format('Y-m-d 23:59:59'))->getTimestamp();
                     $restrictions = "fk_usuario_cuenta='" . Current::User()->getId();
                     //$restrictions .= "' AND timestamp < 1601539400";
                     $restrictions .= "' AND timestamp > " . $beginOfDay;
                     //$restrictions .= "' AND timestamp < " . $endOfDay;
                     $bitacora = new \GIndie\Platform\View\TableSimple(new \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\bitacora\Tabla(
                             [$restrictions]));
-                    $modalContent = $this->_modalWrap("Bitácora de actividades", $bitacora);
+                    $modalContent = $this->_modalWrap("Bitácora de actividades",
+                                                      $bitacora);
                 } else {
-                    $modalContent = $this->_modalWrap("Bitácora de actividades", "@todo");
+                    $modalContent = $this->_modalWrap("Bitácora de actividades",
+                                                      "@todo");
                 }
 
                 return $modalContent;
@@ -173,8 +195,10 @@ trait ToUpgrade
                 $form->setAttribute("gip-action", "submit");
                 $form->setAttribute("gip-action-id", "gip-logout");
                 $form->addContent("<p>¿Está seguro que desea cerrar la sesión actual?</p>");
-                $rtn = new Bootstrap3\Component\Modal\Content("Cerrar sesión", $form);
-                $btn = new Bootstrap3\Component\Button("Cerrar sesión", Bootstrap3\Component\Button::TYPE_SUBMIT);
+                $rtn = new Bootstrap3\Component\Modal\Content("Cerrar sesión",
+                                                              $form);
+                $btn = new Bootstrap3\Component\Button("Cerrar sesión",
+                                                       Bootstrap3\Component\Button::TYPE_SUBMIT);
                 $btn->setForm($form->getId())->setValue("Submit");
                 $btn->setContext(Bootstrap3\Component\Button::$COLOR_SUCCESS);
                 $rtn->addFooterButton($btn);
@@ -189,21 +213,21 @@ trait ToUpgrade
                 $rtn->addContent("[La Plataforma]<br>[Información de sesión de usuario]");
                 return $rtn;
             default:
-                \trigger_error("No se encontró el modal solicitado {$id}", \E_USER_ERROR);
+                \trigger_error("No se encontró el modal solicitado {$id}",
+                               \E_USER_ERROR);
                 //throw new \Exception("No se encontró el modal solicitado");
-                $rtn = new Bootstrap3\Modal\Content("Error", "No se encontró el modal solicitado");
+                $rtn = new Bootstrap3\Modal\Content("Error",
+                                                    "No se encontró el modal solicitado");
                 return $rtn;
         }
     }
 
     /**
-     * 
+     * @since ??-??-??
      * @param type $action
      * @param type $id
      * @param type $class
      * @param type $selected
-     * 
-     * @edit GIP.00.04
      */
     protected function _createLog($action, $id, $class, $selected)
     {
@@ -236,7 +260,8 @@ trait ToUpgrade
                 /**
                  * @todo Verify plugin data
                  */
-                $sii = \GIndie\Platform\INIHandler::getCategoryValue("Plugins", "SistemaIntegralIngresos");
+                $sii = \GIndie\Platform\INIHandler::getCategoryValue("Plugins",
+                                                                     "SistemaIntegralIngresos");
                 if ($sii) {
                     $data = [];
                     $data['fk_usuario_cuenta'] = \GIndie\Platform\Current::User()->getId();
@@ -252,10 +277,12 @@ trait ToUpgrade
                             $nota = "Ingresó al módulo " . $modulo::NAME;
                             break;
                         default:
-                            \trigger_error("POR DEFINIR ACCION EN HISTORIAL. {$action}", \E_USER_ERROR);
+                            \trigger_error("POR DEFINIR ACCION EN HISTORIAL. {$action}",
+                                           \E_USER_ERROR);
                             break;
                     }
-                    $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
+                    $data['notas'] = \filter_var($nota,
+                                                 \FILTER_SANITIZE_SPECIAL_CHARS);
                     $bitacora = \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
                     $bitacora->run("gip-inner-create");
                 }
@@ -265,14 +292,13 @@ trait ToUpgrade
 
     /**
      * 
-     * @since GIP.00.01
+     * @since ??-??-??
      * 
      * @param string $action
      * @param string $id
      * 
      * @return mixed
      * @throws \Exception
-     * @edit GIP.00.04
      */
     protected function submit($id)
     {
@@ -285,7 +311,8 @@ trait ToUpgrade
                 $_rol = [];
                 foreach ($_POST as $rol => $value) {
                     if (strcmp($value, "rol") == 0) {
-                        \GIndie\Platform\Current::Roles()->addElement($rol, $userId);
+                        \GIndie\Platform\Current::Roles()->addElement($rol,
+                                                                      $userId);
                         $_rolTemp = \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\rol\Registro::findById($rol);
                         $_rol[] = $_rolTemp->getDisplay();
                     }
@@ -299,8 +326,10 @@ trait ToUpgrade
                     $data['action'] = "config-sesion";
                     $data['timestamp'] = \time();
 
-                    $nota = "Modificó sus permisos de sesión: " . join(", ", $_rol);
-                    $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
+                    $nota = "Modificó sus permisos de sesión: " . join(", ",
+                                                                       $_rol);
+                    $data['notas'] = \filter_var($nota,
+                                                 \FILTER_SANITIZE_SPECIAL_CHARS);
                     $bitacora = \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
                     $bitacora->run("gip-inner-create");
                 } else {
@@ -320,12 +349,14 @@ trait ToUpgrade
                     /**
                      * @todo Verify plugin data
                      */
-                    $sii = \GIndie\Platform\INIHandler::getCategoryValue("Plugins", "SistemaIntegralIngresos");
+                    $sii = \GIndie\Platform\INIHandler::getCategoryValue("Plugins",
+                                                                         "SistemaIntegralIngresos");
                     if ($sii) {
                         $data['action'] = "gip-logout";
                         $data['timestamp'] = \time();
                         $nota = "Cerró su sesión";
-                        $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
+                        $data['notas'] = \filter_var($nota,
+                                                     \FILTER_SANITIZE_SPECIAL_CHARS);
                         $bitacora = \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
                         $bitacora->run("gip-inner-create");
                     }
@@ -334,7 +365,8 @@ trait ToUpgrade
                 }
                 return $response;
             default:
-                \trigger_error("No se pudo ejecutar el comando submit. id {$id}", \E_USER_ERROR);
+                \trigger_error("No se pudo ejecutar el comando submit. id {$id}",
+                               \E_USER_ERROR);
                 throw new \Exception("No se pudo ejecutar el comando submit.");
                 break;
         }
@@ -345,6 +377,7 @@ trait ToUpgrade
      * @param GIndie\Platform\Model\Record $record
      * @param string $action
      * @return \GIndie\Platform\View\Form
+     * @since ??-??-??
      */
     protected function _recordForm($record, $action)
     {
@@ -370,6 +403,15 @@ trait ToUpgrade
         return $form;
     }
 
+    /**
+     * 
+     * @param type $action
+     * @param type $id
+     * @param type $class
+     * @return type
+     * @throws \Exception
+     * @since 18-03-14
+     */
     protected function recordAction($action, $id, $class)
     {
         switch ($action)
@@ -394,7 +436,8 @@ trait ToUpgrade
                 try {
                     if ($record->delete()) {
                         $modalContent = new Bootstrap3\Component\Modal\Content("Registro eliminado con éxito");
-                        $btnDismiss = new Bootstrap3\Component\Button("Cerrar", Bootstrap3\Component\Button::TYPE_BUTTON);
+                        $btnDismiss = new Bootstrap3\Component\Button("Cerrar",
+                                                                      Bootstrap3\Component\Button::TYPE_BUTTON);
                         $btnDismiss->setAttribute("data-dismiss", "modal");
                         $modalContent->addFooterButton($btnDismiss);
                         $response->addScript("$('#gip-modal .modal-content').html('{$modalContent}');");
@@ -406,7 +449,8 @@ trait ToUpgrade
 //                    var_dump($exc->getCode()); //1451
 //                    return $exc->getTraceAsString();
                     //$response->addScript("$('#gip-modal .modal-body .modal-footer').html('".\GIndie\Platform\ExceptionMySQL::handleException($exc)."');");
-                    $modalContent = new Bootstrap3\Component\Modal\Content("Error al eliminar", \GIndie\Platform\ExceptionMySQL::handleException($exc));
+                    $modalContent = new Bootstrap3\Component\Modal\Content("Error al eliminar",
+                                                                           \GIndie\Platform\ExceptionMySQL::handleException($exc));
                     $response->addScript("$('#gip-modal .modal-content').html('{$modalContent}');");
                     //$response->addScript("$('#gip-modal .modal-footer').html('TEST');");
                     //$response->addContent("Hubo un error al eliminar (1451), intentenlo de nuevo.");
@@ -414,7 +458,8 @@ trait ToUpgrade
 
                 return $response;
             default:
-                trigger_error("Unable to run recordAction: gip-action={$action} gip-action-id={$id} gip-action-class={$class}", E_USER_ERROR);
+                trigger_error("Unable to run recordAction: gip-action={$action} gip-action-id={$id} gip-action-class={$class}",
+                              E_USER_ERROR);
                 throw new \Exception("Unable to run.");
                 break;
         }
@@ -422,7 +467,7 @@ trait ToUpgrade
 
     /**
      * 
-     * @since GIP.00.01
+     * @since ??-??-??
      * 
      * @param string $action
      * @param string $id
@@ -458,7 +503,8 @@ trait ToUpgrade
             case "setController":
                 return static::setController($id);
             default:
-                \trigger_error("Unable to run: gip-action={$action} gip-action-id={$id} gip-action-class={$class}", E_USER_ERROR);
+                \trigger_error("Unable to run: gip-action={$action} gip-action-id={$id} gip-action-class={$class}",
+                               E_USER_ERROR);
                 throw new \Exception("Unable to run.");
         }
     }

@@ -9,10 +9,10 @@ ${licensePrefix?replace(" +$", "", "r")}
 ${licensePrefix}@author Angel Sierra Vega <angel.sierra@grupoindie.com>
 ${licensePrefix}@copyright (c) ${date?date?string("yyyy")} Angel Sierra Vega. Grupo INDIE.
 ${licensePrefix?replace(" +$", "", "r")}
-${licensePrefix}@package Platform
+${licensePrefix}@package GIndie\Platform
 ${licensePrefix?replace(" +$", "", "r")}
+${licensePrefix}@version UNDEFINED
 ${licensePrefix}@since ${date?date?string("yy-MM-dd")}
-${licensePrefix}@version ??
 <#if licenseLast??>
 ${licenseLast}
 </#if>

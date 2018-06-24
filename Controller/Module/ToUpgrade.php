@@ -1,14 +1,13 @@
 <?php
 
 /**
- * GI-Platform-DVLP - ToUpgrade
- *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
- *
- * @package Platform
- *
- * @version GIP.00.00 18-03-13 Empty [class/trait/interface/file] created.
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+
+ * @package GIndie\Platform\Controller\Instance\Module
+ * 
+ * @version 0C.10
+ * @since 18-03-13
  */
 
 namespace GIndie\Platform\Controller\Module;
@@ -18,12 +17,9 @@ use GIndie\Generator\DML\HTML5\Bootstrap3;
 use GIndie\Platform\View\Widget;
 use GIndie\Platform\Model\Datos\mr_sesion;
 
-//use GIndie\Platform\Model\Datos\mr_sesion;
-//use GIndie\Platform\View\Widget;
-
 /**
  *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * 
  */
 trait ToUpgrade
 {
@@ -40,7 +36,8 @@ trait ToUpgrade
      * @edit 18-04-03
      * - Removed autosubmit
      */
-    protected function widgetTableSearch($_classname, array $_searchColumns, array $_params = [],
+    protected function widgetTableSearch($_classname, array $_searchColumns,
+                                         array $_params = [],
                                          array $buttons = [])
     {
         $record = $_classname::RelatedRecord();
@@ -54,7 +51,9 @@ trait ToUpgrade
             if (\is_array($attribute)) {
                 foreach ($attribute as $key => $value) {
                     $recordAttr = $record::getAttribute($key);
-                    $tmpAttr = \GIndie\Platform\View\Input::constructFromAttribute($recordAttr, $value, \NULL);
+                    $tmpAttr = \GIndie\Platform\View\Input::constructFromAttribute($recordAttr,
+                                                                                   $value,
+                                                                                   \NULL);
                 }
             } else {
                 if ($record::getAttribute($attribute)) {
@@ -62,9 +61,12 @@ trait ToUpgrade
                     $value = static::getSearchValue($_classname, $attribute);
                     //$value = $_classname;
                     //$value = isset($_POST[$attribute]) ? $_POST[$attribute] : "";
-                    $tmpAttr = \GIndie\Platform\View\Input::constructFromAttribute($recordAttr, $value, \NULL);
+                    $tmpAttr = \GIndie\Platform\View\Input::constructFromAttribute($recordAttr,
+                                                                                   $value,
+                                                                                   \NULL);
                 } else {
-                    \trigger_error($attribute . " not defined in " . $record::SCHEMA . "." . $record::TABLE . " " . $record, \E_USER_ERROR);
+                    \trigger_error($attribute . " not defined in " . $record::SCHEMA . "." . $record::TABLE . " " . $record,
+                                   \E_USER_ERROR);
                 }
             }
             if ($recordAttr->getSize()) {
@@ -79,11 +81,17 @@ trait ToUpgrade
             }
             $form->addContent($tmpAttr);
         }
-        $widget = new \GIndie\Platform\View\Widget("" . $_classname::Name(), \FALSE, $form, "<div id='tempContent'></div>");
+        $widget = new \GIndie\Platform\View\Widget("" . $_classname::Name(),
+                                                   \FALSE, $form,
+                                                   "<div id='tempContent'></div>");
 //        $reloadButton = Widget\Buttons::Reload($_classname);
 //        $widget->addButtonHeading($reloadButton);
 
-        $searchButton = \GIndie\Platform\View\Widget\Buttons::CustomSuccess("<span class=\"glyphicon glyphicon-search\"></span>", \NULL, \NULL, \FALSE, \NULL);
+        $searchButton = \GIndie\Platform\View\Widget\Buttons::CustomSuccess("<span class=\"glyphicon glyphicon-search\"></span>",
+                                                                            \NULL,
+                                                                            \NULL,
+                                                                            \FALSE,
+                                                                            \NULL);
         $searchButton->setForm($form->getId());
         $widget->addButtonHeading($searchButton);
         //$widget->addContent(\GIndie\Platform\View\Javascript::submitOnChange($form->getId()));
@@ -105,7 +113,7 @@ trait ToUpgrade
         $widget->setContext("primary");
         return $widget;
     }
-    
+
     /**
      * 
      * @param string $classname
@@ -113,27 +121,31 @@ trait ToUpgrade
      * @return \GIndie\Platform\View\Widget\WidgetReport
      * @since 18-03-30
      */
-    protected function widgetReportFromModel($classname, $params = []){
-        if (\is_subclass_of($classname, \GIndie\Platform\Model\Table::class, true)) {
+    protected function widgetReportFromModel($classname, $params = [])
+    {
+        if (\is_subclass_of($classname, \GIndie\Platform\Model\Table::class,
+                            true)) {
             $rtnWidget = new Widget\WidgetReport(new $classname($params));
             return $rtnWidget;
         }
-        \trigger_error($classname . " is not subclass of \GIndie\Platform\Model\Table", \E_USER_ERROR);
+        \trigger_error($classname . " is not subclass of \GIndie\Platform\Model\Table",
+                       \E_USER_ERROR);
     }
 
     /**
-     * @since GIP.00.08
      * @param string $classname
      * @param array $params
      * @return \GIndie\Platform\View\Widget\WidgetTable
      */
     protected function widgetTableFromModel($classname, $params = [])
     {
-        if (\is_subclass_of($classname, \GIndie\Platform\Model\Table::class, true)) {
+        if (\is_subclass_of($classname, \GIndie\Platform\Model\Table::class,
+                            true)) {
             $rtnWidget = new Widget\WidgetTable(new $classname($params));
             return $rtnWidget;
         }
-        \trigger_error($classname . " is not subclass of \GIndie\Platform\Model\Table", \E_USER_ERROR);
+        \trigger_error($classname . " is not subclass of \GIndie\Platform\Model\Table",
+                       \E_USER_ERROR);
     }
 
     /**
@@ -190,6 +202,7 @@ trait ToUpgrade
         if (\sizeof($searchArray) > 0) {
             $searchArray = [\join(" AND ", $searchArray)];
         } else {
+            
         }
         return $searchArray;
     }
@@ -208,15 +221,12 @@ trait ToUpgrade
     }
 
     /**
-     * @final
+     * @todo error handling
      * 
-     * @todo        error handling
-     * 
-     * @version     GIP.00.04
-     * @since       2017-04-21
+     * @since 17-04-21
      *          
-     * @param       string $widgetPlaceholder
-     * @return      null|\GIndie\Platform\Controller\Main\WidgetInterface
+     * @param string $widgetPlaceholder
+     * @return null|\GIndie\Platform\Controller\Main\WidgetInterface
      */
     public function getWidget($placeholderid)
     {
@@ -232,7 +242,6 @@ trait ToUpgrade
      * @param string $class
      * @param string $selected
      * 
-     * @since GIP.00.07
      * 
      * @return null|\GIndie\Platform\Controller\Main\WidgetInterface
      */
@@ -255,12 +264,15 @@ trait ToUpgrade
     }
 
     /**
-     * @version     GIP.00.04
-     * @since       2017-04-28
+     * @since 2017-04-28
      * @var array 
      */
     private $_placeholder = [];
 
+    /**
+     * 
+     * @return type
+     */
     public function getWidgets()
     {
         return $this->_placeholder;
@@ -288,29 +300,5 @@ trait ToUpgrade
         return $string;
     }
 
-    /**
-     * @since GIP.00.06
-     * @param string $placeholderId
-     * @return \GIndie\Platform\Controller\Module\Placeholder
-     */
-    public function placeholder($placeholderId)
-    {
-        if (!isset($this->_placeholder[$placeholderId]))
-            $this->_placeholder[$placeholderId] = new \GIndie\Platform\Controller\Module\Placeholder();
-        $rnt = &$this->_placeholder[$placeholderId];
-        return $rnt;
-    }
-
-    /**
-     * Use placeholder() instead
-     * @deprecated since GIP.00.06
-     * @version GIP.00.05
-     * @var string $widgetPlaceholder
-     * @return \GIndie\Platform\Controller\Module\Placeholder
-     */
-    public function configPlaceholder($placeholderId)
-    {
-        return static::placeholder($placeholderId);
-    }
 
 }

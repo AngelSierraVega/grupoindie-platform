@@ -1,17 +1,24 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Description of ModuleINT
+ *
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * 
+ * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform\Controller\Instance\Module
+ * 
+ * @version 0C.10
+ * @since 17-05-23
  */
 
 namespace GIndie\Platform\Controller;
 
 /**
- * Description of ModuleINT
+ * @todo
+ * - Upgrade class
  *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  */
 interface ModuleINT
 {

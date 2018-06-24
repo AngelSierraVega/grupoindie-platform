@@ -1,22 +1,24 @@
 <?php
 
+/**
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * 
+ * @package GIndie\Platform\Controller\Instance\Module
+ * 
+ * @version 0C.10
+ * @since 18-03-13
+ */
+
 namespace GIndie\Platform\Controller\Module;
 
 /**
  * GI-Platform-DVLP - ToDeprecate
- *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
- *
- * @package Platform
- *
- * @version 0C.10
- * @since 18-03-13
  */
 trait ToDeprecate
 {
 
     /**
+     * Use runRecordActionGipEdit instead
      * @param string $action
      * @param string $id
      * @param string $class
@@ -29,7 +31,7 @@ trait ToDeprecate
     }
 
     /**
-     * 
+     * Use runRecordForm instead
      * @param string $action
      * @param string $id
      * @param string $class
@@ -42,6 +44,7 @@ trait ToDeprecate
     }
 
     /**
+     * Use runRecordAction instead
      * @param string $action
      * @param string $id
      * @param string $class
@@ -54,7 +57,7 @@ trait ToDeprecate
     }
 
     /**
-     * 
+     * Use runRecordAction instead
      * @param type $action
      * @param type $id
      * @param type $class
@@ -68,7 +71,7 @@ trait ToDeprecate
     }
 
     /**
-     * 
+     * Use runFormRequest instead
      * @param type $action
      * @param type $id
      * @param type $class
@@ -82,6 +85,7 @@ trait ToDeprecate
     }
 
     /**
+     * Use cnstrctTableFromSearch instead
      * @since 17-??-??
      * @param string $class
      * @return \GIndie\Platform\View\Table

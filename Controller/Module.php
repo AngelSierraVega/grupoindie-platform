@@ -1,7 +1,16 @@
 <?php
 
 /**
- * GIplatform - Module
+ * Description of Module
+ *
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * 
+ * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform\Controller\Instance\Module
+ * 
+ * @version 0C.13
+ * @since 17-05-23
  */
 
 namespace GIndie\Platform\Controller;
@@ -12,22 +21,37 @@ use GIndie\Platform\Model;
 use GIndie\Platform\View;
 
 /**
- * Description of Module
- *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * 
- * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
- *
- * @package Platform
- * @version GIP.00.00 17-05-23
- * @version GIP.00.0?
- * @edit GIP.00.07
- * @edit GIP.00.08 18-03-05
+ * @edit 18-03-05
  * - Created widgetTableFromModel()
+ * @edit 18-05-21
+ * - Use Module\Deprecated;
  */
 abstract class Module extends Platform implements ModuleINT
 {
-    
+
+    /**
+     * @since 18-03-13
+     * @edit 18-03-14
+     * @edit 18-05-21
+     */
+    use Module\ToUpgrade;
+    use Module\ToDeprecate;
+    use Module\Upgrading;
+    use Module\Deprecated;
+
+    /**
+     * @param string $placeholderId
+     * @return \GIndie\Platform\Controller\Module\Placeholder
+     * @since 18-03-30
+     */
+    public function placeholder($placeholderId)
+    {
+        if (!isset($this->_placeholder[$placeholderId]))
+            $this->_placeholder[$placeholderId] = new \GIndie\Platform\Controller\Module\Placeholder();
+        $rnt = &$this->_placeholder[$placeholderId];
+        return $rnt;
+    }
+
     /**
      * @since 18-04-01
      * @return \GIndie\ScriptGenerator\Bootstrap3\Component\Alert
@@ -38,23 +62,13 @@ abstract class Module extends Platform implements ModuleINT
     }
 
     /**
-     * @since 18-03-13
-     * @edit 18-03-14
-     */
-    use Module\ToUpgrade;
-    use Module\ToDeprecate;
-    use Module\Upgrading;
-
-    /**
-     * @version     GIP.00.02
-     * @since       2017-04-23
-     * @var         string 
+     * @since 17-04-23
+     * @var string 
      */
     const NAME = "UnnamedModule";
 
     /**
-     * @version     GIP.00.03
-     * @since       2017-04-21
+     * @since 17-04-21
      */
     public function __construct()
     {
@@ -70,7 +84,8 @@ abstract class Module extends Platform implements ModuleINT
      * @return \GIndie\Platform\View\Form
      * @since 18-06-14
      */
-    protected function cnstrctForm($record, $gipAction = null, $uniqueToken = true, $customTarget = false)
+    protected function cnstrctForm($record, $gipAction = null,
+                                   $uniqueToken = true, $customTarget = false)
     {
         switch ($gipAction)
         {
@@ -114,8 +129,7 @@ abstract class Module extends Platform implements ModuleINT
     /**
      * [description]
      * @abstract
-     * @version     GIP.00.03
-     * @since       2017-04-28
+     * @since 17-04-28
      */
     abstract public function config();
 
@@ -226,7 +240,8 @@ abstract class Module extends Platform implements ModuleINT
         //$modalContent = View\Modal\Content::primary($modalTitle, $form);
         $modalContent = $this->cnstrctModal($modalTitle, $form);
         $modalContent->getHeader()->setBackground("primary");
-        $btn = new Bootstrap3\Component\Button($actionName, Bootstrap3\Component\Button::TYPE_SUBMIT);
+        $btn = new Bootstrap3\Component\Button($actionName,
+                                               Bootstrap3\Component\Button::TYPE_SUBMIT);
         $btn->setForm($form->getId())->setValue("Submit");
         $btn->setContext($actionContext);
         $modalContent->addFooterButton($btn);
