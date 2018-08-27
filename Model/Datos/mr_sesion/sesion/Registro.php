@@ -1,61 +1,25 @@
 <?php
 
 /**
- * GIplatform - Registro 2017-06-11
+ * GIplatform - Registro
  * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
  *
  * @package Platform
  *
- * @version GIP.00.01
+ * @version 0C.30
+ * @since 17-06-11
  */
 
 namespace GIndie\Platform\Model\Datos\mr_sesion\sesion;
 
-use GIndie\Platform\Model\Database\Record;
-
 /**
  * Description of Registro
- * @since GIP.00.01
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @edit 18-08-19
+ * - Commented class
+ * @edit 18-08-26
+ * - Class extends \GIndie\Platform\DataModel\Platform\Session
  */
-class Registro extends Record {
+class Registro extends \GIndie\Platform\DataModel\Platform\Session
+{
     
-//    /**
-//     * Stores attribute definition
-//     * @var array 
-//     */
-//    protected static $_attribute = [];
-    
-    
-
-    const NAME = "Sesión de usuario";
-
-    /**
-     * @since GIP.00.01
-     */
-    //const SCHEMA = "mrdemo_sesion";
-
-    /**
-     * @since GIP.00.01
-     */
-    const TABLE = "sesion";
-
-    /**
-     * @since GIP.00.01
-     */
-    const PRIMARY_KEY = "fk_usuario_cuenta";
-
-    /**
-     * @since GIP.00.01
-     */
-    const AUTOINCREMENT = \FALSE;
-    
-    const DISPLAY_KEY = "php_sess_id";
-    
-    public static function configAttributes()
-    {
-        static::attribute("fk_usuario_cuenta");
-        static::attribute("php_sess_id");
-    }
-
 }

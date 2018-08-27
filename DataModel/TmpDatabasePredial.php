@@ -8,18 +8,21 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version UNDEFINED
+ * @version 0C.70
  * @since 18-08-19
  */
 
 namespace GIndie\Platform\DataModel;
 
+use GIndie\DBHandler\MySQL56;
+use GIndie\Platform\Model\Datos\mr_sesion;
+
 /**
- * Description of TmpDatabasePredial
- *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * Temporal database definition
+ * @todo
+ * - Deprecate and remove class
  */
-class TmpDatabasePredial
+class TmpDatabasePredial extends \MunicipioMineralReforma\Predial\ModeloDatos\BaseDatos
 {
-    //put your code here
+    
 }
