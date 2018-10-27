@@ -14,6 +14,7 @@
 
 namespace GIndie\Platform\DataModel\Platform;
 
+//use GIndie\Platform\Model\Record;
 use GIndie\DBHandler\MySQL56\Instance\DataType;
 use GIndie\Platform\Model;
 use GIndie\Platform\DataModel\Resources\GIPList;
@@ -21,9 +22,12 @@ use GIndie\Platform\DataModel\Resources\GIPList;
 /**
  * Description of AdministrativeUnit
  *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @edit 18-10-27
+ * - Added databaseClassname() from DataModel\AbstractTable
+ * - Class extends Model\RecordAutoincremented 
+ * - Removed PRIMARY_KEY and AUTOINCREMENT
  */
-class AdministrativeUnit extends \GIndie\Platform\DataModel\AbstractTable
+class AdministrativeUnit extends Model\RecordAutoincremented
 {
 
     /**
@@ -46,21 +50,12 @@ class AdministrativeUnit extends \GIndie\Platform\DataModel\AbstractTable
      */
     const TABLE = "pltfrm_ndd_dmnstrtv";
 
-    /**
-     * Llave primaria del modelo de datos.
-     * @since 18-08-26
-     */
-    const PRIMARY_KEY = "id";
 
     /**
      * @since 18-08-26
      */
     const DISPLAY_KEY = "dscrpcn";
 
-    /**
-     * @since 18-08-26
-     */
-    const AUTOINCREMENT = true;
 
     /**
      * Define los atributos del modelo de datos.
@@ -126,6 +121,18 @@ class AdministrativeUnit extends \GIndie\Platform\DataModel\AbstractTable
     public static function defaultRecord()
     {
         return ["id" => null, "parent" => null, "dscrpcn" => "DEFAULT"];
+    }
+
+    /**
+     * 
+     * @return string
+     * @since 18-08-26
+     * @edit 18-10-27
+     * - Added from DataModel\AbstractTable
+     */
+    public static function databaseClassname()
+    {
+        return \GIndie\Platform\DataModel\TmpDatabasePredial::class;
     }
 
 }
