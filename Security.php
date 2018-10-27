@@ -1,11 +1,15 @@
 <?php
 
 /**
- * @copyright (c) 2017 Angel Sierra Vega. Grupo INDIE.
+ * GI-Platform-DVLP - RecordAutoincremented
  *
- * @package Platform
- * 
- * @version GIP.00.0?
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform
+ *
+ * @version 0C.00
+ * @since
  */
 
 namespace GIndie\Platform;
@@ -17,8 +21,6 @@ use Model\Datos;
  * @category Helpers
  * @since GIP.00.03
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * 
- * @version GIP.00.01
  */
 class Security
 {
@@ -85,7 +87,6 @@ class Security
      * @param string $key Cadena de texto a encriptar.
      * @return string|boolean A 60 character string, or FALSE on failure. 
      * 
-     * @version GIP.00.01
      */
     public static function enctript($key)
     {
@@ -143,7 +144,6 @@ class Security
 
     /**
      * @NOTdeprecated since GIP.00.04
-     * @version GIP.00.03
      * 
      * @var string $email
      * @var string $password
@@ -155,10 +155,21 @@ class Security
     public static function authenticateUser()
     {
         $user = Current::Connection()->sanitize($_POST['log_user']);
-        $schema = Model\Datos\mr_sesion\usuario_cuenta\Registro::SCHEMA;
-        $_resultSet = Current::Connection()->select(
-                ["key", "password_su", "password_enct"], $schema, "usuario_cuenta", ["user='{$user}'", "active='1'"], ["LIMIT 1"]
-        );
+//        $schema = Model\Datos\mr_sesion\usuario_cuenta\Registro::SCHEMA;
+//        $_resultSet = Current::Connection()->select(
+//                ["key", "password_su", "password_enct"], $schema, "usuario_cuenta", ["user='{$user}'", "active='1'"], ["LIMIT 1"]
+//        );
+        $tableUser = DataModel\Platform\User::instance();
+        //$tableUser->getName();
+        //$userHandler = new \GIndie\DBHandler\MySQL56\Handler\Table(DataModel\Platform\User::instance());
+        $query = \GIndie\DBHandler\MySQL56\Statement\DataManipulation::select(
+                        [$tableUser->name() => ["key", "password_su", "password_enct"]], [$tableUser->databaseName() => $tableUser->name()]);
+        $query->addConditionEquals("user", $user);
+        $query->addConditionEquals("active", "1");
+        $query->setLimit(1);
+        //var_dump($query . "");
+        $_resultSet = \GIndie\DBHandler\MySQL56::query($query);
+        //var_dump($_resultSet);
         if (count($_resultSet) == 1) {
             $_resultSet = $_resultSet->fetch_assoc();
             $password = Current::Connection()->sanitize($_POST["log_pass"]);
@@ -189,10 +200,10 @@ class Security
      * 
      * @param string $userKey
      * @return boolean
-     * @version GIP.00.04
      */
     public static function startAuthenticatedSession($userKey)
     {
+//        var_dump("startAuthenticatedSession");
         $_SESSION["gip-connection"] = new Model\Database\Connection\SessionHandler();
         //$session = new Model\Datos\mr_sesion\sesion\Registro($userKey);
         $session = Model\Datos\mr_sesion\sesion\Registro::findById($userKey);
@@ -206,12 +217,14 @@ class Security
                 }
                 break;
             default:
-                $data = ["fk_usuario_cuenta" => $userKey,
+                $data = ["pltfrm_cta_fk" => $userKey,
                     "php_sess_id" => \session_id()];
                 $session = Model\Datos\mr_sesion\sesion\Registro::instance($data);
                 //$session = $session->getAttribute("fk_usuario_cuenta")->setValue($userKey);
                 //$session->getAttribute("php_sess_id")->setValue(\session_id());
+//                var_dump("attempt to create session");
                 if ($session->run("gip-create") !== \TRUE) {
+                    //var_dump("successfull create session");
                     throw new Platform\ExceptionLogin("Security: startAuthenticatedSession");
                     return \FALSE;
                 }
@@ -224,7 +237,6 @@ class Security
     /**
      * @deprecated since GIP.00.05
      * @return      boolean
-     * @version     GIP.00.04
      */
     private static function startAuthenticatedConnectionDPR()
     {
@@ -243,12 +255,11 @@ class Security
      * 
      * @param string $userKey
      * @return boolean
-     * @version GIP.00.04
      */
     public static function verifyUniqueSession($userKey)
     {
         $sessionList = new Model\Datos\mr_sesion\sesion\Lista([
-            ["fk_usuario_cuenta" => $userKey],
+            ["pltfrm_cta_fk" => $userKey],
             ["php_sess_id" => \session_id()]
         ]);
         return $sessionList->getElementAt($userKey) !== \FALSE ? \TRUE : \FALSE;

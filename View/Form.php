@@ -1,11 +1,14 @@
 <?php
 /**
- * GIplatform - Form 2017-04-28
- * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+ * GI-Platform-DVLP - 
  *
- * @package Platform
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
  *
- * @version GIP.00.05
+ * @package GIndie\Platform\View
+ *
+ * @version 0C.00
+ * @since 17-04-28
  */
 
 namespace GIndie\Platform\View;
@@ -18,9 +21,7 @@ use GIndie\Platform\Model\Attribute;
 
 /**
  * Description of Form
- * 
- *   
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @edit 18-05-20
  */
 class Form extends HTML5\Category\FormInput\Form
 {
@@ -36,12 +37,10 @@ class Form extends HTML5\Category\FormInput\Form
      * @param string $formId
      * @param \GIndie\Platform\Model\Record $record
      * 
-     * @version     GIP.00.05
      * @edit 2017-06-18 <angel.sierra@grupoindie.com>
      *      - Se agregó token único en formularios
      */
-    public function __construct(Record $record = \NULL, $uniqueToken = \TRUE,
-                                $customTarget = \FALSE)
+    public function __construct(Record $record = \NULL, $uniqueToken = \TRUE, $customTarget = \FALSE)
     {
         parent::__construct();
         $this->_record = $record;

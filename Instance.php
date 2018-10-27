@@ -1,10 +1,16 @@
 <?php
 
 /**
- * GIplatform - Instance 
- * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+ * GI-Platform-DVLP - Instance
  *
- * @package Platform
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform
+ *
+ * @version 0C.03
+ * @since 17-05-23
+ * @todo Upgrade class
  */
 
 namespace GIndie\Platform;
@@ -15,18 +21,14 @@ use \GIndie\Generator\DML\HTML5;
 
 /**
  * Description of Platform
- *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @since GIP.00.00 2017-05-23
  * 
- * @version GIP.00.06
- * @edit GIP.00.07 17-12-26
+ * @edit 17-12-26 
  * - Deprecated methods appNombre(), urlInstitucion(), hostAplicacion(), hostAplicacion()
  *   hostFacturas(), hostRespaldos(), urlAssets(), urlFacturas(), urlRecibos(), rutaFacturas(),
  *   rutaRespaldos(), logoAplicacion(), logoInstitucion(), logoFacturas(), sloganAplicacion()
- * @edit GIP.00.08 17-12-27
+ * @edit 17-12-27 
  * - Used \GIndie\Platform\INIHandler::getCategoryValue in previously deprecated methods.
- * @edit GIP.00.09 18-01-14
+ * @edit 18-01-14 
  * - Bitácora restaurada
  * @todo
  * - Move \Straffsa\SistemaIntegralIngresos funcionality 
@@ -35,13 +37,13 @@ abstract class Instance
 {
 
     /**
-     * @since GIP.00.01
+     * 
      */
     const CONFIG_CLASS = \NULL;
 
     /**
      * Nombre de la aplicación mas el nombre de la instancia.
-     * @edit GIP.00.09
+     * @edit 18-01-14
      */
     public function appNombre()
     {
@@ -50,7 +52,7 @@ abstract class Instance
 
     /**
      * Ruta real a las facturas
-     * @edit GIP.00.08
+     * @edit 17-12-27
      */
     public function urlInstitucion()
     {
@@ -60,7 +62,7 @@ abstract class Instance
     /**
      * 
      * @return type
-     * @edit GIP.00.08
+     * @edit 17-12-27
      */
     public function hostAplicacion()
     {
@@ -69,8 +71,7 @@ abstract class Instance
 
     /**
      * Host de las facturas (ruta real)
-     * @version MR-ADIN.00.03
-     * @deprecated since GIP.00.07
+     * @deprecated since 17-12-26
      */
     public function hostFacturas()
     {
@@ -81,8 +82,7 @@ abstract class Instance
 
     /**
      * Host de los respaldos (ruta real)
-     * @version MR-ADIN.00.03
-     * @deprecated since GIP.00.07
+     * @deprecated since 17-12-26
      */
     public function hostRespaldos()
     {
@@ -93,7 +93,7 @@ abstract class Instance
 
     /**
      * Ruta a la carpeta que almacena los assets de la aplicación
-     * @edit GIP.00.08
+     * @edit 17-12-27
      */
     public function urlAssets()
     {
@@ -103,8 +103,7 @@ abstract class Instance
 
     /**
      * URL a la carpeta que almacena las facturas
-     * @version MR-ADIN.00.03
-     * @deprecated since GIP.00.07
+     * @deprecated since 17-12-26
      */
     public function urlFacturas()
     {
@@ -115,8 +114,8 @@ abstract class Instance
 
     /**
      * URL a la carpeta que almacena los recibos
-     * @version MR-ADIN.00.03
-     * @NOTdeprecated since GIP.00.09
+     * @edit 18-01-14
+     * - Not deprecated 
      */
     public function urlRecibos()
     {
@@ -128,8 +127,8 @@ abstract class Instance
 
     /**
      * Ruta real a las facturas
-     * @version MR-ADIN.00.03
-     * @NOTdeprecated since GIP.00.09
+     * @edit 18-01-14
+     * - Not deprecated 
      */
     public function rutaFacturas()
     {
@@ -141,9 +140,9 @@ abstract class Instance
 
     /**
      * Ruta real a los respaldos
-     * @since GIP.00.07
-     * @version MR-ADIN.00.03
-     * @NOTdeprecated 18-03-23
+     * @since 17-12-26
+     * @edit 18-03-23
+     * - Not deprecated 
      * @edit 18-03-23
      */
     public function rutaRespaldos()
@@ -161,8 +160,7 @@ abstract class Instance
 
     /**
      * Ruta real a los recibos
-     * @version MR-ADIN.00.03
-     * @NOTdeprecated since GIP.00.09
+     * @NOTdeprecated since 18-01-14
      * @todo 
      * - Verificar ruta automática
      */
@@ -179,7 +177,7 @@ abstract class Instance
 
     /**
      * URL al logotipo de la aplicación
-     * @edit GIP.00.08
+     * @edit 17-12-27
      */
     public function logoAplicacion()
     {
@@ -188,7 +186,7 @@ abstract class Instance
 
     /**
      * URL al logotipo de la institución
-     * @edit GIP.00.08
+     * @edit 17-12-27
      */
     public function logoInstitucion()
     {
@@ -197,8 +195,7 @@ abstract class Instance
 
     /**
      * URL al logotipo de las facturas
-     * @version MR-ADIN.00.03
-     * @deprecated since GIP.00.07
+     * @deprecated since 17-12-26
      */
     public function logoFacturas()
     {
@@ -210,7 +207,7 @@ abstract class Instance
 
     /**
      * Slogan
-     * @edit GIP.00.08
+     * @edit 17-12-27
      */
     public function sloganAplicacion()
     {
@@ -226,12 +223,11 @@ abstract class Instance
     /**
      * Obtiene el <b>slogan</b> declarado para la <b>Instancia</b> actual.
      * @author Izmir Sanchez Juarez <izmirreffi@gmail.com>
-     * @since GIndie\Platform::GIP.00.07
-     * @edit 2017-06-17 <angel.sierra@grupoindie.com>
+     * @since 17-12-26
+     * @edit 17-06-17 <angel.sierra@grupoindie.com>
      *      - Se redeclaró la función desde GIndie\Platform.
      *      - Se redeclaró el método de estático a dinámico.
      *      - La constante es accesada desde el archivo de configuración instanciado
-     * @version GIP.00.03
      */
     public function getSloganDPR()
     {
@@ -243,12 +239,11 @@ abstract class Instance
     /**
      * Obtiene la <b>ruta del logo</b> declarada para la <b>Instancia</b> actual.
      * @author Izmir Sanchez Juarez <izmirreffi@gmail.com>
-     * @since GIndie\Platform::GIP.00.07
+     * @since GIndie\Platform::17-12-26
      * @edit 2017-06-17 <angel.sierra@grupoindie.com>
      *      - Se redeclaró la función desde GIndie\Platform.
      *      - Se redeclaró el método de estático a dinámico.
      *      - La constante es accesada desde el archivo de configuración instanciado
-     * @version GIP.00.03
      */
     public function getImageBrandDPR()
     {
@@ -259,7 +254,6 @@ abstract class Instance
 
     /**
      * Obtiene la <b>ruta del proyecto</b>.
-     * @version GIP.00.0?
      */
     public static function getProjectPathDPR()
     {
@@ -271,7 +265,6 @@ abstract class Instance
 
     /**
      * Ruta a la carpeta que almacena las facturas
-     * @version MR-ADIN.00.03
      */
     public static function hostDPR()
     {
@@ -282,7 +275,6 @@ abstract class Instance
 
     /**
      * Ruta a la carpeta que almacena las facturas
-     * @version MR-ADIN.00.03
      */
     public static function pathToFacturasDPR()
     {
@@ -293,7 +285,6 @@ abstract class Instance
 
     /**
      * Ruta a la carpeta que almacena los recibos
-     * @version MR-ADIN.00.03
      */
     public static function pathToRecibosDPR()
     {
@@ -303,7 +294,6 @@ abstract class Instance
     }
 
     /**
-     * @version GIP.00.0?
      */
     public static function getAssetsPathDPR()
     {
@@ -316,23 +306,18 @@ abstract class Instance
     /**
      * @todo Definir links desde el archivo global de configuración
      * @var null|array 
-     * @since GIP.00.01
      */
     private static $_LINKS = [];
 
     /**
      * @deprecated since GIP.00.02
      * @var array 
-     * @since GIP.00.01
-     * @version GIP.00.02
      */
     private static $_MODULES = [];
 
     /**
      * Crea una nueva instancia de la plataforma
      * @final
-     * @since GIP.00.01
-     * @version GIP.00.02
      */
     final private function __construct()
     {
@@ -347,14 +332,11 @@ abstract class Instance
     /**
      * []
      * @abstract
-     * @since GIP.00.01
      */
     abstract public function config();
 
     /**
-     * @deprecated  since GIP.00.02
-     * @since GIP.00.01
-     * @version GIP.00.02
+     * @deprecated
      * 
      * @param string $classname
      * @param boolean|string $config true for show, false for hide, string for group
@@ -378,7 +360,6 @@ abstract class Instance
 
     /**
      * 
-     * @since GIP.00.02
      * 
      * @param string $classname
      * @param string|null $href Null for hiding
@@ -393,7 +374,6 @@ abstract class Instance
 
     /**
      * 
-     * @since GIP.00.01
      * 
      * @param string $classname
      * @param string|null $href Null for hiding
@@ -415,7 +395,6 @@ abstract class Instance
 
     /**
      * 
-     * @since GIP.00.01
      * 
      * @param string $classname
      * @param string|null $href Null for hiding
@@ -430,7 +409,6 @@ abstract class Instance
 
     /**
      * [Despliegue de una excepción al usuario final]
-     * @since GIP.00.01
      * 
      * @param \Exception $e
      * @todo Funcionalidad y pruebas
@@ -442,7 +420,6 @@ abstract class Instance
 
     /**
      * Verifica si se está intentando autenticar una sesión
-     * @since GIP.00.04
      */
     private static function _isLoginAttempt()
     {
@@ -460,7 +437,6 @@ abstract class Instance
 
     /**
      * Verifica si es posible reiniciar una sesión
-     * @since GIP.00.04
      */
     private static function _isRestartAttempt()
     {
@@ -477,10 +453,10 @@ abstract class Instance
     /**
      * [description]
      * 
-     * @since GIP.00.01
-     * @version GIP.00.05
-     * @edit GIP.00.09
+     * @edit 18-01-14
      * @edit 18-04-01
+     * @edit 18-10-27
+     * - Se eliminó referencia a SII
      */
     final public static function run()
     {
@@ -502,19 +478,22 @@ abstract class Instance
                      */
                     $sii = \GIndie\Platform\INIHandler::getCategoryValue("Plugins",
                                                                          "SistemaIntegralIngresos");
+                    $sii = true;
                     if ($sii) {
                         $data = [];
-                        $data['fk_usuario_cuenta'] = \GIndie\Platform\Current::User()->getId();
+                        $data['pltfrm_cta_fk'] = \GIndie\Platform\Current::User()->getId();
                         $data['action'] = "gip-login";
                         $data['timestamp'] = \time();
                         $nota = "Ingresó al sistema con correo y contraseña";
-                        $data['notas'] = \filter_var($nota,
+                        $data['notes'] = \filter_var($nota,
                                                      \FILTER_SANITIZE_SPECIAL_CHARS);
-                        $bitacora = \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
+//                        $bitacora = \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
+                        $bitacora = DataModel\Platform\LogUser::instance($data);
                         $bitacora->run("gip-inner-create");
                     }
                 }
                 if (static::_isRestartAttempt()) {
+//                    var_dump("_isRestartAttempt");
                     Security::restartSession();
                 }
             } catch (\GIndie\Platform\ExceptionLogin $e) {
@@ -533,6 +512,7 @@ abstract class Instance
                 }
             } 
             catch (\Exception $e) {
+//                var_dump($e);
                 \header("Refresh: 1; url=" . $_SERVER['PHP_SELF']);
                 return "Exception: " . $e->getMessage();
             }
@@ -599,7 +579,6 @@ abstract class Instance
             return Current::Module()->run($_action, $_action_id, $_class,
                                           $_selected_id);
         } catch (\Exception $e) {
-            //return "TEST";
             $GLOBALS["gip-error"] = static::displayException($e);
             return static::displayException($e);
         }

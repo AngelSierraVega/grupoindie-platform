@@ -1,13 +1,13 @@
 <?php
 
 /**
- * AdministracionIngresos - caja_cobro 2017-05-31
+ * AdministracionIngresos - caja_cobro
  * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
  *
- * @package MineralDeLaReforma
- * @subpackage AdmininstracionIngresos
+ * @package GIndie\Platform\Model
  *
- * @version MR-ADIN.00.01
+ * @version DEPRECATED
+ * @since 17-05-31
  */
 
 namespace GIndie\Platform\Model\MR;
@@ -16,7 +16,6 @@ use GIndie\Platform\Model\Database\Record;
 
 /**
  * Description of caja_cobro
- * @since MR-ADIN.00.01
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  */
 class caja_cobro extends Record {

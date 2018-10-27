@@ -18,7 +18,9 @@ use GIndie\Platform\Model\Database\Table;
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * @since 2017-05-08
- * @version     GIP.00.01
+ * @package GIndie\Platform\Model
+ *
+ * @version DEPRECATED
  */
 class Roles extends Table {
     
@@ -35,13 +37,11 @@ class Roles extends Table {
 
     /**
      * The name of the database
-     * @version     GIP.00.01
      */
     const DATABASE = "gip_session";
 
     /**
      * The name of the table
-     * @version     GIP.00.01
      */
     const TABLE = "user_role";
 

@@ -1,8 +1,14 @@
 <?php
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * GI-Platform-DVLP - 
+ *
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform\View
+ *
+ * @version 0C.00
+ * @since 
  */
 
 namespace GIndie\Platform\View;
@@ -13,6 +19,7 @@ use GIndie\Platform\Model\Attribute;
  * Description of Input
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @edit 18-03-22
  */
 class Input
 {
@@ -21,7 +28,6 @@ class Input
      * 
      * @param       \GIndie\Platform\Model\Attribute $attribute
      * 
-     * @version     GIP.00.04
      * @edit 2017-05-31 <robertogs.soft@hotmail.com> 
      *      - Evalua si el elemento esta required
      * @edit 2017-06-12 <angel.sierra.vega@gmail.com>

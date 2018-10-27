@@ -1,25 +1,28 @@
 <?php
 
-/*
- * Copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+/**
+ * GI-Platform-DVLP - Attribute
  *
- * This software is protected under GNU: you can use, study and modify it
- * but not distribute it under the terms of the GNU General Public License 
- * as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform
+ *
+ * @version 0C.03
+ * @since 17-04-23
+ * @todo Upgrade class
  */
 
 namespace GIndie\Platform\Model;
 
+use GIndie\DBHandler\MySQL56\Instance\ColumnDefinition;
+use GIndie\DBHandler\MySQL56\Instance\DataType;
+
 /**
  * Description of Attribute
  * 
- * @since       2017-04-23
- * @version     GIP.00.07
- * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
- *
  */
-class Attribute
+class Attribute //extends ColumnDefinition
 {
 
     /**
@@ -88,7 +91,6 @@ class Attribute
     const TYPE_CURRENCY = 11;
 
     /**
-     * @since GIP.00.09
      * @var int TYPE_LINK
      */
     const TYPE_LINK = 12;
@@ -118,16 +120,14 @@ class Attribute
     }
 
     /**
-     * @version GIP.00.07
-     * @since 2017-08-22
+     * @since 17-08-22
      *
      * @var string 
      */
     private $_help = \NULL;
 
     /**
-     * @version GIP.00.07
-     * @since 2017-08-22
+     * @since 17-08-22
      */
     public function getHelp()
     {
@@ -135,8 +135,7 @@ class Attribute
     }
 
     /**
-     * @version GIP.00.07
-     * @since 2017-08-22
+     * @since 17-08-22
      * @return \GIndie\Platform\Model\Attribute
      */
     public function setHelp($text)
@@ -146,16 +145,14 @@ class Attribute
     }
 
     /**
-     * @version     GIP.00.04
-     * @since       2017-08-03
+     * @since 17-08-03
      *
      * @var string 
      */
     private $_size = "col-xs-12";
 
     /**
-     * @version     GIP.00.04
-     * @since       2017-08-03
+     * @since 17-08-03
      */
     public function getSize()
     {
@@ -163,8 +160,7 @@ class Attribute
     }
 
     /**
-     * @version     GIP.00.04
-     * @since       2017-08-03
+     * @since 17-08-03
      * @return      \GIndie\Platform\Model\Attribute
      */
     public function setSize($size)
@@ -174,16 +170,14 @@ class Attribute
     }
 
     /**
-     * @version     GIP.00.03
-     * @since       2017-04-29
+     * @since 17-04-29
      *
      * @var string 
      */
     private $_name;
 
     /**
-     * @version     GIP.00.03
-     * @since       2017-04-29
+     * @since 17-04-29
      */
     public function getName()
     {
@@ -197,7 +191,6 @@ class Attribute
     private $_label;
 
     /**
-     * @version     GIP.00.01
      * @param       type $label
      * @return      \GIndie\Platform\Model\Attribute
      */
@@ -208,7 +201,6 @@ class Attribute
     }
 
     /**
-     * @version     GIP.00.01
      */
     public function getLabel()
     {
@@ -222,9 +214,24 @@ class Attribute
         $this->_restrictions = $restrictions;
     }
 
-    private $_notNull = \FALSE;
+    /**
+     *
+     * @var boolean
+     * @todo
+     * - Deprecate var 
+     */
+    private $_notNull = false;
 
-    public function setNotNull($value = \TRUE)
+    /**
+     * If neither NULL nor NOT NULL is specified, the column is treated as though NULL had 
+     * been specified.
+     * 
+     * @param boolean $value 
+     * @return \Self
+     * 
+     * @since 18-08-18
+     */
+    public function setNotNull($value = true)
     {
         $this->_notNull = $value;
         return $this;
@@ -248,7 +255,6 @@ class Attribute
      * @return $this
      * 
      * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
-     * @version     GIP.00.04
      */
     public function setRestrictionRequired($value = \TRUE)
     {
@@ -276,14 +282,56 @@ class Attribute
     private $_typeOptions;
 
     /**
-     * @version     GIP.00.04
      * @param       type $type
      * @return      \GIndie\Platform\Model\Attribute
      */
-    public function setType($type, $typeOptions = \NULL)
+    public function setType($type, $typeOptions = null)
     {
         $this->_type = $type;
         $this->_typeOptions = $typeOptions;
+//        switch ($type)
+//        {
+//            case static::TYPE_STRING:
+//                parent::__construct(new DataType(DataType::text()));
+//                break;
+//            case static::TYPE_NUMERIC:
+//                parent::__construct(new DataType(DataType::integer()));
+//                break;
+//            case static::TYPE_BOOLEAN:
+//                parent::__construct(new DataType(DataType::tinyint(1)));
+//                break;
+//            case static::TYPE_DATE:
+//                parent::__construct(new DataType(DataType::date()));
+//                break;
+//            case static::TYPE_FOREIGN_KEY:
+//                throw new \Exception("@todo");
+//                break;
+//            case static::TYPE_PASSWORD:
+//                parent::__construct(new DataType(DataType::varchar(300)));
+//                break;
+//            case static::TYPE_EMAIL:
+//                parent::__construct(new DataType(DataType::varchar(500)));
+//                break;
+//            case static::TYPE_TIMESTAMP:
+//                parent::__construct(new DataType(DataType::timestamp()));
+//                break;
+//            case static::TYPE_OPTIONGROUP:
+//                throw new \Exception("@todo");
+//                break;
+//            case static::TYPE_ENUM:
+//                parent::__construct(new DataType(DataType::enum($typeOptions)));
+//                break;
+//            case static::TYPE_HIDDEN:
+//                throw new \Exception("@todo");
+//                break;
+//            case static::TYPE_CURRENCY:
+//                parent::__construct(new DataType(DataType::decimal(12, 2)));
+//                break;
+//            default:
+//                throw new \Exception("@todo type: {$type}");
+//                break;
+//        }
+
         return $this;
     }
 
@@ -321,8 +369,7 @@ class Attribute
     {
         $this->_type = static::TYPE_FOREIGN_KEY;
         if (!\is_subclass_of($listClass, ListSimple::class, \TRUE)) {
-            \trigger_error($listClass . " no es de tipo ListSimple en " . get_called_class(),
-                           \E_USER_ERROR);
+            \trigger_error($listClass . " no es de tipo ListSimple en " . get_called_class(), \E_USER_ERROR);
         }
         $this->_fk_class = $listClass;
         //$this->_fk_column = $columnName;
@@ -362,7 +409,7 @@ class Attribute
     }
 
     /**
-     * @version     GIP.00.01
+     * 
      */
     public function getType()
     {
@@ -370,7 +417,6 @@ class Attribute
     }
 
     /**
-     * @version     GIP.00.01
      */
     public function getTypeOptions()
     {
@@ -382,8 +428,6 @@ class Attribute
     /**
      * 
      * @param boolean $value
-     * 
-     * @version     GIP.00.04
      */
     public function excludeFromForm($value = \TRUE)
     {

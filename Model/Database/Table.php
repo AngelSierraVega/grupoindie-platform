@@ -1,12 +1,16 @@
 <?php
 
-/*
- * Copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+/**
+ * GI-Platform-DVLP - ListSimple
  *
- * This software is protected under GNU: you can use, study and modify it
- * but not distribute it under the terms of the GNU General Public License 
- * as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform\Model
+ *
+ * @version DEPRECATED
+ * @since 17-05-08
+ * @todo Upgrade class
  */
 
 namespace GIndie\Platform\Model\Database;
@@ -15,12 +19,10 @@ use GIndie\Platform\Current;
 
 /**
  *
- * @since       2017-05-08
- * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @edit 18-02-27
  * 
- * @version     GIP.00.01
  */
 abstract class Table extends \GIndie\Platform\Model\Table
 {
-
+    
 }

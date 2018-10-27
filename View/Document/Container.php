@@ -7,7 +7,7 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0C.00 DOING
+ * @version 0C.30 
  * 
  * @todo
  * - Funcional class with node
@@ -51,8 +51,7 @@ class Container extends Bootstrap3\Grid
      * 
      * @since 17-04-21
      */
-    public function addWidget($id, /* \GIndie\Platform\View\Widget */
-                              $widget = NULL)
+    public function addWidget($id, /* \GIndie\Platform\View\Widget */ $widget = NULL)
     {
         $this->_widgets[$id] = $widget == NULL ? "" : $widget;
     }
@@ -75,12 +74,12 @@ class Container extends Bootstrap3\Grid
              * @param widget_id     Es el id logico de la base de datos (Id padre en base de datos),
              */
             function triggerInteraction(widget_id, selected = "NONE") {
-//                console.log("triggerInteraction");
-               // console.log("'triggerInteraction' called widget_id(" + widget_id + ") selected(" + selected + ")");
-               // console.log(relaciones);
+        //                console.log("triggerInteraction");
+                // console.log("'triggerInteraction' called widget_id(" + widget_id + ") selected(" + selected + ")");
+                // console.log(relaciones);
                 if (relaciones[widget_id]) {
                     if (relaciones[widget_id].length > 0) {
-                   //     console.log("Calling 'gipInteraction'");
+                        //     console.log("Calling 'gipInteraction'");
                         gipInteraction(relaciones[widget_id], selected);
                     }
             }
@@ -93,7 +92,7 @@ class Container extends Bootstrap3\Grid
              * @param widget_id     Es el id logico de la base de datos (Id padre en base de datos),
              */
             function triggerParents(widget_id, selected) {
-//                console.log("triggerParents");
+        //                console.log("triggerParents");
                 var refresh_parents = [];
                 $.each(relaciones, function (index, val) {
                     if (val.includes(widget_id) > 0) {
@@ -140,7 +139,7 @@ class Container extends Bootstrap3\Grid
 
 
             function gipInteraction(slaves, selected) {
-//                console.log("gipInteraction");
+        //                console.log("gipInteraction");
                 $.each(slaves, function (index, el) {
                     //console.log("'Clicking' widget-reload");
                     $("#" + el).find('button[gip-action="widget-reload"]').trigger('click');
@@ -191,6 +190,8 @@ class Container extends Bootstrap3\Grid
      * @since 18-06-24
      * @edit 18-07-29
      * - Added ID to placeholders: o-o-o, i-i-i
+     * @edit 18-10-18
+     * - Added placeholders: i-ii-i-large, i-ii-ii-small
      */
     private function tmpContent()
     {
@@ -205,6 +206,15 @@ class Container extends Bootstrap3\Grid
         <div class="row ">
             <div id="i-i-i" gip-placeholder="i-i-i" class="col-xs-12">
                 <?php echo $this->_widgets["i-i-i"]; ?>
+            </div>
+        </div>
+
+        <div class="row ">
+            <div id="i-ii-i-large" class="col-sm-8">
+                <?php echo $this->_widgets["i-ii-i-large"]; ?>
+            </div>
+            <div id="i-ii-ii-small" class="col-sm-4">
+                <?php echo $this->_widgets["i-ii-ii-small"]; ?>
             </div>
         </div>
 
@@ -224,7 +234,7 @@ class Container extends Bootstrap3\Grid
                 <?php echo $this->_widgets["i-ii-ii"]; ?>
             </div>
         </div>
-        
+
         <div class="row">
             <div id="i-iii-i" class="col-sm-4">
                 <?php echo $this->_widgets["i-iii-i"]; ?>

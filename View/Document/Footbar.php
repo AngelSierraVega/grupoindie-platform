@@ -1,11 +1,14 @@
 <?php
-/*
- * Copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+/**
+ * GI-Platform-DVLP - 
  *
- * This software is protected under GNU: you can use, study and modify it
- * but not distribute it under the terms of the GNU General Public License 
- * as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform\View
+ *
+ * @version 0C.00
+ * @since 17-02-08
  */
 
 namespace GIndie\Platform\View\Document;
@@ -16,11 +19,7 @@ use GIndie\Generator\DML\HTML5\Bootstrap3;
 
 /**
  * Footbar
- * 
- * @since 2017-02-08
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * 
- * @version 00.B0
+ * @edit 18-05-20
  */
 class Footbar extends HTML5\Category\StylesSemantics\Footer {
 

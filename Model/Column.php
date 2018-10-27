@@ -1,9 +1,16 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * GI-Platform-DVLP - Attribute
+ *
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform
+ *
+ * @version 0C.00
+ * @since 17-04-23
+ * @todo Upgrade class
  */
 
 namespace GIndie\Platform\Model;
@@ -11,10 +18,7 @@ namespace GIndie\Platform\Model;
 /**
  * Description of Attribute
  * 
- * @since       2017-04-23
- * @version     GIP.00.00.02
- * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
- *
+ * @edit 17-04-23
  */
 class Column
 {
@@ -71,7 +75,6 @@ class Column
     private $_label;
 
     /**
-     * @version     GIP.00.01
      * @param       type $label
      * @return      \GIndie\Platform\Model\Attribute
      */
@@ -125,8 +128,7 @@ class Column
     //private $_value = "";
 
     /**
-     * @deprecated since GIP.00.00.02
-     * @version     GIP.00.01
+     * @deprecated since 17-04-23
      * @param       type $value
      * @return      \GIndie\Platform\Model\Attribute
      */
@@ -137,8 +139,7 @@ class Column
     }
 
     /**
-     * @deprecated since GIP.00.00.02
-     * @version     GIP.00.01
+     * @deprecated since 17-04-23
      */
     public function getValueDPR()
     {
@@ -148,7 +149,6 @@ class Column
     private $_type = "string";
 
     /**
-     * @version     GIP.00.01
      * @param       type $type
      * @return      \GIndie\Platform\Model\Attribute
      */
@@ -185,9 +185,9 @@ class Column
         $this->_fk_column = $columnName;
         return $this;
     }
-    
+
     private $_enumOptions = [];
-    
+
     /**
      * @todo Evaluar que $className herede o sea de tipo Record
      * @param type $className
@@ -199,8 +199,9 @@ class Column
         $this->_enumOptions = $enumOptions;
         return $this;
     }
-    
-    public function getEnumOptions(){
+
+    public function getEnumOptions()
+    {
         return $this->_enumOptions;
     }
 
@@ -215,7 +216,6 @@ class Column
     }
 
     /**
-     * @version     GIP.00.01
      */
     public function getType()
     {

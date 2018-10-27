@@ -8,7 +8,7 @@ namespace GIndie\Platform\Model;
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
  *
- * @package Platform
+ * @package GIndie\Platform\Model
  *
  * @version 0C.10
  * @since 18-03-30

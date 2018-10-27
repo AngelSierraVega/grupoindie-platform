@@ -1,12 +1,15 @@
 <?php
 
-/*
- * Copyright (C) 2016 Angel Sierra Vega. Grupo INDIE.
+/**
+ * GI-Platform-DVLP - 
  *
- * This software is protected under GNU: you can use, study and modify it
- * but not distribute it under the terms of the GNU General Public License 
- * as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform\View
+ *
+ * @version 0C.00
+ * @since 17-01-05
  */
 
 namespace GIndie\Platform\View;
@@ -17,10 +20,7 @@ use GIndie\Generator\DML\HTML5\Bootstrap3;
 /**
  * Document
  * 
- * @since       2017-01-05
- * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
- * 
- * @version MR-ADIN.00.02
+ * @edit 18-06-24
  */
 class Document extends Bootstrap3\Component\Document
 {

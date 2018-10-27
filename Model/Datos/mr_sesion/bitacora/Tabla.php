@@ -4,10 +4,8 @@
  * AdministracionIngresos - Tabla 2017-06-10
  * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
  *
- * @package MineralDeLaReforma
- * @subpackage AdmininstracionIngresos
- *
- * @version MR-ADIN.00.01
+ * @package GIndie\Platform\Model\Datos
+ * @version DEPRECATED
  */
 
 namespace GIndie\Platform\Model\Datos\mr_sesion\bitacora;

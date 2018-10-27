@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0C.70
+ * @version 0C.A0
  * @since 18-08-25
  */
 
@@ -22,6 +22,8 @@ use GIndie\DBHandler\MySQL56\Instance\ColumnDefinition;
 /**
  * @edit 18-08-19
  * - Commented class
+ * @edit 18-08-30
+ * - Added defineRecordRestrictions()
  */
 class User extends Record
 {
@@ -98,7 +100,8 @@ class User extends Record
         /**
          * Attribute pltfrm_ndd_dmnstrtv_fk
          */
-        static::attribute("pltfrm_ndd_dmnstrtv_fk");
+        static::attribute("pltfrm_ndd_dmnstrtv_fk")->setTypeFK(\GIndie\Platform\DataModel\Resources\GIPList\Units::class);
+        static::attribute("pltfrm_ndd_dmnstrtv_fk")->setLabel("Unidad Administrativa");
     }
 
     /**
@@ -106,6 +109,8 @@ class User extends Record
      * @edit 18-08-26
      * - Removed id
      * - Added referenceDefinition()
+     * @edit 18-10-11
+     * - Added virtual column nbr_cmplt
      */
     protected static function tableDefinition()
     {
@@ -119,12 +124,15 @@ class User extends Record
          */
         static::columnDefinition("key", DataType::varchar(8));
         static::columnDefinition("key")->setNotNull();
+        static::referenceDefinition()->setPrimaryKey("key");
+//        static::referenceDefinition()->addUniqueKey("key", "idxunique_key_pltfrm_cta");
 
         /**
          * Column user
          */
         static::columnDefinition("user", DataType::varchar(255));
         static::columnDefinition("user")->setNotNull();
+        static::referenceDefinition()->addUniqueKey("user", "idxdsply_pltfrm_cta");
 
         /**
          * Column password_su 
@@ -141,7 +149,7 @@ class User extends Record
         /**
          * Column active
          */
-        static::columnDefinition("active", DataType::tinyint(1));
+        static::columnDefinition("active", DataType::tinyint(1, true));
         static::columnDefinition("active")->setDefaultValue(1);
 
         /**
@@ -149,7 +157,10 @@ class User extends Record
          */
         static::columnDefinition("pltfrm_ndd_dmnstrtv_fk", DataType::serializedBigint());
         static::columnDefinition("pltfrm_ndd_dmnstrtv_fk")->setNotNull();
-        
+        $instance = AdministrativeUnit::instance();
+        $instance->columns();
+        static::referenceDefinition()->addForeignKey("pltfrm_ndd_dmnstrtv_fk", $instance, "pltfrm_cta_FK_pltfrm_ndd_dmnstrtv");
+
         /**
          * Column trtmnt
          */
@@ -168,29 +179,36 @@ class User extends Record
         static::columnDefinition("ap_mat", DataType::varchar(255));
 
         /**
+         * Virtual column nbr_cmplt
+         */
+        static::columnDefinition("nbr_cmplt", DataType::varchar(765));
+        static::columnDefinition("nbr_cmplt")->setGenerated("(CONCAT_WS(' ',trtmnt,nmbrs,ap_pat,ap_mat))", "STORED");
+
+        /**
          * Reference Definition
          */
-        static::referenceDefinition()->setPrimaryKey("key");
-        static::referenceDefinition()->addUniqueKey("key", "idxunique_key_pltfrm_cta");
-        static::referenceDefinition()->addUniqueKey("user", "idxdsply_pltfrm_cta");
-        $instance = AdministrativeUnit::instance();
-        $instance->columns();
-        static::referenceDefinition()->addForeignKey("pltfrm_ndd_dmnstrtv_fk", $instance, "pltfrm_cta_FK_pltfrm_ndd_dmnstrtv");
     }
 
     /**
      * 
      * @return array
      * @since 18-08-26
+     * @edit 18-10-11
+     * - Added projectHandler
      */
     public static function defaultRecord()
     {
-        return [
-            "key" => "1a0108f3",
-            "user" => "admin@localhost",
-            "password_su" => "$2y$10\$CO8ruMmANUfiyF/vupP//um45QCHqaxc9Z2dT8OCkt/uaZyuI3jQO",
-            "pltfrm_ndd_dmnstrtv_fk" => 1
-        ];
+        return [[
+        "key" => "1a0108f3",
+        "user" => "admin@localhost",
+        "password_su" => "$2y$10\$CO8ruMmANUfiyF/vupP//um45QCHqaxc9Z2dT8OCkt/uaZyuI3jQO",
+        "pltfrm_ndd_dmnstrtv_fk" => 1
+            ], [
+                "key" => "1a0108f4",
+                "user" => "projectHandler@localhost",
+                "password_su" => "$2y$10\$CO8ruMmANUfiyF/vupP//um45QCHqaxc9Z2dT8OCkt/uaZyuI3jQO",
+                "pltfrm_ndd_dmnstrtv_fk" => 1
+        ]];
     }
 
     /**
@@ -209,6 +227,18 @@ class User extends Record
         $_POST["password_su"] = \GIndie\Platform\Security::enctript($_POST["password_su"]);
         $_POST["password_enct"] = "NULL";
         return parent::_create($postReading);
+    }
+
+    /**
+     * Define los permisos de usuario
+     * @since 18-08-30
+     */
+    public static function defineRecordRestrictions()
+    {
+        static::requireRoles("gip-create", ["AS"]);
+        static::requireRoles("gip-edit", ["AS"]);
+        static::requireRoles("gip-delete", ["AS"]);
+        static::requireRoles("gip-state", ["AS"]);
     }
 
 }

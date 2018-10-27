@@ -1,12 +1,16 @@
 <?php
 
-/*
- * Copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+/**
+ * GI-Platform-DVLP - SessionHandler
  *
- * This software is protected under GNU: you can use, study and modify it
- * but not distribute it under the terms of the GNU General Public License 
- * as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform\Model
+ *
+ * @version 0C.00
+ * @since 17-01-15
+ * @todo Upgrade class
  */
 
 namespace GIndie\Platform\Model\Database;
@@ -16,10 +20,6 @@ namespace GIndie\Platform\Model\Database;
  * 
  * @abstract
  * 
- * @since       2017-01-15
- * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
- * 
- * @version     GIP.00.03
  */
 abstract class Connection
 {
@@ -28,7 +28,6 @@ abstract class Connection
      * The php mysql connection object.
      * 
      * @var         \mysqli 
-     * @version     GIP.00.01
      */
     private $_conection;
 
@@ -36,7 +35,6 @@ abstract class Connection
      * The name of the host to connect.
      * 
      * @var         string 
-     * @version     GIP.00.01
      */
     private static $HOST = "localhost";
 
@@ -79,7 +77,6 @@ abstract class Connection
      * 
      * @throws      \Exception
      * 
-     * @version     GIP.00.01
      */
     function __construct()
     {
@@ -103,7 +100,6 @@ abstract class Connection
      *                  <b>FALSE</b> on failure. For SELECT, SHOW, DESCRIBE or EXPLAIN 
      *                  will return a <b>\Traversable</b> object. For other successful 
      *                  queries will return <b>TRUE</b>.
-     * @version GIP.00.02
      */
     public function query($query)
     {
@@ -156,10 +152,8 @@ abstract class Connection
      * @return \Traversable|boolean
      *                  <b>FALSE</b> on error. Otherwize will return a 
      *                  <b>\Traversable</b> object.
-     * @version GIP.00.01
      */
-    public function select(array $selectors, $schema = \NULL, $table = \NULL, array $conditions
-    = [], array $params = [])
+    public function select(array $selectors, $schema = \NULL, $table = \NULL, array $conditions = [], array $params = [])
     {
         //$selectors = ["*"];
 
@@ -263,7 +257,6 @@ abstract class Connection
      * @author Izmir Sanchez Juarez <izmirreffi@gmail.com>
      * @edit Angel Sierra Vega <angel.sierra.vega@gmail.com>
      *      - update funcional
-     * @version GIP.00.03
      */
     public function update(\GIndie\Platform\Model\Record $newRecordData, $id)
     {
@@ -317,7 +310,6 @@ abstract class Connection
      *                  <b>FALSE</b> on error. Otherwize will return a
      *                  <b>\Traversable</b> object.
      * @author          Izmir Sanchez Juarez <izmirreffi@gmail.com>
-     * @version         GIP.00.02
      */
     public function delete($deleteRecord)
     {
@@ -344,11 +336,10 @@ abstract class Connection
      *                  <b>FALSE</b> on error. Otherwize will return a
      *                  <b>\Traversable</b> object.
      * @author          Angel Sierra Vega <angel.sierra@grupoindie.com>
-     * @version         GIP.00.03
      */
     public function create(\GIndie\Platform\Model\Record $newRecordData)
     {
-
+//        static::columnDefinition("nmbr_cmplt")
         //var_dump($newRecordData);
         $PKname = $newRecordData::PRIMARY_KEY;
         $PKvalue = $newRecordData->getValueOf($newRecordData::PRIMARY_KEY);

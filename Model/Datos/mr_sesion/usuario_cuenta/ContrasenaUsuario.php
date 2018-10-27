@@ -4,9 +4,8 @@
  * GIplatform - ContrasenaUsuario 2017-06-16
  * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
  *
- * @package Platform
- *
- * @version GIP.00.02
+ * @package GIndie\Platform\Model\Datos
+ * @version DEPRECATED
  */
 
 namespace GIndie\Platform\Model\Datos\mr_sesion\usuario_cuenta;
@@ -38,14 +37,18 @@ class ContrasenaUsuario extends Registro
      * 
      * @param boolean $postReading
      * @return string|boolean
-     * @version GIP.00.02 - Se agregó validación de contraseñas SU/ENCT
+     * @edit 
+     * - Se agregó validación de contraseñas SU/ENCT
      */
     public function _update($postReading = \TRUE)
     {
-        if (\GIndie\Platform\Security::validate($_POST["password_enct"],
-                                                $this->getValueOf("password_su"))) {
-            return "Necesita crear una contraseña distinta a la contraseña de uso único. No se pudo actualizar la contraseña.";
+
+        if (\GIndie\Platform\Security::validate($_POST["password_enct"], $this->getValueOf("password_su"))) {
+            throw new \Exception("Necesita crear una contraseña distinta a la contraseña de uso único. No se pudo actualizar la contraseña.");
+            //return "Necesita crear una contraseña distinta a la contraseña de uso único. No se pudo actualizar la contraseña.";
         } else {
+            //var_dump("entro");
+            //throw new \Exception("entro");
             $_POST["password_su"] = "NULL";
             $_POST["password_enct"] = \GIndie\Platform\Security::enctript($_POST["password_enct"]);
             if (parent::_update($postReading)) {
@@ -53,6 +56,7 @@ class ContrasenaUsuario extends Registro
                 return \TRUE;
             }
         }
+        throw new \Exception("No se pudo actualizar la contraseña. Intente de nuevo por favor.");
         return \FALSE;
     }
 

@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * GI-Platform-DVLP - RecordAutoincremented
+ *
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform\View
+ *
+ * @version 0C.00
+ * @since 
+ */
+
 namespace GIndie\Platform\View\Document\Footbar;
 
 use GIndie\Platform\Current;
@@ -7,6 +19,9 @@ use GIndie\Generator\DML\HTML5\Category\StylesSemantics;
 use GIndie\Generator\DML\HTML5\Category\Links\Anchor;
 use GIndie\Generator\DML\HTML5\Category\StylesSemantics\Div;
 
+/**
+ * @edit 18-02-27
+ */
 class Content extends Div
 {
 

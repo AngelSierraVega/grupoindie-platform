@@ -36,9 +36,7 @@ trait ToUpgrade
      * @edit 18-04-03
      * - Removed autosubmit
      */
-    protected function widgetTableSearch($_classname, array $_searchColumns,
-                                         array $_params = [],
-                                         array $buttons = [])
+    protected function widgetTableSearch($_classname, array $_searchColumns, array $_params = [], array $buttons = [])
     {
         $record = $_classname::RelatedRecord();
         $record::instance();
@@ -51,9 +49,7 @@ trait ToUpgrade
             if (\is_array($attribute)) {
                 foreach ($attribute as $key => $value) {
                     $recordAttr = $record::getAttribute($key);
-                    $tmpAttr = \GIndie\Platform\View\Input::constructFromAttribute($recordAttr,
-                                                                                   $value,
-                                                                                   \NULL);
+                    $tmpAttr = \GIndie\Platform\View\Input::constructFromAttribute($recordAttr, $value, \NULL);
                 }
             } else {
                 if ($record::getAttribute($attribute)) {
@@ -61,12 +57,9 @@ trait ToUpgrade
                     $value = static::getSearchValue($_classname, $attribute);
                     //$value = $_classname;
                     //$value = isset($_POST[$attribute]) ? $_POST[$attribute] : "";
-                    $tmpAttr = \GIndie\Platform\View\Input::constructFromAttribute($recordAttr,
-                                                                                   $value,
-                                                                                   \NULL);
+                    $tmpAttr = \GIndie\Platform\View\Input::constructFromAttribute($recordAttr, $value, \NULL);
                 } else {
-                    \trigger_error($attribute . " not defined in " . $record::SCHEMA . "." . $record::TABLE . " " . $record,
-                                   \E_USER_ERROR);
+                    \trigger_error($attribute . " not defined in " . $record::SCHEMA . "." . $record::TABLE . " " . $record, \E_USER_ERROR);
                 }
             }
             if ($recordAttr->getSize()) {
@@ -81,17 +74,11 @@ trait ToUpgrade
             }
             $form->addContent($tmpAttr);
         }
-        $widget = new \GIndie\Platform\View\Widget("" . $_classname::Name(),
-                                                   \FALSE, $form,
-                                                   "<div id='tempContent'></div>");
+        $widget = new \GIndie\Platform\View\Widget("" . $_classname::Name(), \FALSE, $form, "<div id='tempContent'></div>");
 //        $reloadButton = Widget\Buttons::Reload($_classname);
 //        $widget->addButtonHeading($reloadButton);
 
-        $searchButton = \GIndie\Platform\View\Widget\Buttons::CustomSuccess("<span class=\"glyphicon glyphicon-search\"></span>",
-                                                                            \NULL,
-                                                                            \NULL,
-                                                                            \FALSE,
-                                                                            \NULL);
+        $searchButton = \GIndie\Platform\View\Widget\Buttons::CustomSuccess("<span class=\"glyphicon glyphicon-search\"></span>", \NULL, \NULL, \FALSE, \NULL);
         $searchButton->setForm($form->getId());
         $widget->addButtonHeading($searchButton);
         //$widget->addContent(\GIndie\Platform\View\Javascript::submitOnChange($form->getId()));
@@ -123,13 +110,11 @@ trait ToUpgrade
      */
     protected function widgetReportFromModel($classname, $params = [])
     {
-        if (\is_subclass_of($classname, \GIndie\Platform\Model\Table::class,
-                            true)) {
+        if (\is_subclass_of($classname, \GIndie\Platform\Model\Table::class, true)) {
             $rtnWidget = new Widget\WidgetReport(new $classname($params));
             return $rtnWidget;
         }
-        \trigger_error($classname . " is not subclass of \GIndie\Platform\Model\Table",
-                       \E_USER_ERROR);
+        \trigger_error($classname . " is not subclass of \GIndie\Platform\Model\Table", \E_USER_ERROR);
     }
 
     /**
@@ -139,13 +124,11 @@ trait ToUpgrade
      */
     protected function widgetTableFromModel($classname, $params = [])
     {
-        if (\is_subclass_of($classname, \GIndie\Platform\Model\Table::class,
-                            true)) {
+        if (\is_subclass_of($classname, \GIndie\Platform\Model\Table::class, true)) {
             $rtnWidget = new Widget\WidgetTable(new $classname($params));
             return $rtnWidget;
         }
-        \trigger_error($classname . " is not subclass of \GIndie\Platform\Model\Table",
-                       \E_USER_ERROR);
+        \trigger_error($classname . " is not subclass of \GIndie\Platform\Model\Table", \E_USER_ERROR);
     }
 
     /**
@@ -244,10 +227,17 @@ trait ToUpgrade
      * 
      * 
      * @return null|\GIndie\Platform\Controller\Main\WidgetInterface
+     * 
      */
     protected function widgetReload($id, $class, $selected)
     {
+
         $placeholder = \GIndie\Platform\Current::Module()->getWidget($id);
+//        @edit 18-10-19
+//        * - Added validation for ModuleInfo
+//        if ($this->validateModuleInfo == false) {
+//            \trigger_error("wdgtModuleInfo() must be called", \E_USER_ERROR);
+//        }
         $placeholder = $placeholder->call($selected);
         return $placeholder;
     }
@@ -299,6 +289,5 @@ trait ToUpgrade
         $string = $string . ";";
         return $string;
     }
-
 
 }

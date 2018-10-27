@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0C.70
+ * @version 0C.A0
  * @since 18-08-25
  */
 
@@ -23,7 +23,6 @@ use GIndie\Platform\DataModel\Resources\GIPList;
  * Description of AdministrativeUnit
  *
  * @edit 18-10-27
- * - Added databaseClassname() from DataModel\AbstractTable
  * - Class extends Model\RecordAutoincremented 
  * - Removed PRIMARY_KEY and AUTOINCREMENT
  */
@@ -50,12 +49,10 @@ class AdministrativeUnit extends Model\RecordAutoincremented
      */
     const TABLE = "pltfrm_ndd_dmnstrtv";
 
-
     /**
      * @since 18-08-26
      */
     const DISPLAY_KEY = "dscrpcn";
-
 
     /**
      * Define los atributos del modelo de datos.
@@ -121,18 +118,6 @@ class AdministrativeUnit extends Model\RecordAutoincremented
     public static function defaultRecord()
     {
         return ["id" => null, "parent" => null, "dscrpcn" => "DEFAULT"];
-    }
-
-    /**
-     * 
-     * @return string
-     * @since 18-08-26
-     * @edit 18-10-27
-     * - Added from DataModel\AbstractTable
-     */
-    public static function databaseClassname()
-    {
-        return \GIndie\Platform\DataModel\TmpDatabasePredial::class;
     }
 
 }

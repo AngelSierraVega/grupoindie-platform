@@ -32,6 +32,10 @@ class ProjectHandler extends \GIndie\ProjectHandler\AbstractProjectHandler
         $rtnArray[\hexdec("0C.00")]["description"] = "Functional project on SII.";
         $rtnArray[\hexdec("0C.00")]["code"] = "One";
         $rtnArray[\hexdec("0C.00")]["threshold"] = "0C.00";
+        //One
+        $rtnArray[\hexdec("0C.70")]["description"] = "Data model upgrade";
+        $rtnArray[\hexdec("0C.70")]["code"] = "One";
+        $rtnArray[\hexdec("0C.70")]["threshold"] = "0C.70";
         //Two
         $rtnArray[\hexdec("0D.00")]["description"] = "Platform for MMR-PRDL";
         $rtnArray[\hexdec("0D.00")]["code"] = "Two";

@@ -1,19 +1,23 @@
 <?php
 
+/**
+ * GI-Platform-DVLP - 
+ *
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform\View
+ *
+ * @version 0C.00
+ * @since 18-03-15
+ */
+
 namespace GIndie\Platform\View\Modal;
 
 use GIndie\ScriptGenerator\Bootstrap3;
 
 /**
- * GI-Platform-DVLP - Content
- *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
- *
- * @package Platform
- *
- * @version ??
- * @since 18-03-15
+ * @edit 18-06-25
  */
 class Content extends Bootstrap3\Component\Modal\Content
 {

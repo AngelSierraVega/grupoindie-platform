@@ -4,9 +4,8 @@
  * GIplatform - Autenticacion 2017-06-11
  * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
  *
- * @package Platform
- *
- * @version GIP.00.01
+ * @package GIndie\Platform\Model\Datos
+ * @version DEPRECATED
  */
 
 namespace GIndie\Platform\Model\Datos\mr_sesion\usuario_cuenta;

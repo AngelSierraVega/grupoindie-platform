@@ -4,10 +4,8 @@
  * AdministracionIngresos - Lista 2017-06-10
  * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
  *
- * @package MineralDeLaReforma
- * @subpackage AdmininstracionIngresos
- *
- * @version MR-ADIN.00.01
+ * @package GIndie\Platform\Model\Datos
+ * @version DEPRECATED
  */
 
 namespace GIndie\Platform\Model\Datos\mr_sesion\usuario_cuenta_rol;
@@ -17,10 +15,28 @@ use GIndie\Platform\Model\Database\ListSimple;
 /**
  * <b>Lista<\b> de las unidades administrativas registradas
  *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @since MR-ADIN.00.01
+ * @todo deprecate
  */
-class Lista extends ListSimple {
+class Lista extends ListSimple
+{
+
+    /**
+     * @since 18-08-26
+     * @return string
+     */
+    public static function DisplayKey()
+    {
+        return "pltfrm_cta_fk";
+    }
+
+    /**
+     * @since 18-08-26
+     * @return string
+     */
+    public static function PrimaryKey()
+    {
+        return "pltfrm_rol_fk";
+    }
 
     /**
      * Unidades administrativas
@@ -58,7 +74,6 @@ class Lista extends ListSimple {
      * @since MR-ADIN.00.01
      */
     //const ELEMENT_AUTONEST_ON = \NULL;
-
 //    /**
 //     * Registro
 //     * @since MR-ADIN.00.01

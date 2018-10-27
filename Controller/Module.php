@@ -30,6 +30,8 @@ use GIndie\Generator\DML\HTML5 AS HTML5ToDeprecate;
  * @edit 18-06-24
  * - runActionSelectRow(), run(): Moved from \GIndie\Platform\Controller\Module.
  * @uses GIndie\Platform\Controller\Module\RunRecordAction
+ * @edit 18-10-19
+ * - Added wdgtModuleInfo()
  */
 abstract class Module extends Platform implements ModuleINT
 {
@@ -46,6 +48,27 @@ abstract class Module extends Platform implements ModuleINT
     use Module\ToDeprecate;
     use Module\Upgrading;
     use Module\Deprecated;
+
+    /**
+     *
+     * @var boolean Validates if wdgtModuleInfo() has been called
+     */
+    private $validateModuleInfo = false;
+
+    /**
+     * Placeholder o-o-o. Module info.
+     * 
+     * @return \GIndie\Platform\View\Widget
+     * @since 18-10-19
+     * @todo Functional validation
+     */
+    public function wdgtModuleInfo()
+    {
+        $this->validateModuleInfo = true;
+        $rtnWidget = new View\Widget("<strong>" . static::NAME . ".</strong>", false, false);
+        $rtnWidget->setContext("info");
+        return $rtnWidget;
+    }
 
     /**
      * @param string $placeholderId
@@ -78,8 +101,7 @@ abstract class Module extends Platform implements ModuleINT
         switch ($action)
         {
             case "@selectRow":
-                return $this->runActionSelectRow($_POST["@placeholderId"],
-                                                 $_POST["@selectedId"]);
+                return $this->runActionSelectRow($_POST["@placeholderId"], $_POST["@selectedId"]);
             case "reportSearch":
                 $_table = $this->_searchTable($class);
                 return new \GIndie\Platform\View\TableReport($_table);
@@ -88,11 +110,8 @@ abstract class Module extends Platform implements ModuleINT
             case "get-input":
                 $record = $class::findById($_POST["gip-record-id"]);
                 $attribute = $record->getAttribute($id);
-                return $form_element = \GIndie\Platform\View\Input::selectFromAttribute($attribute,
-                                                                                        $record->getValueOf($attribute->getName()),
-                                                                                                            $_POST["gip-record-id"]);
-                return \GIndie\Platform\View\Input::formGroup($attribute,
-                                                              $form_element);
+                return $form_element = \GIndie\Platform\View\Input::selectFromAttribute($attribute, $record->getValueOf($attribute->getName()), $_POST["gip-record-id"]);
+                return \GIndie\Platform\View\Input::formGroup($attribute, $form_element);
             case "form-create":
             case "form-edit":
             case "form-delete":
@@ -165,8 +184,7 @@ abstract class Module extends Platform implements ModuleINT
      * @return \GIndie\Platform\View\Form
      * @since 18-06-14
      */
-    protected function cnstrctForm($record, $gipAction = null,
-                                   $uniqueToken = true, $customTarget = false)
+    protected function cnstrctForm($record, $gipAction = null, $uniqueToken = true, $customTarget = false)
     {
         switch ($gipAction)
         {
@@ -320,11 +338,9 @@ abstract class Module extends Platform implements ModuleINT
         $modalTitle = $actionName . " <b>" .
                 $record->getName() . "</b> <i>" .
                 $record->getDisplay() . "</i>";
-        $modalContent = View\Modal\Content::defaultModalContent($modalTitle,
-                                                                $form, true);
+        $modalContent = View\Modal\Content::defaultModalContent($modalTitle, $form, true);
         $modalContent->getHeader()->setBackground("primary");
-        $btn = new Bootstrap3\Component\Button($actionName,
-                                               Bootstrap3\Component\Button::TYPE_SUBMIT);
+        $btn = new Bootstrap3\Component\Button($actionName, Bootstrap3\Component\Button::TYPE_SUBMIT);
         $btn->setForm($form->getId())->setValue("Submit");
         $btn->setContext($actionContext);
         $modalContent->addFooterButton($btn);

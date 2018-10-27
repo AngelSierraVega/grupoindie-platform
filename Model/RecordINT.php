@@ -1,12 +1,13 @@
 <?php
 
 /**
- * GIplatform - Record 2017-07-02
+ * AdministracionIngresos - caja_cobro
  * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
  *
- * @package Platform
+ * @package GIndie\Platform\Model
  *
- * @version GIP.00.0?
+ * @version 0C.00
+ * @since 17-07-02
  */
 
 namespace GIndie\Platform\Model;
@@ -14,21 +15,18 @@ namespace GIndie\Platform\Model;
 /**
  * Description of RecordINT
  *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @edit 18-02-27
  */
 interface RecordINT
 {
 
     /**
      * Define los <b>atributos</b> del registro.
-     * @since GIP.00.01
      */
     public static function configAttributes();
 
     /**
-     * @todo 
      * Define los <b>permisos</b> del registro.
-     * @version GIP.00.02
      * 
      */
     public static function defineRecordRestrictions();

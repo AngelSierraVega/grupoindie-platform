@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version DOING 0C.70
+ * @version 0C.A0
  * @since 18-08-27
  */
 
@@ -33,19 +33,16 @@ class UserProfile extends User
 
     /**
      * @since 18-08-27
+     * @edit 18-10-27
+     * const AUTOINCREMENT = true;
      */
-    const AUTOINCREMENT = true;
 
     /**
      * @since 18-08-27
+     * @edit 18-10-27
+     * - Atributo virtual en lugar de compuesto
      */
-    const DISPLAY_KEY = ["compuesto" => [
-            "nmbrs" => "gip-model",
-            " " => "string",
-            "ap_pat" => "gip-model",
-            " " => "string",
-            "ap_mat" => "gip-model"]
-    ];
+    const DISPLAY_KEY = "nbr_cmplt";
 
     /**
      * Define los atributos del modelo de datos

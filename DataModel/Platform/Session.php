@@ -20,7 +20,6 @@ use GIndie\DBHandler\MySQL56\Instance\DataType;
 /**
  * Description of Session
  *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  */
 class Session extends Record
 {
@@ -76,7 +75,7 @@ class Session extends Record
          * Column php_sess_id
          */
         static::columnDefinition("php_sess_id", DataType::varchar(255));
-        
+
         /**
          * Reference Definition
          */

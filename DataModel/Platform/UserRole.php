@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0C.70
+ * @version 0C.A0
  * @since 18-08-25
  */
 
@@ -25,7 +25,6 @@ use GIndie\DBHandler\MySQL56\Instance\DataType;
 /**
  * Description of UserRole
  *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  */
 class UserRole extends Record
 {
@@ -69,7 +68,8 @@ class UserRole extends Record
         static::attribute("pltfrm_rol_fk")->setLabel("Roles de usuario");
         static::attribute("pltfrm_rol_fk")->setNotNull();
 
-        static::attribute("pltfrm_cta_fk")->setType(Model\Attribute::TYPE_HIDDEN)->setLabel("Usuario");
+        static::attribute("pltfrm_cta_fk")->setType(Model\Attribute::TYPE_HIDDEN);
+        static::attribute("pltfrm_cta_fk")->excludeFromDisplay();
     }
 
     /**
@@ -114,10 +114,14 @@ class UserRole extends Record
      * 
      * @return array
      * @since 18-08-26
+     * @edit 18-10-24
      */
     public static function defaultRecord()
     {
-        return ["id" => null, "pltfrm_rol_fk" => "AS", "pltfrm_cta_fk" => "1a0108f3"];
+        return [
+            ["id" => null, "pltfrm_rol_fk" => "AS", "pltfrm_cta_fk" => "1a0108f3"]
+            , ["id" => null, "pltfrm_rol_fk" => "AS", "pltfrm_cta_fk" => "1a0108f4"]
+        ];
     }
 
     /**

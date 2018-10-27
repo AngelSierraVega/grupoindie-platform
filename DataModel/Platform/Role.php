@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0C.70
+ * @version 0C.A0
  * @since 18-08-25
  */
 
@@ -92,7 +92,6 @@ class Role extends Record
 
         /**
          * Column pltfrm_cta_fk
-         * 
          */
         static::columnDefinition("dscrptn", DataType::varchar(255));
         static::columnDefinition("dscrptn")->setNotNull();

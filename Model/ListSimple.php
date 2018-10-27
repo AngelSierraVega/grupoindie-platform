@@ -1,7 +1,17 @@
 <?php
 
+
 /**
- * GIplatform - ListSimple 
+ * GI-Platform-DVLP - ListSimple
+ *
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform\Model
+ *
+ * @version 0C.00
+ * @since 17-06-26
+ * @todo Upgrade class
  */
 
 namespace GIndie\Platform\Model;
@@ -10,29 +20,20 @@ use GIndie\Platform\Current;
 
 /**
  * Description of List
- *
- * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
- *
- * @package Platform
- *
- * @version GIP.00.00 17-06-26
- * @edit GIP.00.05
- * @edit GIP.00.06 18-01-17
+ * @edit 18-01-17
  * - Updated readFromDB()
  * - Cleaned deprecated code
+ * @edit 18-02-27
  */
 abstract class ListSimple implements ListSimpleINT
 {
 
     /**
      * The name of the attribute to perform the autonest
-     *  @since  GIP.00.02
      */
     const ELEMENT_AUTONEST_ON = \NULL;
 
     /**
-     * @since GIP.00.05
      * @return \GIndie\Platform\Model\Record
      */
     public static function DisplayKey()
@@ -42,7 +43,6 @@ abstract class ListSimple implements ListSimpleINT
     }
 
     /**
-     * @since GIP.00.05
      * @return \GIndie\Platform\Model\Record
      */
     public static function PrimaryKey()
@@ -57,7 +57,6 @@ abstract class ListSimple implements ListSimpleINT
     }
 
     /**
-     * @since GIP.00.05
      * @return string
      */
     public static function Name()
@@ -67,15 +66,11 @@ abstract class ListSimple implements ListSimpleINT
     }
 
     /**
-     * @since  GIP.00.01
-     * @version GIP.00.05
      * @var \GIndie\Platform\Model\Record
      */
     private $_relatedRecordClass;
 
     /**
-     * @since  GIP.00.01
-     * @version GIP.00.05
      */
     public function __construct($conditions = [])
     {
@@ -117,9 +112,7 @@ abstract class ListSimple implements ListSimpleINT
      * 
      * @param array $conditions
      * @param array $params
-     *
-     * @version     GIP.00.05
-     * @edit GIP.00.06
+     * @edit 18-01-17
      * - Protected method
      * - Param $params added
      */
@@ -161,7 +154,6 @@ abstract class ListSimple implements ListSimpleINT
 
 
     /**
-     * @version     GIP.00.01
      * @return      \GIndie\Platform\Model\Table\Column
      */
     protected function defineColumnDPR($fieldName)

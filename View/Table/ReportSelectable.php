@@ -1,4 +1,15 @@
 <?php
+/**
+ * GI-Platform-DVLP - 
+ *
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform\View
+ *
+ * @version 0C.00
+ * @since 18-03-30
+ */
 
 namespace GIndie\Platform\View\Table;
 
@@ -6,15 +17,7 @@ use GIndie\Platform\View;
 use GIndie\Platform\Model;
 
 /**
- * GI-Platform-DVLP - ReportSelectable
- *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
- *
- * @package Platform
- *
- * @version 0C.20
- * @since 18-03-30
+ * @edit 18-05-20
  */
 class ReportSelectable extends View\Table
 {

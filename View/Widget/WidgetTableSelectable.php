@@ -1,11 +1,14 @@
 <?php
-/*
- * GIplatform - test 2017-05-21
- * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+/**
+ * GI-Platform-DVLP - 
  *
- * @package Platform
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
  *
- * @version GIP.00.00
+ * @package GIndie\Platform\View
+ *
+ * @version 0C.00
+ * @since 17-05-21
  */
 
 namespace GIndie\Platform\View\Widget;
@@ -16,15 +19,18 @@ namespace GIndie\Platform\View\Widget;
  * Description of WidgetTableSelectable
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @edit 18-02-27
  */
-class WidgetTableSelectable extends WidgetTable {
+class WidgetTableSelectable extends WidgetTable
+{
 
-    public function __construct(\GIndie\Platform\Model\Table $table,
-            $title = "WidgetTableSelectable") {
+    public function __construct(\GIndie\Platform\Model\Table $table, $title = "WidgetTableSelectable")
+    {
         parent::__construct($table, $title);
     }
 
-    protected function tmpContent() {
+    protected function tmpContent()
+    {
         ob_start();
         ?>
         <table class="table table-hover"> 

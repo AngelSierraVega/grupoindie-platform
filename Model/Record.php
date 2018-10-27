@@ -3,31 +3,77 @@
 /**
  * GIplatform - Record 2017-??-??
  * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+ * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
  *
- * @package Platform
+ * @package GIndie\Platform\Model
  *
- * @version GIP.00.0?
+ * @version 0C.30
+ * @since 17-04-23
  */
 
 namespace GIndie\Platform\Model;
 
 use GIndie\Platform\Current;
-use \GIndie\Generator\DML\HTML5\Bootstrap3;
+use GIndie\Generator\DML\HTML5\Bootstrap3;
+use GIndie\DBHandler\MySQL56;
+use GIndie\DBHandler\MySQL57;
+use GIndie\Platform\DataModel;
 
 /**
  * Description of Record
- *
- * @since       2017-04-23
- * @version     GIP.00.10
- * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @edit GIP.00.11 18-01-14
- * - Update getDisplayOf()
  * 
+ * @edit 18-01-14
+ * - Update getDisplayOf()
+ * @edit 18-10-27
+ * - Removed TABLE
+ * - DISPLAY_KEY defaults to "id"
  * @todo
  * - Move \Straffsa\SistemaIntegralIngresos funcionality 
  */
-abstract class Record implements RecordINT
+abstract class Record extends MySQL57\Instance\Table implements RecordINT
 {
+
+    /**
+     * @since 18-08-20
+     * @todo
+     * - Remove from class
+     */
+    protected static function tableDefinition()
+    {
+        
+    }
+
+    /**
+     * 
+     * @return string
+     * @since 18-08-19
+     * - Remove or upgrade
+     */
+    public static function databaseClassname()
+    {
+        return DataModel\TmpDatabasePredial::class;
+    }
+
+    /**
+     * The name of the database storing the record.
+     */
+    const SCHEMA = "mmr_prdl";
+
+    //"mr_ingresos"
+    //"mmr_prdl"
+    //"straffon_ingresos";
+    //"grupoind_ingresos"
+    //"grupoind_prdl"
+
+    /**
+     * 
+     * @return string
+     * @since 18-08-18
+     */
+    public static function name()
+    {
+        return static::TABLE;
+    }
 
     /**
      * @var boolean
@@ -38,51 +84,35 @@ abstract class Record implements RecordINT
     /**
      * The name of the record
      * @var string NAME
-     * @since GIP.00.02
      */
     const NAME = "UNDEFINED";
 
     /**
      * @var string ICON
-     * @since GIP.00.0?
      */
     const ICON = "glyphicon glyphicon-th-list";
 
     /**
-     * The name of the database storing the record.
-     * @version GIP.00.10
+     * If the primary key is autoincremented
      */
-    const SCHEMA = "mr_ingresos";
-    //"mr_ingresos"
-    //"mmr_prdl"
-    //"straffon_ingresos";
-    //"grupoind_ingresos"
-    //"grupoind_prdl"
-
-    /**
-     * The name of the table storing the the record.
-     * @version GIP.00.10
-     */
-    const TABLE = \NULL;
+    const AUTOINCREMENT = true;
 
     /**
      * The primary key of the record.
-     * @version GIP.00.10
      */
     const PRIMARY_KEY = "id";
 
     /**
-     * If the primary key is autoincremented
-     * @version GIP.00.10
+     * The key used for displaying the record to the user
+     * @edit 18-10-27
+     * - Default "id"
      */
-    const AUTOINCREMENT = \TRUE;
+    const DISPLAY_KEY = "id";
 
     /**
-     * The key used for displaying the record to the user
-     * @version GIP.00.10
+     * 
      */
-    const DISPLAY_KEY = \NULL;
-    const STATE_ATTRIBUTE = \NULL;
+    const STATE_ATTRIBUTE = null;
 
     /**
      * @var array $_data
@@ -97,7 +127,6 @@ abstract class Record implements RecordINT
 
     /**
      * The value of the record ID
-     * @since GIP.00.08
      * @var string 
      */
     private $_recordId;
@@ -110,12 +139,12 @@ abstract class Record implements RecordINT
     /**
      * Sets data from an associative array
      * @param array $data
-     * @since GIP.00.08
      * @return \GIndie\Platform\Model\Record
      */
     public static function instance(array $data = [])
     {
         static::configAttributes();
+        //static::tableDefinition();
         \array_key_exists(static::PRIMARY_KEY, $data) ?: $data[static::PRIMARY_KEY] = "GIP-UNDEFINED";
         foreach (\array_keys(static::$_attribute[static::class]) as $attribute) {
             \array_key_exists($attribute, $data) ?: $data[$attribute] = "";
@@ -124,39 +153,25 @@ abstract class Record implements RecordINT
     }
 
     /**
-     * @version     GIP.00.08
+     * @edit 18-10-27
+     * - Updated constants validation
      */
     private function __construct($data)
     {
-//        static::SCHEMA !== \NULL ?: trigger_error(\get_called_class() . " Necesita definir la constante SCHEMA",
-//                                                  E_USER_ERROR);
-        static::TABLE !== \NULL ?: trigger_error(\get_called_class() . " Necesita definir la constante TABLE", E_USER_ERROR);
-        static::DISPLAY_KEY !== \NULL ?: trigger_error(\get_called_class() . " Necesita definir la constante DISPLAY_KEY", E_USER_ERROR);
-
+        \defined("static::SCHEMA") ?: trigger_error(\get_called_class() . " Necesita definir la constante SCHEMA", \E_USER_ERROR);
+        \defined("static::TABLE") ?: trigger_error(\get_called_class() . " Necesita definir la constante TABLE", \E_USER_ERROR);
+        \defined("static::DISPLAY_KEY") ?: trigger_error(\get_called_class() . " Necesita definir la constante DISPLAY_KEY", \E_USER_ERROR);
+        \defined("static::PRIMARY_KEY") ?: \trigger_error(\get_called_class() . " Necesita definir la constante PRIMARY_KEY", \E_USER_ERROR);
         $this->_recordId = $data[static::PRIMARY_KEY];
         $this->_updatedFields = [];
         foreach ($data as $attribute => $value) {
             $this->setValueOf($attribute, $value);
         }
-//        if (static::AUTOINCREMENT) {
-//            static::attribute(static::PRIMARY_KEY)->excludeFromForm()->excludeFromDisplay();
-//        }
-//        if ($recordId !== "CREATE" && $recordId !== "DELETE" && $recordId !== "NONE") {
-//            try {
-//                $this->readFromDB($recordId);
-//                //var_dump($this->readFromDB($recordId));
-//            } catch (\Exception $exc) {
-//                foreach ($this->_data as $key => $value) {
-//                    $this->_data[$key]->setValue($exc->getMessage());
-//                }
-//            }
-//        }
     }
 
     /**
      * Sets data from DB connection
      * @param string $recordId
-     * @since GIP.00.08
      * @return \GIndie\Platform\Model\Record
      */
     public static function findById($recordId)
@@ -186,7 +201,6 @@ abstract class Record implements RecordINT
     /**
      * Sets data from DB connection
      * @param string $recordId
-     * @since GIP.00.08
      * @return \GIndie\Platform\Model\Record
      */
     public static function findBy($attribute, $value)
@@ -210,7 +224,6 @@ abstract class Record implements RecordINT
      * Delete a record on the database
      * 
      * @author      Izmir Sanchez Juarez <izmirreffi@gmail.com
-     * @version     GIP.00.02
      * @edit 18-03-15
      * - 
      */
@@ -229,12 +242,13 @@ abstract class Record implements RecordINT
          */
         if ($action) {
             $data = [];
-            $data['fk_usuario_cuenta'] = \GIndie\Platform\Current::User()->getId();
+            $data['pltfrm_cta_fk'] = \GIndie\Platform\Current::User()->getId();
             $data['action'] = "gip-delete";
             $data['timestamp'] = \time();
             $nota = static::NAME . " eliminado(a): " . $this->getDisplay();
-            $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
-            $bitacora = \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
+            $data['notes'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
+//            $bitacora = \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
+            $bitacora = DataModel\Platform\LogUser::instance($data);
             $bitacora->run("gip-inner-create");
         }
         return $action;
@@ -244,7 +258,7 @@ abstract class Record implements RecordINT
      * Creates a new record on the database
      *
      * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
-     * @version     GIP.00.03
+     * @todo Upgrade bitacora
      */
     protected function _create($postReading = \TRUE)
     {
@@ -271,13 +285,15 @@ abstract class Record implements RecordINT
             switch (static::TABLE)
             {
                 case "bitacora_usuario":
+                case "pltfrm_cta_log":
+                case "pltfrm_ssn":
                 case "sesion":
                     break;
                 case "caja_usuarios":
                     $nota = "Asignación de caja a un usuario con los datos ";
                 default:
                     $data = [];
-                    $data['fk_usuario_cuenta'] = \GIndie\Platform\Current::User()->getId();
+                    $data['pltfrm_cta_fk'] = \GIndie\Platform\Current::User()->getId();
                     $data['action'] = "gip-create";
                     $data['timestamp'] = \time();
                     foreach ($this->getAttributeNames() as $key) {
@@ -290,8 +306,9 @@ abstract class Record implements RecordINT
                                 break;
                         }
                     }
-                    $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
-                    $bitacora = \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
+                    $data['notes'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
+                    $bitacora = DataModel\Platform\LogUser::instance($data);
+                    //$bitacora = \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
                     $bitacora->run("gip-inner-create");
                     break;
             }
@@ -328,7 +345,6 @@ abstract class Record implements RecordINT
      * Update a record on the database
      * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
      * @edit Izmir Sanchez Juarez <izmirreffi@gmail.com>
-     * @version GIP.00.02
      */
     protected function _update($postReading = \TRUE)
     {
@@ -346,10 +362,12 @@ abstract class Record implements RecordINT
         {
             case "bitacora_usuario":
             case "sesion":
+            case "pltfrm_cta_log":
+            case "pltfrm_ssn":
                 break;
             default:
                 $data = [];
-                $data['fk_usuario_cuenta'] = \GIndie\Platform\Current::User()->getId();
+                $data['pltfrm_cta_fk'] = \GIndie\Platform\Current::User()->getId();
                 $data['action'] = "gip-edit";
                 $data['timestamp'] = \time();
                 $nota = static::NAME . " actualizado(a): " . $this->getDisplay() . " con los datos";
@@ -363,8 +381,9 @@ abstract class Record implements RecordINT
                             break;
                     }
                 }
-                $data['notas'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
-                $bitacora = \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
+                $data['notes'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
+//                $bitacora = \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
+                $bitacora = DataModel\Platform\LogUser::instance($data);
                 $bitacora->run("gip-inner-create");
         }
 //        if ($action) {
@@ -374,13 +393,11 @@ abstract class Record implements RecordINT
     }
 
     /**
-     * @version GIP.00.01
      * @return \GIndie\Platform\Model\Attribute
      */
     protected static function attribute($fieldName)
     {
-        isset(static::$_attribute[static::class][$fieldName]) ?: static::$_attribute[static::class][$fieldName]
-                        = new Attribute($fieldName, static::class);
+        isset(static::$_attribute[static::class][$fieldName]) ?: static::$_attribute[static::class][$fieldName] = new Attribute($fieldName, static::class);
         $rtnElement = &static::$_attribute[static::class][$fieldName];
         return $rtnElement;
     }
@@ -428,7 +445,6 @@ abstract class Record implements RecordINT
     }
 
     /**
-     * @version     GIP.00.08
      * @return      array
      */
     final public static function getAttributeNames()
@@ -443,7 +459,6 @@ abstract class Record implements RecordINT
     }
 
     /**
-     * @version     GIP.00.05
      * @return      array
      */
     final public static function getAttributesForm()
@@ -458,7 +473,6 @@ abstract class Record implements RecordINT
     }
 
     /**
-     * @version     GIP.00.02
      * @return      array
      */
     final public static function getAttributesDisplay()
@@ -481,7 +495,6 @@ abstract class Record implements RecordINT
      * 
      * @param string $attributeName
      * @param string $value
-     * @since GIP.00.08
      */
     public function setValueOf($attributeName, $value, $sanitize = \FALSE)
     {
@@ -495,8 +508,7 @@ abstract class Record implements RecordINT
             $value = \GIndie\Platform\Current::Connection()->sanitize($value);
         }
         if (isset($this->_data[static::SCHEMA][static::TABLE][$this->_recordId][$attributeName])) {
-            if (\strcmp($this->_data[static::SCHEMA][static::TABLE][$this->_recordId][$attributeName], $value)
-                    != 0) {
+            if (\strcmp($this->_data[static::SCHEMA][static::TABLE][$this->_recordId][$attributeName], $value) != 0) {
                 $this->_updatedFields[] = $attributeName;
             }
         }
@@ -508,7 +520,6 @@ abstract class Record implements RecordINT
     /**
      * 
      * @param string $attributeName
-     * @since GIP.00.09
      */
     public function getLabelOf($attributeName)
     {
@@ -517,7 +528,6 @@ abstract class Record implements RecordINT
 
     /**
      * 
-     * @since GIP.00.10
      * @return mixed
      */
     public function getDisplay()
@@ -544,8 +554,7 @@ abstract class Record implements RecordINT
     /**
      * 
      * @param string $attributeName
-     * @since GIP.00.09
-     * @edit GIP.00.11
+     * @edit 18-01-14
      * - Attribute::TYPE_ENUM returns empty string if no value
      */
     public function getDisplayOf($attributeName)
@@ -605,7 +614,6 @@ abstract class Record implements RecordINT
      * 
      * @param string $attributeName
      * @return mixed
-     * @since GIP.00.08
      */
     public function getValueOf($attributeName)
     {
@@ -639,7 +647,6 @@ abstract class Record implements RecordINT
     }
 
     /**
-     * @version     GIP.00.08
      * @return      \GIndie\Platform\Model\Attribute
      * @param       string $attributeName The name of the attribute
      */
@@ -656,7 +663,6 @@ abstract class Record implements RecordINT
 
     /**
      * @abstract
-     * @version     GIP.00.06
      */
     public static function defineRecordRestrictions()
     {
@@ -667,7 +673,6 @@ abstract class Record implements RecordINT
 
     /**
      * @todo interal store for command - roles
-     * @version     GIP.00.00
      */
     protected static function requireRoles($command, array $roles)
     {
@@ -679,7 +684,6 @@ abstract class Record implements RecordINT
 
     /**
      * @todo interal store for command - roles
-     * @version     GIP.00.00
      */
     protected static function excludeRoles($command, array $roles)
     {
@@ -688,7 +692,6 @@ abstract class Record implements RecordINT
 
     /**
      * @todo interal return for command - roles
-     * @version     GIP.00.00
      */
     public static function getValidRolesFor($command)
     {

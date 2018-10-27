@@ -1,16 +1,23 @@
 <?php
 
+/**
+ * GI-Platform-DVLP - Table
+ *
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform\Model
+ *
+ * @version 0C.00
+ * @since 17-06-26
+ */
+
 namespace GIndie\Platform\Model;
 
 use GIndie\Platform\Current;
 
 /**
  * Description of Table
- * 
- * @version GIP.00.06
- * @since 2017-06-26
- *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * @edit 18-03-13
  * - Autoformated class
  */
@@ -60,7 +67,6 @@ abstract class Table implements TableINT
 
     /**
      * @todo private verification tag for inheritance.
-     * @version     GIP.00.04
      * @edit 18-04-01
      */
     public function __construct(array $conditions = [])
@@ -87,7 +93,6 @@ abstract class Table implements TableINT
      * 
      * @param array $conditions
      * 
-     * @version     GIP.00.02
      */
     protected function readFromDB(array $conditions = [], array $params = [])
     {
@@ -132,7 +137,6 @@ abstract class Table implements TableINT
     }
 
     /**
-     * @version     GIP.00.01
      * @return      \GIndie\Platform\Model\Attribute
      */
     protected function defineColumn($fieldName, $attribute)
@@ -226,7 +230,6 @@ abstract class Table implements TableINT
     /**
      * @return      array
      * @since       2017-08-14
-     * @version     GIP.00.03
      */
     public function getColumnNames()
     {
@@ -236,7 +239,6 @@ abstract class Table implements TableINT
     /**
      * @return      array
      * @since       2017-04-27
-     * @version     GIP.00.02
      */
     public function ColumnNames()
     {
@@ -254,7 +256,6 @@ abstract class Table implements TableINT
     /**
      * @return      array
      * @since       2017-06-21
-     * @version     GIP.00.03
      */
     public function getColumns()
     {
@@ -272,7 +273,6 @@ abstract class Table implements TableINT
      * @param string $columnName
      * @return \GIndie\Platform\Model\Column
      * @since 2017-06-21
-     * @version GIP.00.02
      */
     public function getColumn($columnName)
     {
@@ -284,7 +284,6 @@ abstract class Table implements TableINT
      * @param string $columnName
      * @return      \GIndie\Platform\Model\Table\Column::getLabel()
      * @since       2017-04-27
-     * @version     GIP.00.02
      */
     public function getLabel($columnName)
     {
@@ -298,7 +297,6 @@ abstract class Table implements TableINT
      * 
      * @return      array
      * @since       2017-04-27
-     * @version     GIP.00.02
      */
     public function getRows()
     {

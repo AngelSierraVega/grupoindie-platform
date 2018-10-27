@@ -1,11 +1,14 @@
 <?php
 /**
- * GIplatform - Table 2017-06-17
- * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+ * GI-Platform-DVLP - 
  *
- * @package Platform
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
  *
- * @version GIP.00.01
+ * @package GIndie\Platform\View
+ * 
+ * @version 0C.00
+ * @since 17-06-17
  */
 
 namespace GIndie\Platform\View;
@@ -19,6 +22,7 @@ use GIndie\Generator\DML\HTML5\Category\StylesSemantics;
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * @since GIP.00.01
+ * @edit 18-04-02
  */
 class Table extends Div
 {

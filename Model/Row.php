@@ -1,9 +1,15 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * GI-Platform-DVLP - RecordAutoincremented
+ *
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform\Model
+ *
+ * @version 0C.00
+ * @since 
  */
 
 namespace GIndie\Platform\Model;

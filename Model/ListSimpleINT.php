@@ -1,9 +1,16 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * GI-Platform-DVLP - ListSimple
+ *
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform\Model
+ *
+ * @version 0C.00
+ * @since 
+ * @todo Upgrade class
  */
 
 namespace GIndie\Platform\Model;
@@ -12,6 +19,7 @@ namespace GIndie\Platform\Model;
  * Description of ListSimpleINT
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @edit 18-02-27
  */
 interface ListSimpleINT
 {

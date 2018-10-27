@@ -1,16 +1,20 @@
 <?php
 
+/**
+ * GI-Platform-DVLP - ExceptionMySQL
+ *
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform
+ *
+ * @version UNDEFINED
+ */
+
 namespace GIndie\Platform;
 
 /**
  * Description of ExceptionMySQL
- *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @copyright (c) 2017 Angel Sierra Vega. Grupo INDIE.
- *
- * @package Platform
- * 
- * @version GIP.00.01
  */
 class ExceptionMySQL extends \Exception
 {

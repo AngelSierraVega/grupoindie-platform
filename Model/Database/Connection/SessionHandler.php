@@ -1,12 +1,16 @@
 <?php
 
-/*
- * Copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+/**
+ * GI-Platform-DVLP - SessionHandler
  *
- * This software is protected under GNU: you can use, study and modify it
- * but not distribute it under the terms of the GNU General Public License 
- * as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform\Model
+ *
+ * @version 0C.00
+ * @since 17-05-07
+ * @todo Upgrade class
  */
 
 namespace GIndie\Platform\Model\Database\Connection;
@@ -15,26 +19,21 @@ use GIndie\Platform\Model\Database\Connection;
 
 /**
  * Description of SessionHandler
- *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @since 2017-05-07
- * @version 
- * @version $Id: GIP.00.01,v 1.2 2006-04-29 04:08:27 cellog Exp $;
  */
-class SessionHandler extends Connection {
+class SessionHandler extends Connection
+{
 
     /**
      * Defines the username
      * @var string 
-     * @version GIP.00.01
      */
-    protected static $USERNAME = "grupoind_main";//"mrdemo_sesion";//"straffon_default";
+    protected static $USERNAME = "grupoind_main"; //"mrdemo_sesion";//"straffon_default";
 
     /**
      * Defines the username
      * @var string 
-     * @version GIP.00.01
      */
-    protected static $PASSWORD = "YJiYZn5ars2";//"WW4_cMtU(o]B";//"%wn0Zx5]EZu}";
+    protected static $PASSWORD = "YJiYZn5ars2"; //"WW4_cMtU(o]B";//"
 
+    //%wn0Zx5]EZu}";
 }

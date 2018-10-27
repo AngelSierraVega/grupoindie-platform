@@ -1,12 +1,15 @@
 <?php
 
 /**
- * GrupoIndie - Widget 2017-04-21
- * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+ * GI-Platform-DVLP - 
  *
- * @package Platform
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
  *
- * @version GIP.00.00
+ * @package GIndie\Platform\View
+ * 
+ * @version 0C.00
+ * @since 17-04-21
  */
 
 namespace GIndie\Platform\View;
@@ -23,7 +26,7 @@ use GIndie\ScriptGenerator\Dashboard;
  * @since   
  * @author  Angel Sierra Vega <angel.sierra@grupoindie.com>
  * 
- * @version GIP.00.00
+ * @edit 18-03-22
  */
 class Widget extends Dashboard\Widget
 {

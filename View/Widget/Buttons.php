@@ -1,12 +1,15 @@
 <?php
 
 /**
- * GIplatform - Buttons 2017-06-08
- * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+ * GI-Platform-DVLP - 
  *
- * @package Platform
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
  *
- * @version GIP.00.00
+ * @package GIndie\Platform\View
+ *
+ * @version 0C.00
+ * @since 17-06-08
  */
 
 namespace GIndie\Platform\View\Widget;
@@ -16,7 +19,7 @@ use \GIndie\Generator\DML\HTML5\Bootstrap3\Component\Button;
 /**
  * Description of Buttons
  *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @edit 18-03-23
  */
 class Buttons
 {
@@ -33,8 +36,7 @@ class Buttons
      * @param string|null $gipClass
      * @return \GIndie\Generator\DML\HTML5\Bootstrap3\Component\Button
      */
-    public static function Custom($context, $icon, $gipAction, $gipActionId = \NULL, $gipModal = \FALSE,
-                                  $gipClass = \NULL, $gipSelectedId = \NULL)
+    public static function Custom($context, $icon, $gipAction, $gipActionId = \NULL, $gipModal = \FALSE, $gipClass = \NULL, $gipSelectedId = \NULL)
     {
         $btn = new Button("");
         $btn->addClass('btn-sm');
@@ -62,8 +64,7 @@ class Buttons
      * 
      * @return \GIndie\Generator\DML\HTML5\Bootstrap3\Component\Button
      */
-    public static function CustomDanger($icon, $gipAction, $gipActionId = \NULL, $gipModal = \FALSE,
-                                        $gipClass = \NULL)
+    public static function CustomDanger($icon, $gipAction, $gipActionId = \NULL, $gipModal = \FALSE, $gipClass = \NULL)
     {
         return static::Custom(static::$COLOR_DANGER, $icon, $gipAction, $gipActionId, $gipModal, $gipClass);
     }
@@ -73,8 +74,7 @@ class Buttons
      * @return \GIndie\Generator\DML\HTML5\Bootstrap3\Component\Button
      * @since 18-03-23
      */
-    public static function customWarning($icon, $gipAction, $gipActionId = \NULL, $gipModal = \FALSE,
-                                         $gipClass = \NULL)
+    public static function customWarning($icon, $gipAction, $gipActionId = \NULL, $gipModal = \FALSE, $gipClass = \NULL)
     {
         return static::Custom(static::$COLOR_WARNING, $icon, $gipAction, $gipActionId, $gipModal, $gipClass);
     }
@@ -83,8 +83,7 @@ class Buttons
      * 
      * @return \GIndie\Generator\DML\HTML5\Bootstrap3\Component\Button
      */
-    public static function CustomPrimary($icon, $gipAction, $gipActionId = \NULL, $gipModal = \FALSE,
-                                         $gipClass = \NULL)
+    public static function CustomPrimary($icon, $gipAction, $gipActionId = \NULL, $gipModal = \FALSE, $gipClass = \NULL)
     {
         return static::Custom(Button::$COLOR_PRIMARY, $icon, $gipAction, $gipActionId, $gipModal, $gipClass);
     }
@@ -93,8 +92,7 @@ class Buttons
      * 
      * @return \GIndie\Generator\DML\HTML5\Bootstrap3\Component\Button
      */
-    public static function CustomSuccess($icon, $gipAction, $gipActionId = \NULL, $gipModal = \FALSE,
-                                         $gipClass = \NULL)
+    public static function CustomSuccess($icon, $gipAction, $gipActionId = \NULL, $gipModal = \FALSE, $gipClass = \NULL)
     {
         return static::Custom(Button::$COLOR_SUCCESS, $icon, $gipAction, $gipActionId, $gipModal, $gipClass);
     }
@@ -103,8 +101,7 @@ class Buttons
      * 
      * @return \GIndie\Generator\DML\HTML5\Bootstrap3\Component\Button
      */
-    public static function CustomDefault($icon, $gipAction, $gipActionId = \NULL, $gipModal = \FALSE,
-                                         $gipClass = \NULL, $gipSelectedId = \NULL)
+    public static function CustomDefault($icon, $gipAction, $gipActionId = \NULL, $gipModal = \FALSE, $gipClass = \NULL, $gipSelectedId = \NULL)
     {
         return static::Custom(Button::$COLOR_DEFAULT, $icon, $gipAction, $gipActionId, $gipModal, $gipClass, $gipSelectedId);
     }

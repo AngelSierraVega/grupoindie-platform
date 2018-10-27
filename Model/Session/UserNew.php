@@ -4,9 +4,9 @@
  * GIplatform - UserNew 2017-05-31
  * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
  *
- * @package Platform
+ * @package GIndie\Platform\Model
  *
- * @version GIP.00.00
+ * @version DEPRECATED
  */
 
 namespace GIndie\Platform\Model\Session;
@@ -24,19 +24,16 @@ class UserNew extends Record {
 
     /**
      * The name of the database storing the record.
-     * @version     GIP.00.01
      */
     const SCHEMA = "mr_sesion";
 
     /**
      * The name of the table storing the the record.
-     * @version     GIP.00.01
      */
     const TABLE = "usuario_cuenta";
 
     /**
      * The primary key of the record.
-     * @version     GIP.00.01
      */
     const PRIMARY_KEY = "key";
 
@@ -44,7 +41,6 @@ class UserNew extends Record {
      * @since       beta.00.01
      * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
      * 
-     * @version     GIP.00.01
      */
     public function defineAttributes() {
         $this->defineAttribute("key")->excludeFromForm();

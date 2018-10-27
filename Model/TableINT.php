@@ -1,11 +1,22 @@
 <?php
 
+/**
+ * GI-Platform-DVLP - TableINT
+ *
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform\Model
+ *
+ * @version 0C.00
+ * @since 
+ */
+
 namespace GIndie\Platform\Model;
 
 /**
  * Description of TableINT
- *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * 
  * @edit 18-03-13
  * - Autoformated class
  */

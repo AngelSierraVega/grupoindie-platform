@@ -16,30 +16,29 @@ use GIndie\Platform\Model\Database\Table;
 /**
  * Description of Users
  *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @package GIndie\Platform\Model
+ *
+ * @version DEPRECATED
  */
-class Users extends Table {
-    
+class Users extends Table
+{
+
     const NAME = "Usuarios";
 
-	/**
+    /**
      * The name of the database
-     * @version     GIP.00.01
      */
     const DATABASE = "gip_session";
 
     /**
      * The name of the table
-     * @version     GIP.00.01
      */
     const TABLE = "user";
-
-
     const ROW_ID = "key";
-    
-    
-    protected function defineColumns() {
-    	$this->defineColumn("key")->setLabel("Llave única");
+
+    protected function defineColumns()
+    {
+        $this->defineColumn("key")->setLabel("Llave única");
         $this->defineColumn("user")->setLabel("Usuario");
         //$this->defineColumn("users")->setLabel("Usuarios");
         //$this->defineColumn("password_enct")->setLabel("Contraseña (Enc.)");;
@@ -53,5 +52,4 @@ class Users extends Table {
 //        $this->addRow(["name" => "[tratamiento] Nombre(s) Apellido1 Apellido 2", "email" => "email@domain"]);
 //        $this->addRow(["name" => "[tratamiento] Nombre(s) Apellido1 Apellido 2", "email" => "email@domain"]);
 //    }
-
 }

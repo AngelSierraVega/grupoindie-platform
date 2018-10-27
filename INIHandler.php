@@ -1,10 +1,15 @@
 <?php
 
 /**
- * Platform - INIHandler
- * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+ * GI-Platform-DVLP - ExceptionMySQL
  *
- * @package Platform
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform
+ *
+ * @version 0C.00
+ * @since 17-12-26
  */
 
 namespace GIndie\Platform;
@@ -13,14 +18,13 @@ namespace GIndie\Platform;
  * Description of INIHandler
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @version GIP.00.00 17-12-26 Created class
- * @edit GIP.00.01
+ * @edit 17-12-26
  * - Extended class from \GIndie\INIHandler
  * - Added required methods: fileName(), pathToFile(), requiredVars()
- * @edit GIP.00.02
+ * @edit 17-12-26
  * - Updated method requiredVars()
- * @edit GIP.00.03 18-01-06
- * @edit GIP.00.04 18-01-23
+ * @edit 18-01-16
+ * @edit 18-01-23
  * - Updated requiredVars()
  */
 class INIHandler extends \GIndie\INIHandler
@@ -28,7 +32,7 @@ class INIHandler extends \GIndie\INIHandler
 
     /**
      * 
-     * @since GIP.00.01
+     * @since 17-12-26
      * @return string
      */
     public static function fileName()
@@ -38,9 +42,9 @@ class INIHandler extends \GIndie\INIHandler
 
     /**
      * 
-     * @since GIP.00.01
+     * @since 17-12-26
      * @return string
-     * @deprecated since GIP.00.03
+     * @deprecated since 18-01-16
      *     public static function pathToFile()
       {
       return __DIR__ . "/" . static::fileName() . ".ini";
@@ -49,9 +53,9 @@ class INIHandler extends \GIndie\INIHandler
 
     /**
      * 
-     * @since GIP.00.01
+     * @since 17-12-26
      * @return array
-     * @edit GIP.00.04
+     * @edit 18-01-23
      */
     public static function requiredVars()
     {

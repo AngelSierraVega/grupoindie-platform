@@ -1,21 +1,23 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * GI-Platform-DVLP - ListSimple
+ *
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform\Model
+ *
+ * @version 0C.00
+ * @since 17-06-26
+ * @todo Upgrade class
  */
 
 namespace GIndie\Platform\Model;
 
-
 /**
  * Description of List
- *
- * @version     GIP.00.02
- * @since       2017-06-26
- *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @edit 18-02-27
  */
 class Element
 {
@@ -23,7 +25,7 @@ class Element
     private $_id;
     private $_value;
     private $_category = \FALSE;
-    
+
     /**
      * @param $value
      * @return mixed

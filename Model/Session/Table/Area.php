@@ -4,9 +4,9 @@
  * GIplatform - Area 2017-05-31
  * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
  *
- * @package Platform
+ * @package GIndie\Platform\Model
  *
- * @version GIP.00.00
+ * @version DEPRECATED
  */
 
 namespace GIndie\Platform\Model\Session\Table;
@@ -24,13 +24,11 @@ class Area extends Table {
 
     /**
      * The name of the database
-     * @version     GIP.00.01
      */
     const DATABASE = "gip_session";
 
     /**
      * The name of the table
-     * @version     GIP.00.01
      */
     const TABLE = "area";
     const ROW_ID = "id";

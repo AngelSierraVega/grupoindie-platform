@@ -1,12 +1,15 @@
 <?php
 
 /**
- * GIplatform
- * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+ * GI-Platform-DVLP - 
  *
- * @package Platform
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
  *
- * @version GIP.00.05
+ * @package GIndie\Platform\View
+ *
+ * @version 0C.00
+ * @since 
  */
 
 namespace GIndie\Platform\View;
@@ -17,6 +20,7 @@ use GIndie\Generator\DML\HTML5\Category\StylesSemantics\Span;
  * Description of Icons
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @edit 18-02-27
  */
 class Icons
 {

@@ -17,8 +17,10 @@ use GIndie\Platform\Model\Record;
  * Defines a Record Model for session information.
  *
  * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @version     GIP.00.01
  * @since       2017-05-02
+ * @package GIndie\Platform\Model
+ *
+ * @version DEPRECATED
  */
 class Information extends Record {
 

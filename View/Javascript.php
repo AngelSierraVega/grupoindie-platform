@@ -1,16 +1,14 @@
 <?php
 
 /**
- * GI-Platform-DVLP - Javascript
+ * GI-Platform-DVLP - 
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
  *
  * @package GIndie\Platform\View
  * 
- * 
- *
- * @version 0A.20
+ * @version 0C.00
  * @since 18-03-14
  */
 
@@ -22,6 +20,7 @@ namespace GIndie\Platform\View;
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * @todo
  * - Extend class from ScriptGenerator
+ * @edit 18-05-20
  */
 class Javascript
 {

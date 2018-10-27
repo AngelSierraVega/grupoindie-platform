@@ -1,11 +1,15 @@
 <?php
-/*
- * GIplatform - test 2017-05-21
- * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+
+/**
+ * GI-Platform-DVLP - 
  *
- * @package Platform
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
  *
- * @version GIP.00.0?
+ * @package GIndie\Platform\View
+ *
+ * @version 0C.00
+ * @since 17-05-21
  */
 
 namespace GIndie\Platform\View\Widget;
@@ -18,9 +22,9 @@ use GIndie\Generator\DML\HTML5\Category\StylesSemantics;
 /**
  * Description of WidgetList
  *
- * @version GIP.00.03
  * 
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @edit 18-02-27
  */
 class WidgetList extends View\Widget
 {
@@ -33,7 +37,6 @@ class WidgetList extends View\Widget
      * WidgetList constructor.
      * 
      * @todo eliminar parametro $id = "treeview"
-     * @version GIP.00.03
      * @since   GIP.00.02
      * @param ListSimple $list
      * @param string|null $selectedId

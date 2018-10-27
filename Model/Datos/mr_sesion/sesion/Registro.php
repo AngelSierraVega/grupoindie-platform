@@ -4,10 +4,8 @@
  * GIplatform - Registro
  * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
  *
- * @package Platform
- *
- * @version 0C.30
- * @since 17-06-11
+ * @package GIndie\Platform\Model\Datos
+ * @version DEPRECATED
  */
 
 namespace GIndie\Platform\Model\Datos\mr_sesion\sesion;

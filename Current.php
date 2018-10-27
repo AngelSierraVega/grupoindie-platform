@@ -1,12 +1,15 @@
 <?php
 
-/*
- * Copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+/**
+ * GI-Platform-DVLP - Current
  *
- * This software is protected under GNU: you can use, study and modify it
- * but not distribute it under the terms of the GNU General Public License 
- * as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform
+ *
+ * @version 0C.10
+ * @since 17-01-05
  */
 
 namespace GIndie\Platform;
@@ -16,15 +19,6 @@ use \GIndie\Platform\Model\Datos\mr_sesion\usuario_cuenta;
 
 /**
  * Access to main vars.
- * 
- * @package     Platform
- * @subpackage  Main
- * @category    API
- * 
- * @since       2017-01-05
- * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
- * 
- * @version     GIP.00.08
  */
 class Current
 {
@@ -33,8 +27,6 @@ class Current
     /**
      * [description]
      * @return      null|\GIndie\Platform\Model\Datos\mr_sesion\usuario_cuenta\Registro
-     * @version     GIP.00.03
-     * @since       GIP.00.00
      */
     public static function User()
     {
@@ -77,8 +69,6 @@ class Current
     /**
      * 
      * @param type $instance
-     * @since GIP.00.02
-     * @version GIP.00.04
      */
     public static function setConfig(Config $config)
     {
@@ -88,8 +78,6 @@ class Current
     /**
      * 
      * @param type $instance
-     * @since GIP.00.02
-     * @version GIP.00.04
      */
     public static function setInstance(\GIndie\Platform\Instance $instance)
     {
@@ -123,7 +111,7 @@ class Current
     }
 
     /**
-     * @deprecated since GIP.00.04
+     * @deprecated
      * @return \static
      */
     public static function Controller()
@@ -157,9 +145,7 @@ class Current
 
     /**
      * [description]
-     * @return      boolean|\GIndie\Platform\Model\User
-     * @version     GIP.00.03
-     * @since       GIP.00.00
+     * @return boolean|\GIndie\Platform\Model\User
      */
     public static function sessionInfo()
     {//
@@ -168,9 +154,8 @@ class Current
 
     /**
      * [description]
-     * @deprecated since GIP.00.04
+     * @deprecated 
      * @return      boolean
-     * @version     GIP.00.02
      */
     public static function IsAuthenticated()
     {
@@ -188,10 +173,9 @@ class Current
 
     /**
      * Attempts to restart a previous session.
-     * @deprecated since GIP.00.06
-     * @todo        Token validation
-     * @return      boolean
-     * @since       GIP.00.03
+     * @deprecated 
+     * @todo Token validation
+     * @return boolean
      */
     public static function sessionRestart()
     {
@@ -213,9 +197,8 @@ class Current
     }
 
     /**
-     * @deprecated since GIP.00.06
+     * @deprecated
      * @return      boolean
-     * @version     GIP.00.04
      */
     private static function session_start_info()
     {
@@ -228,9 +211,8 @@ class Current
     }
 
     /**
-     * @deprecated since GIP.00.06
+     * @deprecated
      * @return      boolean
-     * @version     GIP.00.04
      */
     private static function session_start_connection()
     {
@@ -242,9 +224,8 @@ class Current
     }
 
     /**
-     * @deprecated since GIP.00.05
-     * @return      boolean
-     * @version     GIP.00.04
+     * @deprecated 
+     * @return boolean
      */
     private static function session_start_user($userId)
     {
@@ -253,9 +234,7 @@ class Current
     }
 
     /**
-     * @deprecated since GIP.00.04
-     * @version     GIP.00.03
-     * @since       GIP.00.02
+     * @deprecated
      */
     public static function StartSession($userId)
     {
@@ -290,7 +269,6 @@ class Current
     /**
      * 
      * @param string $userId
-     * @since GIP.00.05
      */
     public static function setUser($userId)
     {
@@ -300,20 +278,18 @@ class Current
 
     /**
      * @todo carga dinámica de roles.
-     * @return      boolean
-     * @version     GIP.00.04
+     * @return boolean
      */
     private static function _setRoles($userId)
     {
-        $_SESSION["gip-roles"] = new RolesUsuario([["fk_usuario_cuenta" => $userId]]);
+        $_SESSION["gip-roles"] = new RolesUsuario([["pltfrm_cta_fk" => $userId]]);
+//        var_dump($_SESSION["gip-roles"]);
         return isset($_SESSION["gip-roles"]);
     }
 
     /**
      * [description]
      * @return      null|\GIndie\Platform\Model\Datos\mr_sesion\usuario_cuenta_rol\Lista
-     * @version     GIP.00.03
-     * @since       GIP.00.00
      */
     public static function Roles()
     {
@@ -325,23 +301,25 @@ class Current
      * @todo basic funcionality
      * @param type $role
      * @return type
+     * @edit 18-08-27
+     * - Debuged vars
      */
     public static function hasRole($roles)
     {
         if (\session_status() === \PHP_SESSION_NONE) {
-            return \FALSE;
+            return false;
         }
         if (!isset($_SESSION["gip-roles"])) {
-            return \FALSE;
+            return false;
         }
         $roles = \is_string($roles) ? [$roles] : $roles;
-        $roles = $roles == \NULL ? ["NONE"] : $roles;
+        $roles = $roles == null ? ["NONE"] : $roles;
         foreach ($roles as $tmpRol) {
-            if ($_SESSION["gip-roles"]->getElementAt($tmpRol) !== \FALSE) {
-                return \TRUE;
+            if ($_SESSION["gip-roles"]->getElementAt($tmpRol) !== false) {
+                return true;
             }
         }
-        return \FALSE;
+        return false;
     }
 
     /**
@@ -382,7 +360,7 @@ class Current
     }
 
     /**
-     * @deprecated since GIP.00.08
+     * @deprecated
      * @todo VALIDAR SI SE DEPRECA COMPLETAMENTE
      * @todo create log entry before destroying session.
      * @return boolean

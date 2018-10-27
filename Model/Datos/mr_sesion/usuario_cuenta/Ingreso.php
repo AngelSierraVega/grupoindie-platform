@@ -4,9 +4,10 @@
  * GIplatform - Ingreso 2017-06-11
  * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
  *
- * @package Platform
+ * @package GIndie\Platform\Model\Datos
  *
- * @version GIP.00.03
+ * @version 0C.00
+ * @todo Move class into DataModel
  */
 
 namespace GIndie\Platform\Model\Datos\mr_sesion\usuario_cuenta;
@@ -16,8 +17,7 @@ use \GIndie\Platform\Model;
 /**
  * Description of Login
  *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @version GIP.00.03
+ * @todo Move to DataModel and deprecate
  */
 class Ingreso extends Registro
 {

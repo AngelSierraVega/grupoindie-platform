@@ -1,12 +1,15 @@
 <?php
 
-/*
- * Copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+/**
+ * GI-Platform-DVLP - 
  *
- * This software is protected under GNU: you can use, study and modify it
- * but not distribute it under the terms of the GNU General Public License 
- * as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform\View
+ *
+ * @version 0C.00
+ * @since 17-04-21
  */
 
 namespace GIndie\Platform\View\Document\Topbar;
@@ -15,11 +18,7 @@ use GIndie\Generator\DML\HTML5\Bootstrap3;
 
 /**
  * UserMenu
- * 
- * @since       2017-04-21
- * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
- * 
- * @version     GIP.00
+ * @edit 18-08-27
  */
 class UserMenu extends Bootstrap3\Component\Dropdown
 {
@@ -53,20 +52,17 @@ class UserMenu extends Bootstrap3\Component\Dropdown
 
         $perfil = Bootstrap3\Factory::Hyperlink("#", "Perfil usuario");
         $perfil->setAttribute("gip-action", "form-edit");
-        $perfil->setAttribute("gip-action-id",
-                              \GIndie\Platform\Current::User()->getId());
+        $perfil->setAttribute("gip-action-id", \GIndie\Platform\Current::User()->getId());
         $perfil->setAttribute("gip-action", "form-edit");
         $perfil->setAttribute("gip-modal", "1");
-        $perfil->setAttribute("gip-action-class",
-                              urlencode("Straffsa\SistemaIntegralIngresos\Datos\mr_catalogos\usuario_perfil\Registro"));
+        $perfil->setAttribute("gip-action-class", urlencode(\GIndie\Platform\DataModel\Platform\UserProfile::class));
 
         $listElements = [$perfil];
 
         $cta = \GIndie\Platform\Current::User()->getId();
-        $listTemp = new \GIndie\Platform\Model\Datos\mr_sesion\usuario_cuenta_rol\Lista(["fk_rol='AS'", "fk_usuario_cuenta='{$cta}'"]);
+        $listTemp = new \GIndie\Platform\Model\Datos\mr_sesion\usuario_cuenta_rol\Lista(["pltfrm_rol_fk='AS'", "pltfrm_cta_fk='{$cta}'"]);
         if ($listTemp->getElementAt("AS") !== \FALSE) {
-            $configuracionSesion = Bootstrap3\Factory::Hyperlink("#",
-                                                                 "Configuración de sesión");
+            $configuracionSesion = Bootstrap3\Factory::Hyperlink("#", "Configuración de sesión");
             $configuracionSesion->setAttribute("gip-action", "config-sesion");
             $configuracionSesion->setAttribute("gip-modal", "1");
             $listElements[] = $configuracionSesion;
@@ -92,8 +88,6 @@ class UserMenu extends Bootstrap3\Component\Dropdown
      * @final
      * @since       2017-01-05
      * @author      Angel Sierra Vega <angel.sierra@grupoindie.com>
-     * 
-     * @version 00.B0
      * @deprecated since 18-05-20
      * @todo 
      * - Delete

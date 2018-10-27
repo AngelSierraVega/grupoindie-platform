@@ -4,9 +4,9 @@
  * GIplatform - Area 2017-05-31
  * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
  *
- * @package Platform
+ * @package GIndie\Platform\Model
  *
- * @version GIP.00.00
+ * @version DEPRECATED
  */
 
 namespace GIndie\Platform\Model\Session;

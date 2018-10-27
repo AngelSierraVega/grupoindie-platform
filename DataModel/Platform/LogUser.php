@@ -8,20 +8,24 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0C.70
+ * @version 0C.A0
  * @since 18-08-25
  */
 
 namespace GIndie\Platform\DataModel\Platform;
 
-use GIndie\Platform\Model\Record;
+//use GIndie\Platform\Model\Record;
 use GIndie\Platform\Model;
 use GIndie\DBHandler\MySQL56\Instance\DataType;
 
 /**
  * Description of LogUser
+ * @edit 18-10-27
+ * - Added databaseClassname() from DataModel\AbstractTable
+ * - Class extends Model\RecordAutoincremented 
+ * - Removed PRIMARY_KEY and AUTOINCREMENT
  */
-class LogUser extends Record
+class LogUser extends Model\RecordAutoincremented
 {
 
     /**
@@ -36,12 +40,6 @@ class LogUser extends Record
      * @since 18-08-25
      */
     const TABLE = "pltfrm_cta_log";
-
-    /**
-     * Llave primaria del modelo de datos.
-     * @since 18-08-25
-     */
-    const PRIMARY_KEY = "id";
 
     /**
      * Llave primaria del modelo de datos.
@@ -117,8 +115,8 @@ class LogUser extends Record
          */
         static::columnDefinition("timestamp", DataType::integer(11));
         static::columnDefinition("timestamp")->setNotNull();
-        
-         /**
+
+        /**
          * Column notes
          */
         static::columnDefinition("notes", DataType::text());

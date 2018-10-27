@@ -1,7 +1,15 @@
 <?php
 
-/*
- * GIplatform - test
+/**
+ * GI-Platform-DVLP - 
+ *
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ *
+ * @package GIndie\Platform\View
+ *
+ * @version 0C.00
+ * @since 17-05-21
  */
 
 namespace GIndie\Platform\View\Widget;
@@ -9,19 +17,10 @@ namespace GIndie\Platform\View\Widget;
 use GIndie\Platform\View;
 
 /**
- * Description of WidgetTable
- *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- *  
- * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
- *
- * @package Platform
- *
- * @version GIP.00.00 17-05-21
- * @version GIP.00.02
- * @edit GIP.00.03 18-02-05
+ * @edit 18-02-05 
  * - Created getTable()
  * - Renamed vars due to PSR-1 violation.
+ * @edit 18-10-01
  */
 class WidgetTable extends View\Widget
 {
@@ -29,8 +28,8 @@ class WidgetTable extends View\Widget
     /**
      *
      * @var \GIndie\Platform\Model\Table 
-     * @since GIP.00.00
-     * @edit GIP.00.03
+     * @since 17-05-21
+     * @edit 18-02-05
      */
     protected $table;
 
@@ -38,10 +37,12 @@ class WidgetTable extends View\Widget
      * @todo new consctruct from View\Widget
      * @param \GIndie\Platform\Model\Table $table
      * @param type $title
-     * @since GIP.00.00
+     * @since 17-05-21
      * @edit 
      *      - Se usa \GIndie\Platform\View\Table para construir el marcado HTML de la tabla.
-     * @edit GIP.00.03
+     * @edit 18-02-05
+     * @edit 18-10-10
+     * - Default context success.
      */
     public function __construct(\GIndie\Platform\Model\Table $tableModel, $selectedId = \NULL)
     {
@@ -49,10 +50,12 @@ class WidgetTable extends View\Widget
         $title = $tableModel::Name();
         $tableView = new \GIndie\Platform\View\Table($tableModel, \TRUE, $selectedId);
         parent::__construct($title, $tableView);
-        $this->addButtonHeading(Buttons::Reload(\NULL, $selectedId));
+        $this->addButtonHeading(Buttons::Reload(null, $selectedId));
         if (\GIndie\Platform\Current::hasRole($tableModel::getValidRolesFor("gip-create"))) {
-            $this->setContext(static::$COLOR_PRIMARY, \TRUE);
+            $this->setContext(static::$COLOR_PRIMARY, true);
             $this->addButtonCreate(urlencode($tableModel::RelatedRecord()));
+        } else {
+            $this->setContext(static::$COLOR_SUCCESS, true);
         }
     }
 
@@ -62,7 +65,7 @@ class WidgetTable extends View\Widget
     }
 
     /**
-     * @since GIP.00.03
+     * @since 18-02-05
      * @return \GIndie\Platform\Model\Table
      */
     public function getTable()

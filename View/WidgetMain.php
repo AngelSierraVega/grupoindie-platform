@@ -1,19 +1,24 @@
 <?php
+
 /**
- * WidgetMain
- * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+ * GI-Platform-DVLP - 
  *
- * @package Platform
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
  *
- * @version GIP.00.01
+ * @package GIndie\Platform\View
+ * 
+ * @version 0C.00
+ * @since 
  */
 
 namespace GIndie\Platform\View;
 
 use GIndie\Platform\View\Widget\Buttons;
 use GIndie\ScriptGenerator\HTML5\Category\StylesSemantics;
+
 /**
- * 
+ * @edit 18-10-22
  */
 class WidgetMain extends Widget
 {
@@ -28,29 +33,24 @@ class WidgetMain extends Widget
      * 
      * @param \GIndie\Platform\Model\Record $record
      * @param string $title
+     * @edit 18-10-22
+     * - Default color: $COLOR_PRIMARY
      */
-    public function __construct(\GIndie\Platform\Model\Record $record,
-                                $title = \NULL)
+    public function __construct(\GIndie\Platform\Model\Record $record, $title = \NULL)
     {
         $this->_record = $record;
         //$record::ICON
-        parent::__construct($title !== \NULL ? $title : $record::NAME, \FALSE,
-                            $this->tmpContent(), true);
-        $this->setContext(static::$COLOR_SUCCESS);
-        $this->addButtonHeading(Buttons::Reload(\urlencode(\get_class($record)),
-                                                                      $record->getId()));
+        parent::__construct($title !== \NULL ? $title : $record::NAME, \FALSE, $this->tmpContent(), true);
+        $this->setContext(static::$COLOR_PRIMARY);
+        $this->addButtonHeading(Buttons::Reload(\urlencode(\get_class($record)), $record->getId()));
         if (\GIndie\Platform\Current::hasRole($record->getValidRolesFor("gip-edit"))) {
-            $this->addButtonEdit(\urlencode(\get_class($record)),
-                                                       $record->getId());
+            $this->addButtonEdit(\urlencode(\get_class($record)), $record->getId());
         }
         if (\GIndie\Platform\Current::hasRole($record->getValidRolesFor("gip-delete"))) {
-            $this->addButtonDelete(\urlencode(\get_class($record)),
-                                                         $record->getId());
+            $this->addButtonDelete(\urlencode(\get_class($record)), $record->getId());
         }
         if (\GIndie\Platform\Current::hasRole($record->getValidRolesFor("gip-state"))) {
-            $this->addButtonState($record->getState(),
-                                  \urlencode(\get_class($record)),
-                                                        $record->getId());
+            $this->addButtonState($record->getState(), \urlencode(\get_class($record)), $record->getId());
         }
     }
 

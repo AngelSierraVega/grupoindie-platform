@@ -1,12 +1,16 @@
 <?php
 
 /**
- * GIplatform - Record  2017-01-15
- * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+ * GI-Platform-DVLP - ListSimple
  *
- * @package Platform
+ * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
  *
- * @version GIP.00.04
+ * @package GIndie\Platform\Model
+ *
+ * @version DEPRECATED
+ * @since 
+ * @todo Upgrade class
  */
 
 namespace GIndie\Platform\Model\Database;
@@ -14,11 +18,9 @@ namespace GIndie\Platform\Model\Database;
 use GIndie\Platform\Current;
 
 /**
- *
- * @since GIP.00.01
- * @author <angel.sierra@grupoindie.com>
+ *@edit 18-02-27
  */
 abstract class Record extends \GIndie\Platform\Model\Record
 {
-
+    
 }

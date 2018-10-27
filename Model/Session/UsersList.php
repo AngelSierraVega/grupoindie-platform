@@ -12,8 +12,9 @@ use GIndie\Platform\Model\Database\ListSimple;
 /**
  * Class UsersList
  *
- * @version GIP.00.04
- * @package GIndie\Platform\Model\Session
+ * @package GIndie\Platform\Model
+ *
+ * @version DEPRECATED
  */
 class UsersList extends ListSimple
 {
