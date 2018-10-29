@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\Model
  *
- * @version 0C.00
+ * @version 0C.3A
  * @since 17-01-15
  * @todo Upgrade class
  */
@@ -19,7 +19,8 @@ namespace GIndie\Platform\Model\Database;
  * Defines a connection to the database.
  * 
  * @abstract
- * 
+ * @edit 18-10-28
+ * - Handle virtual column
  */
 abstract class Connection
 {
@@ -257,6 +258,8 @@ abstract class Connection
      * @author Izmir Sanchez Juarez <izmirreffi@gmail.com>
      * @edit Angel Sierra Vega <angel.sierra.vega@gmail.com>
      *      - update funcional
+     * @edit 18-10-28
+     * - Skip SQL attribute if is virtual column
      */
     public function update(\GIndie\Platform\Model\Record $newRecordData, $id)
     {
@@ -272,14 +275,18 @@ abstract class Connection
         $table = $newRecordData::TABLE;
         $attribute_pairs = array();
         foreach ($newRecordData->getAttributeNames() as $attribute) {
-            $attr = "`{$table}`.`" . $attribute . "`";
-            $value = $newRecordData->getValueOf($attribute);
-            if ($value == "NULL") {
-                $attribute_pairs[] = "$attr=$value";
-            } elseif ($value == "NOW()") {
-                $attribute_pairs[] = "$attr=$value";
+            if ($newRecordData->getAttribute($attribute)->isVirtualColumn() === true) {
+                
             } else {
-                $attribute_pairs[] = "$attr='$value'";
+                $attr = "`{$table}`.`" . $attribute . "`";
+                $value = $newRecordData->getValueOf($attribute);
+                if ($value == "NULL") {
+                    $attribute_pairs[] = "$attr=$value";
+                } elseif ($value == "NOW()") {
+                    $attribute_pairs[] = "$attr=$value";
+                } else {
+                    $attribute_pairs[] = "$attr='$value'";
+                }
             }
         }
 
@@ -336,6 +343,8 @@ abstract class Connection
      *                  <b>FALSE</b> on error. Otherwize will return a
      *                  <b>\Traversable</b> object.
      * @author          Angel Sierra Vega <angel.sierra@grupoindie.com>
+     * @edit 18-10-28
+     * - Skip virtual column
      */
     public function create(\GIndie\Platform\Model\Record $newRecordData)
     {
@@ -348,16 +357,20 @@ abstract class Connection
 
         $attribute_pairs = array();
         foreach ($newRecordData->getAttributeNames() as $attribute) {
-            $key = $newRecordData->getAttribute($attribute)->getName();
-            $key = $attribute;
-            $key = "`{$table}`.`{$key}`";
-            $value = $newRecordData->getValueOf($attribute);
-            if ($value == "NULL") {
-                $attribute_pairs[$key] = $value;
-            } elseif ($value == "NOW()") {
-                $attribute_pairs[$key] = $value;
+            if ($newRecordData->getAttribute($attribute)->isVirtualColumn() === true) {
+                
             } else {
-                $attribute_pairs[$key] = "'{$value}'";
+                $key = $newRecordData->getAttribute($attribute)->getName();
+                $key = $attribute;
+                $key = "`{$table}`.`{$key}`";
+                $value = $newRecordData->getValueOf($attribute);
+                if ($value == "NULL") {
+                    $attribute_pairs[$key] = $value;
+                } elseif ($value == "NOW()") {
+                    $attribute_pairs[$key] = $value;
+                } else {
+                    $attribute_pairs[$key] = "'{$value}'";
+                }
             }
         }
 

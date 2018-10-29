@@ -7,15 +7,21 @@
  *
  * @package GIndie\Platform\View
  * 
- * @version 0C.00
+ * @version 0C.A0
  * @since 17-06-17
+ * @todo Upgrade vars
+ * @todo Upgrade methods
+ * @todo Extends Table
  */
 
 namespace GIndie\Platform\View;
 
-use GIndie\Generator\DML\HTML5\Category\StylesSemantics\Div;
+//use GIndie\Generator\DML\HTML5\Category\StylesSemantics\Div;
 use GIndie\Platform\Model\Table as ModelTable;
-use GIndie\Generator\DML\HTML5\Category\StylesSemantics;
+//use GIndie\Generator\DML\HTML5\Category\StylesSemantics;
+use GIndie\ScriptGenerator\HTML5\Category\StylesSemantics;
+
+//use \GIndie\ScriptGenerator\HTML5\Category\StylesSemantics\Div;
 
 /**
  * Description of Table
@@ -23,8 +29,12 @@ use GIndie\Generator\DML\HTML5\Category\StylesSemantics;
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * @since GIP.00.01
  * @edit 18-04-02
+ * @edit 18-10-27
+ * - Class extends \GIndie\ScriptGenerator\HTML5\Category\StylesSemantics\Div
+ * @edit 18-11-05
+ * - Removed use of deprecated libs
  */
-class Table extends Div
+class Table extends \GIndie\ScriptGenerator\HTML5\Category\StylesSemantics\Div
 {
 
     /**
@@ -54,8 +64,7 @@ class Table extends Div
      * @param string|null $selectedId
      * @since GIP.00.01
      */
-    public function __construct(ModelTable $table, $showFooter = \FALSE,
-                                $selectedId = \NULL)
+    public function __construct(ModelTable $table, $showFooter = \FALSE, $selectedId = \NULL)
     {
         $this->_showFooter = $showFooter;
         $relatedRecord = $table::RelatedRecord();
@@ -142,8 +151,7 @@ class Table extends Div
 
     protected function _btnGroup($rowId)
     {
-        $bntGroup = new StylesSemantics\Div("",
-                                            ["class" => "btn-group btn-group-xs"]);
+        $bntGroup = new StylesSemantics\Div("", ["class" => "btn-group btn-group-xs"]);
         if ($this->_delete) {
 //            $button = Widget\Buttons::CustomDanger(Icons::Delete(),
 //                                                   "form-delete", $rowId, \TRUE,
@@ -167,6 +175,8 @@ class Table extends Div
      * Construye el marcado HTML del contenido del Nodo actual
      * @todo Deprecar función y construir Nodos
      * @since GIP.00.01
+     * @edit 18-10-29
+     * - Se corrigió bug en generación de botones
      */
     protected function tableContent($selectedId)
     {
@@ -206,7 +216,7 @@ class Table extends Div
                     <?php
                     if ($this->_isEditable()) {
                         ?>
-                        <td class="text-center"><?= $this->_btnGroup($row->getValue("id")); ?></td>
+                        <td class="text-center"><?= $this->_btnGroup($row->getValue($this->_rowIdAttribute)); ?></td>
                         <?php
                     }
 
@@ -218,11 +228,9 @@ class Table extends Div
                             switch ($column->getType())
                             {
                                 case \GIndie\Platform\Model\Attribute::TYPE_CURRENCY:
-                                    $total = $total + \floatval($this->_model->getValueOf($row->getValue($this->_rowIdAttribute),
-                                                                                                         $columnName));
+                                    $total = $total + \floatval($this->_model->getValueOf($row->getValue($this->_rowIdAttribute), $columnName));
                                 default:
-                                    echo $this->_model->getDisplayOf($row->getValue($this->_rowIdAttribute),
-                                                                                    $columnName);
+                                    echo $this->_model->getDisplayOf($row->getValue($this->_rowIdAttribute), $columnName);
                             }
                             ?></td>
                         <?php

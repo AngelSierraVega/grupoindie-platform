@@ -8,23 +8,25 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0C.00
  * @since 17-06-08
+ * @version 0D.00
  */
 
 namespace GIndie\Platform\View\Widget;
 
-use \GIndie\Generator\DML\HTML5\Bootstrap3\Component\Button;
+use GIndie\ScriptGenerator\Bootstrap3\Component\Button;
 
 /**
  * Description of Buttons
  *
  * @edit 18-03-23
+ * @edit 18-11-05
+ * - Removed use of deprecated libs
  */
 class Buttons
 {
 
-    use \GIndie\Generator\DML\HTML5\Bootstrap3\ContextualColors;
+    use \GIndie\ScriptGenerator\Bootstrap3\ContextualColors;
 
     /**
      * 
@@ -118,10 +120,12 @@ class Buttons
     /**
      * 
      * @return \GIndie\Generator\DML\HTML5\Bootstrap3\Component\Button
+     * @edit 18-10-28
+     * - Default CustomSuccess 
      */
     public static function Edit($gipClass, $gipActionId = \NULL)
     {
-        return static::CustomPrimary("<span class=\"glyphicon glyphicon-edit\"></span>", "form-edit", $gipActionId, "lg", $gipClass);
+        return static::CustomSuccess("<span class=\"glyphicon glyphicon-edit\"></span>", "form-edit", $gipActionId, "lg", $gipClass);
     }
 
     /**

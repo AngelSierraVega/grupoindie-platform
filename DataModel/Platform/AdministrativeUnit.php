@@ -8,15 +8,15 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0C.A0
+ * @version 0C.E0
  * @since 18-08-25
  */
 
 namespace GIndie\Platform\DataModel\Platform;
 
 //use GIndie\Platform\Model\Record;
-use GIndie\DBHandler\MySQL56\Instance\DataType;
-use GIndie\Platform\Model;
+use GIndie\DBHandler\MySQL57\Instance\DataType;
+//use GIndie\Platform\Model;
 use GIndie\Platform\DataModel\Resources\GIPList;
 
 /**
@@ -25,8 +25,12 @@ use GIndie\Platform\DataModel\Resources\GIPList;
  * @edit 18-10-27
  * - Class extends Model\RecordAutoincremented 
  * - Removed PRIMARY_KEY and AUTOINCREMENT
+ * @edit 18-11-02
+ * - Upgraded Model
+ * @edit 18-11-04
+ * - Handle user error
  */
-class AdministrativeUnit extends Model\RecordAutoincremented
+class AdministrativeUnit extends AbstractTable
 {
 
     /**
@@ -46,27 +50,28 @@ class AdministrativeUnit extends Model\RecordAutoincremented
     /**
      * Define la tabla de la Base de Datos
      * @since 18-08-26
+     * @edit 18-11-02
      */
-    const TABLE = "pltfrm_ndd_dmnstrtv";
+    const TABLE = "ndd_dmnstrtv";
 
     /**
      * @since 18-08-26
+     * @edit 18-11-02
      */
-    const DISPLAY_KEY = "dscrpcn";
+    const DISPLAY_KEY = "nmbr";
 
     /**
      * Define los atributos del modelo de datos.
      * @since 18-08-26
+     * @edit 18-11-02
      */
     public static function configAttributes()
     {
-        static::attribute("dscrpcn")->setType(Model\Attribute::TYPE_STRING);
-        static::attribute("dscrpcn")->setRestrictionRequired();
-        static::attribute("dscrpcn")->setLabel("Nombre de la unidad administrativa");
-        static::attribute("dscrpcn")->setSize("col-sm-6");
-        static::attribute("parent")->setLabel("Depende de");
-        static::attribute("parent")->setTypeFK(GIPList\Units::class);
-        static::attribute("parent")->setSize("col-sm-6");
+        parent::configAttributesFromColumnDefinition();
+        static::attribute(static::ATTR_NOMBRE)->setSize("col-sm-6");
+        static::attribute(static::ATTR_DEPENDE)->setTypeFK(GIPList\Units::class);
+        static::attribute(static::ATTR_DEPENDE)->setNotNull();
+        static::attribute(static::ATTR_DEPENDE)->setSize("col-sm-6");
     }
 
     /**
@@ -82,6 +87,21 @@ class AdministrativeUnit extends Model\RecordAutoincremented
     }
 
     /**
+     * @since 18-11-02
+     */
+    const ATTR_ID = "id";
+
+    /**
+     * @since 18-11-02
+     */
+    const ATTR_DEPENDE = "dpnd";
+
+    /**
+     * @since 18-11-02
+     */
+    const ATTR_NOMBRE = "nmbr";
+
+    /**
      * @since 18-08-19
      */
     protected static function tableDefinition()
@@ -89,25 +109,48 @@ class AdministrativeUnit extends Model\RecordAutoincremented
         /**
          * Column id
          */
-        static::columnDefinition("id", DataType::serial());
+        static::columnDefinition(static::ATTR_ID, DataType::serial());
+        static::columnDefinition(static::ATTR_ID)->setComment("índice autoincremental");
+        static::referenceDefinition()->setPrimaryKey(static::ATTR_ID);
 
         /**
          * Column parent
          */
-        static::columnDefinition("parent", DataType::serializedBigint());
+        static::columnDefinition(static::ATTR_DEPENDE, DataType::serializedBigint());
+        static::columnDefinition(static::ATTR_DEPENDE)->setComment("Depende de");
+        static::referenceDefinition()->addForeignKey(static::ATTR_DEPENDE, static::class, "idx_parent_pltfrm_ndd_dmnstrtv");
 
         /**
          * Column dscrpcn
          */
-        static::columnDefinition("dscrpcn", DataType::varchar(255));
-        static::columnDefinition("dscrpcn")->setNotNull();
+        static::columnDefinition(static::ATTR_NOMBRE, DataType::varchar(255));
+        static::columnDefinition(static::ATTR_NOMBRE)->setNotNull();
+        static::columnDefinition(static::ATTR_NOMBRE)->setComment("Nombre de la unidad administrativa");
 
         /**
          * Reference Definition
          */
-        static::referenceDefinition()->setPrimaryKey("id");
-        static::referenceDefinition()->addUniqueKey(["parent", "dscrpcn"], "idx_dsply_pltfrm_ndd_dmnstrtv");
-        static::referenceDefinition()->addForeignKey("parent", static::instance(), "idx_parent_pltfrm_ndd_dmnstrtv");
+        static::referenceDefinition()->addUniqueKey([static::ATTR_DEPENDE, static::ATTR_NOMBRE], "idx_dsply_pltfrm_ndd_dmnstrtv");
+    }
+
+    /**
+     * 
+     * @param boolean $postReading
+     * @since 18-11-04
+     * - Handle update
+     */
+    protected function _update($postReading = \TRUE)
+    {
+        switch (true)
+        {
+            case $_POST["gip-action-id"] == $_POST[static::ATTR_DEPENDE]:
+                $error = \GIndie\ScriptGenerator\Dashboard\Alert::danger("Error de usuario: Seleccione una unidad dependiente distinta");
+                throw new \Exception($error);
+                break;
+            default:
+                break;
+        }
+        return parent::_update($postReading);
     }
 
     /**
@@ -117,7 +160,7 @@ class AdministrativeUnit extends Model\RecordAutoincremented
      */
     public static function defaultRecord()
     {
-        return ["id" => null, "parent" => null, "dscrpcn" => "DEFAULT"];
+        return [static::ATTR_ID => null, static::ATTR_DEPENDE => null, static::ATTR_NOMBRE => "DEFAULT"];
     }
 
 }

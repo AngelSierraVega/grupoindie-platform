@@ -8,13 +8,13 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0C.70
+ * @version DEPRECATED
  * @since 18-08-19
  */
 
 namespace GIndie\Platform\DataModel;
 
-use GIndie\DBHandler\MySQL56;
+use GIndie\DBHandler\MySQL57;
 use GIndie\Platform\Model\Datos\mr_sesion;
 
 /**

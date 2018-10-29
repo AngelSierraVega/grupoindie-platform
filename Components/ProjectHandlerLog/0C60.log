@@ -1,0 +1,156 @@
+18-10-27 to 18-11-05
+
+18-10-29: 
+- Se actualizó Model\Record: Atributos autogenerados a partir de columnas
+- Se corrigió bug en View\Table
+
+18-10-29
+- Added widgets ii-ii-i-large, ii-ii-ii-small
+- Added View\JqueryValidator
+
+18-11-02
+- Upgraded Model\Record
+- Replace MySQL56 with MySQL57
+- Upgraded DataModel
+
+18-11-03
+- Validated password_su vs password_enct
+- Removed default SCHEMA from Model
+
+18-11-05
+- Removed use of deprecated libs
+- Removed \Straffsa\SistemaIntegralIngresos dependency
+
+-------------------------------PROJECT---------------------------------|
+\GIndie\Platform
+18-11-05 v:0C.60 LOC:14275
+ABS(13) CLA(85) INT(6) SCR(1) TRA(10) LOG(3) NDF(0) 
+-------------------------------VERSIONS--------------------------------|
+[0A.00] AlphaCero....| Functional project
+[0B.00] BetaCero.....| Main funcionality
+[0C.00] One..........| Functional project on SII.
+[0C.20] One..........| Data model upgrade
+[0C.60] PGRD-1.......| Removed deprecated dependency
+[0D.00] Two..........| Platform for MMR-PRDL
+[10.00] FINAL........| 
+--------------------------------FILE-----------------------------|--V--|
+[SCR] AutoloaderPlatform.php.....................................|0C.00|
+[ABS] Config.php.................................................|0C.10|
+[INT] ConfigINT.php..............................................|0C.10|
+[TRA] Controller\Platform\Upgrading.php..........................|DPRCT|
+[CLA] Current.php................................................|0C.10|
+[CLA] DataModel\Resources\GIPTable\Logs.php......................|OC.70|
+[CLA] ExceptionLogin.php.........................................|0C.00|
+[CLA] ExceptionMySQL.php.........................................|NDFND|
+[CLA] INIHandler.php.............................................|0C.00|
+[ABS] Instance.php...............................................|0D.00|
+[CLA] Model\Column.php...........................................|0C.00|
+[CLA] ProjectHandler.php.........................................|0C.70|
+[CLA] Security.php...............................................|0C.30|
+[LOG] Components\ProjectHandlerLog\0C20.log......................|NDFND|
+[LOG] Components\ProjectHandlerLog\0C60.log......................|NDFND|
+[LOG] Components\ProjectHandlerLog\current.log...................|NDFND|
+[TRA] Controller\Module\Deprecated.php...........................|0C.1F|
+[TRA] Controller\Module\RunRecordAction.php......................|0C.1F|
+[TRA] Controller\Module\ToDeprecate.php..........................|0C.1F|
+[TRA] Controller\Module\ToUpgrade.php............................|DPRCT|
+[TRA] Controller\Module\Upgrading.php............................|0C.1F|
+[CLA] Controller\Module\WidgetInterface.php......................|0C.00|
+[ABS] Controller\Module.php......................................|0C.A0|
+[INT] Controller\ModuleINT.php...................................|0C.10|
+[CLA] Controller\Module\Placeholder.php..........................|0C.30|
+[CLA] Controller\Module\Session.php..............................|DPRCT|
+[CLA] Controller\Module\Welcome.php..............................|0D.00|
+[TRA] Controller\Platform\Deprecated.php.........................|0D.00|
+[TRA] Controller\Platform\ToDeprecate.php........................|DPRCT|
+[TRA] Controller\Platform\ToUpgrade.php..........................|DPRCT|
+[ABS] Controller\Platform.php....................................|0C.A0|
+[ABS] DataModel\Platform\AbstractTable.php.......................|0D.00|
+[CLA] DataModel\Platform\AdministrativeUnit.php..................|0C.E0|
+[CLA] DataModel\Platform\LogUser.php.............................|0C.D0|
+[CLA] DataModel\Platform\Role.php................................|0C.C0|
+[CLA] DataModel\Platform\Session.php.............................|0C.D0|
+[CLA] DataModel\Platform\User.php................................|0C.CF|
+[CLA] DataModel\Platform\UserProfile.php.........................|0C.D0|
+[CLA] DataModel\Platform\UserRole.php............................|0C.D0|
+[CLA] DataModel\Platform.php.....................................|0C.C0|
+[CLA] DataModel\Resources\GIPList\Roles.php......................|0C.70|
+[CLA] DataModel\Resources\GIPList\Units.php......................|0C.A0|
+[CLA] DataModel\Resources\GIPList\Users.php......................|0C.70|
+[CLA] DataModel\Resources\GIPTable\Roles.php.....................|0C.A0|
+[CLA] DataModel\TmpDatabasePredial.php...........................|DPRCT|
+[CLA] Model\Attribute.php........................................|0C.30|
+[CLA] Model\Database\Connection\SessionHandler.php...............|0C.00|
+[CLA] Model\Database\Connection\SystemAdministrator.php..........|0C.00|
+[CLA] Model\Database\Connection\UserDefault.php..................|0C.00|
+[ABS] Model\Database\Connection.php..............................|0C.3A|
+[ABS] Model\Database\ListSimple.php..............................|DPRCT|
+[ABS] Model\Database\Record.php..................................|DPRCT|
+[ABS] Model\Database\Table.php...................................|DPRCT|
+[CLA] Model\Element.php..........................................|0C.00|
+[ABS] Model\ListSimple.php.......................................|0C.00|
+[INT] Model\ListSimpleINT.php....................................|0C.00|
+[CLA] Model\MR\caja_cobro.php....................................|DPRCT|
+[ABS] Model\Record.php...........................................|0C.B0|
+[INT] Model\RecordINT.php........................................|0C.00|
+[CLA] Model\Row.php..............................................|0C.50|
+[CLA] Model\Session\Area.php.....................................|DPRCT|
+[CLA] Model\Session\Information.php..............................|DPRCT|
+[CLA] Model\Session\Roles.php....................................|DPRCT|
+[CLA] Model\Session\Table\Area.php...............................|DPRCT|
+[CLA] Model\Session\Table\TableArea.php..........................|DPRCT|
+[CLA] Model\Session\UserNew.php..................................|DPRCT|
+[CLA] Model\Session\Users.php....................................|DPRCT|
+[CLA] Model\Session\UsersList.php................................|DPRCT|
+[ABS] Model\Table.php............................................|0C.50|
+[INT] Model\TableINT.php.........................................|0C.00|
+[ABS] Model\View.php.............................................|0C.10|
+[INT] Model\ViewINT.php..........................................|0C.10|
+[CLA] Model\Datos\mr_sesion\bitacora\Registro.php................|DPRCT|
+[CLA] Model\Datos\mr_sesion\bitacora\Tabla.php...................|DPRCT|
+[CLA] Model\Datos\mr_sesion\rol\Lista.php........................|DPRCT|
+[CLA] Model\Datos\mr_sesion\rol\Registro.php.....................|DPRCT|
+[CLA] Model\Datos\mr_sesion\sesion\Lista.php.....................|DPRCT|
+[CLA] Model\Datos\mr_sesion\sesion\Registro.php..................|DPRCT|
+[CLA] Model\Datos\mr_sesion\unid_admin\Lista.php.................|DPRCT|
+[CLA] Model\Datos\mr_sesion\unid_admin\Registro.php..............|DPRCT|
+[CLA] Model\Datos\mr_sesion\usuario_cuenta\Autenticacion.php.....|DPRCT|
+[CLA] Model\Datos\mr_sesion\usuario_cuenta\ContrasenaUsuario.php.|DPRCT|
+[CLA] Model\Datos\mr_sesion\usuario_cuenta\Ingreso.php...........|0C.00|
+[CLA] Model\Datos\mr_sesion\usuario_cuenta\Registro.php..........|DPRCT|
+[CLA] Model\Datos\mr_sesion\usuario_cuenta_rol\Lista.php.........|DPRCT|
+[CLA] Model\Datos\mr_sesion\usuario_cuenta_rol\Registro.php......|DPRCT|
+[CLA] View\Document\Container.php................................|0C.90|
+[CLA] View\Document\Footbar\Content.php..........................|0D.00|
+[CLA] View\Document\Footbar.php..................................|0D.00|
+[CLA] View\Document\Topbar\ModuleMenu.php........................|0D.00|
+[CLA] View\Document\Topbar\UserMenu.php..........................|0D.00|
+[CLA] View\Document\Topbar.php...................................|0D.00|
+[CLA] View\Document.php..........................................|0D.00|
+[CLA] View\Form.php..............................................|0D.00|
+[CLA] View\Icons.php.............................................|0D.00|
+[CLA] View\Input.php.............................................|0C.00|
+[CLA] View\Javascript.php........................................|0C.00|
+[CLA] View\JqueryValidator.php...................................|0C.A0|
+[CLA] View\Login.php.............................................|0D.00|
+[CLA] View\Modal\Content.php.....................................|0C.00|
+[CLA] View\Table\ReportSelectable.php............................|0C.00|
+[CLA] View\Table.php.............................................|0C.A0|
+[CLA] View\TableComplete.php.....................................|0C.00|
+[CLA] View\TablePagination.php...................................|0C.00|
+[CLA] View\TableReport.php.......................................|0C.00|
+[CLA] View\Tables\Table.php......................................|0C.50|
+[CLA] View\Tables\TablePagination.php............................|0C.50|
+[CLA] View\TableSimple.php.......................................|0C.00|
+[CLA] View\Widget\Buttons.php....................................|0D.00|
+[CLA] View\Widget\WidgetList.php.................................|0C.A0|
+[CLA] View\Widget\WidgetReport.php...............................|0C.00|
+[CLA] View\Widget\WidgetReportSelectable.php.....................|0C.20|
+[CLA] View\Widget\WidgetTable.php................................|0C.00|
+[CLA] View\Widget\WidgetTableComplete.php........................|0C.00|
+[CLA] View\Widget\WidgetTableSelectable.php......................|0C.00|
+[CLA] View\Widget.php............................................|0C.00|
+[CLA] View\WidgetMain.php........................................|0C.00|
+[TRA] WidgetsDefinition.php......................................|0C.90|
+-----------------------------------------------------------------------|
+ \GIndie\Platform v 0C.60

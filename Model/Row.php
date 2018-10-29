@@ -8,19 +8,19 @@
  *
  * @package GIndie\Platform\Model
  *
- * @version 0C.00
+ * @version 0C.50
  * @since 
  */
 
 namespace GIndie\Platform\Model;
 
 /**
- * Description of Row
- *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @edit 18-10-29
+ * - Created setValueOf(), getAssoc()
  */
 class Row
 {
+
     private $_data;
 
     public function __construct(array $assoc)
@@ -28,9 +28,31 @@ class Row
         $this->_data = $assoc;
     }
 
+    /**
+     * 
+     * @param type $columnId
+     * @param type $value
+     * @since 18-10-29
+     */
+    public function setValueOf($columnId, $value)
+    {
+        $this->_data[$columnId] = $value;
+    }
+
+    /**
+     * 
+     * @return array
+     * @since 18-10-29
+     */
+    public function getAssoc()
+    {
+        return $this->_data;
+    }
+
     public function getValue($columnId)
     {
         return isset($this->_data[$columnId]) ? $this->_data[$columnId] :
                 \NULL;
     }
+
 }

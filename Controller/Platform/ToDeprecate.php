@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\Controller\Instance
  * 
- * @version 0C.1F
+ * @version DEPRECATED
  * @since 18-03-14
  */
 

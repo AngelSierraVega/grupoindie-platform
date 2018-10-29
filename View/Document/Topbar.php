@@ -8,23 +8,30 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0C.00
+ * @version 0D.00
  * @since 17-01-05
  */
 
 namespace GIndie\Platform\View\Document;
 
 use GIndie\Platform\Current;
-use GIndie\Generator\DML\HTML5\Category\StylesSemantics;
-use GIndie\Generator\DML\HTML5\Category\Links\Anchor;
-use GIndie\Generator\DML\HTML5\Category\Lists;
-use GIndie\Generator\DML\HTML5\Category\StylesSemantics\Div;
-use GIndie\Generator\DML\HTML5\Bootstrap3\Component\Button;
-use GIndie\Generator\DML\HTML5\Bootstrap3 as Bootstrap3;
+//use GIndie\Generator\DML\HTML5\Category\StylesSemantics;
+use GIndie\ScriptGenerator\HTML5\Category\StylesSemantics;
+//use GIndie\Generator\DML\HTML5\Category\Links\Anchor;
+//use GIndie\Generator\DML\HTML5\Category\Lists;
+use GIndie\ScriptGenerator\HTML5\Category\Lists;
+//use GIndie\Generator\DML\HTML5\Category\StylesSemantics\Div;
+use GIndie\ScriptGenerator\HTML5\Category\StylesSemantics\Div;
+//use GIndie\Generator\DML\HTML5\Bootstrap3\Component\Button;
+use GIndie\ScriptGenerator\Bootstrap3\Component\Button;
+//use GIndie\Generator\DML\HTML5\Bootstrap3 as Bootstrap3;
+use GIndie\ScriptGenerator\Bootstrap3;
 
 /**
  * Topbar
  * @edit 18-05-20
+ * @edit 18-11-05
+ * - Removed use of deprecated libs
  */
 class Topbar extends Div
 {
@@ -98,7 +105,8 @@ class Topbar extends Div
         $navbar_brand = new Div("", ["class" => "navbar-brand"]);
         $navbar_header->addContent($navbar_brand);
 
-        $anchor = \GIndie\Generator\DML\HTML5\Category\Links::Anchor();
+//        $anchor = \GIndie\Generator\DML\HTML5\Category\Links::Anchor();
+        $anchor = \GIndie\ScriptGenerator\HTML5\Category\Links::anchor();
         $anchor->setAttribute("gip-action","setController");
         $anchor->setAttribute("gip-action-id",urlencode(\GIndie\Platform\Controller\Module\Welcome::class));
         

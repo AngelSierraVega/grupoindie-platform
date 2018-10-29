@@ -6,22 +6,23 @@
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
  *
- * @package GIndie\Platform
+ * @package GIndie\Platform\DataModel
  *
- * @version 0C.A0
+ * @version 0C.C0
  * @since 18-09-24
  */
 
 namespace GIndie\Platform\DataModel;
 
-use GIndie\DBHandler\MySQL56;
+use GIndie\DBHandler\MySQL57;
 
 /**
- * Description of Plataforma
+ * Database Platform
  *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @edit 18-11-02
+ * - Renamed class from Plataforma to Platform
  */
-class Plataforma extends MySQL56\Instance\Database
+class Platform extends MySQL57\Instance\Database
 {
 
     /**
@@ -39,16 +40,17 @@ class Plataforma extends MySQL56\Instance\Database
      * @return array
      * @since 18-08-15
      * @edit 18-09-18
-     * - Todas las tablas de la base de datos definidas
+     * @edit 18-11-02
+     * - Upgraded tables
      */
     public static function getTableClassnames()
     {
-        return [Plataforma\UnidadAdministrativa::class
-            , Plataforma\Rol::class
-            , Plataforma\Usuario::class
-            , Plataforma\UsuarioRol::class
-            , Plataforma\BitacoraUsuario::class
-            , Plataforma\Sesion::class
+        return [Platform\AdministrativeUnit::class
+            , Platform\Role::class
+            , Platform\User::class
+            , Platform\UserRole::class
+            , Platform\LogUser::class
+            , Platform\Session::class
         ];
     }
 

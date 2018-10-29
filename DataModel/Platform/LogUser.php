@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0C.A0
+ * @version 0C.D0
  * @since 18-08-25
  */
 
@@ -16,7 +16,7 @@ namespace GIndie\Platform\DataModel\Platform;
 
 //use GIndie\Platform\Model\Record;
 use GIndie\Platform\Model;
-use GIndie\DBHandler\MySQL56\Instance\DataType;
+use GIndie\DBHandler\MySQL57\Instance\DataType;
 
 /**
  * Description of LogUser
@@ -25,7 +25,7 @@ use GIndie\DBHandler\MySQL56\Instance\DataType;
  * - Class extends Model\RecordAutoincremented 
  * - Removed PRIMARY_KEY and AUTOINCREMENT
  */
-class LogUser extends Model\RecordAutoincremented
+class LogUser extends AbstractTable
 {
 
     /**
@@ -56,7 +56,7 @@ class LogUser extends Model\RecordAutoincremented
         static::attribute("id")->excludeFromDisplay();
         static::attribute("pltfrm_cta_fk")->setLabel("Usuario");
         static::attribute("pltfrm_cta_fk")->setSize("col-sm-6");
-        static::attribute("pltfrm_cta_fk")->setTypeFK(\GIndie\Platform\DataModel\Resources\GIPList\Users::class);
+//        static::attribute("pltfrm_cta_fk")->setTypeFK(\GIndie\Platform\DataModel\Resources\GIPList\Users::class);
         static::attribute("action")->setType(Model\Attribute::TYPE_STRING)->setLabel("action")->excludeFromDisplay();
         static::attribute("action-id")->setType(Model\Attribute::TYPE_STRING)->setLabel("action-id")->excludeFromDisplay();
         static::attribute("action-class")->setType(Model\Attribute::TYPE_STRING)->setLabel("action-class")->excludeFromDisplay();
@@ -80,8 +80,11 @@ class LogUser extends Model\RecordAutoincremented
          * Column pltfrm_cta_fk
          * 
          */
-        static::columnDefinition("pltfrm_cta_fk", DataType::varchar(8));
+        static::columnDefinition("pltfrm_cta_fk", static::getPKDataType(User::class));
         static::columnDefinition("pltfrm_cta_fk")->setNotNull();
+//        $instance = User::instance();
+//        $instance->columns();
+        static::referenceDefinition()->addForeignKey("pltfrm_cta_fk", User::class, "pltfrm_cta_log_FK_pltfrm_cta");
 
         /**
          * Column action
@@ -126,9 +129,7 @@ class LogUser extends Model\RecordAutoincremented
          * Reference Definition
          */
         static::referenceDefinition()->setPrimaryKey("id");
-        $instance = User::instance();
-        $instance->columns();
-        static::referenceDefinition()->addForeignKey("pltfrm_cta_fk", $instance, "pltfrm_cta_log_FK_pltfrm_cta");
+        
     }
 
     /**

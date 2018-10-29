@@ -8,20 +8,20 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0C.70
+ * @version 0C.D0
  * @since 18-08-27
  */
 
 namespace GIndie\Platform\DataModel\Platform;
 
 use GIndie\Platform\Model\Record;
-use GIndie\DBHandler\MySQL56\Instance\DataType;
+use GIndie\DBHandler\MySQL57\Instance\DataType;
 
 /**
  * Description of Session
  *
  */
-class Session extends Record
+class Session extends AbstractTable
 {
 
     /**
@@ -70,7 +70,7 @@ class Session extends Record
         /**
          * Column pltfrm_cta_fk
          */
-        static::columnDefinition("pltfrm_cta_fk", DataType::char(8));
+        static::columnDefinition("pltfrm_cta_fk", static::getPKDataType(User::class));
         /**
          * Column php_sess_id
          */
@@ -81,9 +81,18 @@ class Session extends Record
          */
         static::referenceDefinition()->setPrimaryKey("id");
         static::referenceDefinition()->addUniqueKey("pltfrm_cta_fk", "idxunique_pltfrm_cta_pltfrm_ssn");
-        $instance = User::instance();
-        $instance->columns();
-        static::referenceDefinition()->addForeignKey("pltfrm_cta_fk", $instance, "pltfrm_ssn_FK_pltfrm_cta");
+//        $instance = User::instance();
+//        $instance->columns();
+        static::referenceDefinition()->addForeignKey("pltfrm_cta_fk", User::class, "pltfrm_ssn_FK_pltfrm_cta");
+    }
+
+    /**
+     * Define las restricciones en función del rol
+     * @since 18-10-28
+     */
+    public static function defineRecordRestrictions()
+    {
+        
     }
 
 }

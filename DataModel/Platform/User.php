@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0C.A0
+ * @version 0C.CF
  * @since 18-08-25
  */
 
@@ -16,8 +16,8 @@ namespace GIndie\Platform\DataModel\Platform;
 
 use GIndie\Platform\Model\Record;
 use GIndie\Platform\Model;
-use GIndie\DBHandler\MySQL56\Instance\DataType;
-use GIndie\DBHandler\MySQL56\Instance\ColumnDefinition;
+use GIndie\DBHandler\MySQL57\Instance\DataType;
+use GIndie\DBHandler\MySQL57\Instance\ColumnDefinition;
 
 /**
  * @edit 18-08-19
@@ -25,7 +25,7 @@ use GIndie\DBHandler\MySQL56\Instance\ColumnDefinition;
  * @edit 18-08-30
  * - Added defineRecordRestrictions()
  */
-class User extends Record
+class User extends AbstractTable
 {
 
     /**
@@ -111,82 +111,86 @@ class User extends Record
      * - Added referenceDefinition()
      * @edit 18-10-11
      * - Added virtual column nbr_cmplt
+     * @edit 18-11-05
+     * - Upgraded column definition
      */
     protected static function tableDefinition()
     {
         /**
-         * Column id
-         */
-        //static::columnDefinition("id", DataType::serial());
-
-        /**
          * Column key
          */
-        static::columnDefinition("key", DataType::varchar(8));
-        static::columnDefinition("key")->setNotNull();
-        static::referenceDefinition()->setPrimaryKey("key");
-//        static::referenceDefinition()->addUniqueKey("key", "idxunique_key_pltfrm_cta");
+        static::clmnDfntn("key", DataType::varchar(8));
+        static::clmnDfntn("key")->setNotNull();
+        static::clmnDfntn("key")->setComment("key");
+        static::rfrncDfntn()->setPrimaryKey("key");
+//        static::rfrncDfntn()->addUniqueKey("key", "idxunique_key_pltfrm_cta");
 
         /**
          * Column user
          */
-        static::columnDefinition("user", DataType::varchar(255));
-        static::columnDefinition("user")->setNotNull();
-        static::referenceDefinition()->addUniqueKey("user", "idxdsply_pltfrm_cta");
+        static::clmnDfntn("user", DataType::varchar(255));
+        static::clmnDfntn("user")->setNotNull();
+        static::clmnDfntn("user")->setComment("user");
+        static::rfrncDfntn()->addUniqueKey("user", "idxdsply_pltfrm_cta");
 
         /**
          * Column password_su 
          */
-        static::columnDefinition("password_su", DataType::varchar(60));
-        static::columnDefinition("password_su")->setDefaultValue(null);
+        static::clmnDfntn("password_su", DataType::varchar(60));
+        static::clmnDfntn("password_su")->setComment("password_su");
+        static::clmnDfntn("password_su")->setDefaultValue(null);
 
         /**
          * Column password_enct
          */
-        static::columnDefinition("password_enct", DataType::varchar(60));
-        static::columnDefinition("password_enct")->setDefaultValue(null);
+        static::clmnDfntn("password_enct", DataType::varchar(60));
+        static::clmnDfntn("password_enct")->setComment("password_enct");
+        static::clmnDfntn("password_enct")->setDefaultValue(null);
 
         /**
          * Column active
          */
-        static::columnDefinition("active", DataType::tinyint(1, true));
-        static::columnDefinition("active")->setDefaultValue(1);
+        static::clmnDfntn("active", DataType::tinyint(1, true));
+        static::clmnDfntn("active")->setComment("active");
+        static::clmnDfntn("active")->setDefaultValue(1);
 
         /**
          * Column pltfrm_ndd_dmnstrtv_fk
          */
-        static::columnDefinition("pltfrm_ndd_dmnstrtv_fk", DataType::serializedBigint());
-        static::columnDefinition("pltfrm_ndd_dmnstrtv_fk")->setNotNull();
-        $instance = AdministrativeUnit::instance();
-        $instance->columns();
-        static::referenceDefinition()->addForeignKey("pltfrm_ndd_dmnstrtv_fk", $instance, "pltfrm_cta_FK_pltfrm_ndd_dmnstrtv");
+        static::clmnDfntn("pltfrm_ndd_dmnstrtv_fk", static::getPKDataType(AdministrativeUnit::class));
+        static::clmnDfntn("pltfrm_ndd_dmnstrtv_fk")->setNotNull();
+        static::clmnDfntn("pltfrm_ndd_dmnstrtv_fk")->setComment("pltfrm_ndd_dmnstrtv_fk");
+//        $instance = AdministrativeUnit::instance();
+//        $instance->columns();
+        static::rfrncDfntn()->addForeignKey("pltfrm_ndd_dmnstrtv_fk", AdministrativeUnit::class, "pltfrm_cta_FK_pltfrm_ndd_dmnstrtv");
 
         /**
          * Column trtmnt
          */
-        static::columnDefinition("trtmnt", DataType::varchar(8));
+        static::clmnDfntn("trtmnt", DataType::varchar(8));
+        static::clmnDfntn("trtmnt")->setComment("trtmnt");
         /**
          * Column nmbrs
          */
-        static::columnDefinition("nmbrs", DataType::varchar(255));
+        static::clmnDfntn("nmbrs", DataType::varchar(100));
+        static::clmnDfntn("nmbrs")->setComment("nmbrs");
         /**
          * Column ap_pat
          */
-        static::columnDefinition("ap_pat", DataType::varchar(255));
+        static::clmnDfntn("ap_pat", DataType::varchar(50));
+        static::clmnDfntn("ap_pat")->setComment("ap_pat");
         /**
          * Column apo_mat
          */
-        static::columnDefinition("ap_mat", DataType::varchar(255));
+        static::clmnDfntn("ap_mat", DataType::varchar(50));
+        static::clmnDfntn("ap_mat")->setComment("ap_mat");
 
         /**
          * Virtual column nbr_cmplt
          */
-        static::columnDefinition("nbr_cmplt", DataType::varchar(765));
-        static::columnDefinition("nbr_cmplt")->setGenerated("(CONCAT_WS(' ',trtmnt,nmbrs,ap_pat,ap_mat))", "STORED");
-
-        /**
-         * Reference Definition
-         */
+        static::clmnDfntn("nbr_cmplt", DataType::varchar(208));
+        static::clmnDfntn("nbr_cmplt")->setComment("nbr_cmplt");
+        static::clmnDfntn("nbr_cmplt")->setGenerated("(CONCAT_WS(' ',trtmnt,nmbrs,ap_pat,ap_mat))", "STORED");
     }
 
     /**

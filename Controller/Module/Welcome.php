@@ -4,28 +4,28 @@
  * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * 
- * @package GIndie\Platform\Deprecated
+ * @package GIndie\Platform\Module
  * 
- * @version 0C.00
+ * @version 0D.00
  * @since 17-06-13
  */
 
 namespace GIndie\Platform\Controller\Module;
 
-use GIndie\Generator\DML\HTML5\Category\StylesSemantics;
-use GIndie\Generator\DML\HTML5\Category\StylesSemantics\Div;
+use GIndie\ScriptGenerator\HTML5\Category\StylesSemantics;
+use GIndie\ScriptGenerator\HTML5\Category\StylesSemantics\Div;
 use GIndie\Platform\Current;
-use GIndie\Generator\DML\HTML5\Category\Links\Anchor;
-use GIndie\Generator\DML\HTML5\Category\Basic\Paragraph;
+use GIndie\ScriptGenerator\HTML5\Category\Links\Anchor;
+
+//use GIndie\Generator\DML\HTML5\Category\Basic\Paragraph;
 
 /**
  * @edit 17-04-23
  * @edit 17-04-28
  * @edit 18-01-07
  * - Displays the name of the app + the name of the instance.
- * @deprecated since 18-05-21
- * @todo
- * - Verify delete
+ * @edit 18-11-05
+ * - Removed use of deprecated libs
  */
 class Welcome extends \GIndie\Platform\Controller\Module
 {
@@ -69,8 +69,7 @@ class Welcome extends \GIndie\Platform\Controller\Module
 
         $h1 = StylesSemantics::Span();
         $h1->setTag("h1");
-        $h1->addContent("<b>" . \GIndie\Platform\INIHandler::getCategoryValue("Instance",
-                                                                              "name") . "</b> -");
+        $h1->addContent("<b>" . \GIndie\Platform\INIHandler::getCategoryValue("Instance", "name") . "</b> -");
         $h1->addContent(Current::Instance()->appNombre());
         $col->addContent($h1);
 
@@ -126,8 +125,7 @@ class Welcome extends \GIndie\Platform\Controller\Module
 //        $footer2->addContent($url2);
 //        $footer->addContent($footer2);
 
-        $this->placeholder("ii-i-i")->typeCustom($heading, false, $row,
-                                                       false, $footer);
+        $this->placeholder("ii-i-i")->typeCustom($heading, false, $row, false, $footer);
     }
 
 }

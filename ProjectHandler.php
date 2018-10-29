@@ -33,13 +33,21 @@ class ProjectHandler extends \GIndie\ProjectHandler\AbstractProjectHandler
         $rtnArray[\hexdec("0C.00")]["code"] = "One";
         $rtnArray[\hexdec("0C.00")]["threshold"] = "0C.00";
         //One
-        $rtnArray[\hexdec("0C.70")]["description"] = "Data model upgrade";
-        $rtnArray[\hexdec("0C.70")]["code"] = "One";
-        $rtnArray[\hexdec("0C.70")]["threshold"] = "0C.70";
+        $rtnArray[\hexdec("0C.20")]["description"] = "Data model upgrade";
+        $rtnArray[\hexdec("0C.20")]["code"] = "One";
+        $rtnArray[\hexdec("0C.20")]["threshold"] = "0C.20";
+        
+        $rtnArray[\hexdec("0C.60")]["description"] = "Removed deprecated dependency";
+        $rtnArray[\hexdec("0C.60")]["code"] = "PGRD-1";
+        $rtnArray[\hexdec("0C.60")]["threshold"] = "0C.60";
         //Two
         $rtnArray[\hexdec("0D.00")]["description"] = "Platform for MMR-PRDL";
         $rtnArray[\hexdec("0D.00")]["code"] = "Two";
         $rtnArray[\hexdec("0D.00")]["threshold"] = "0D.00";
+        
+        $rtnArray[\hexdec("10.00")]["description"] = "";
+        $rtnArray[\hexdec("10.00")]["code"] = "FINAL";
+        $rtnArray[\hexdec("10.00")]["threshold"] = "10.00";
         \ksort($rtnArray);
         return $rtnArray;
     }

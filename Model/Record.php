@@ -7,7 +7,7 @@
  *
  * @package GIndie\Platform\Model
  *
- * @version 0C.30
+ * @version 0C.B0
  * @since 17-04-23
  */
 
@@ -15,9 +15,10 @@ namespace GIndie\Platform\Model;
 
 use GIndie\Platform\Current;
 use GIndie\Generator\DML\HTML5\Bootstrap3;
-use GIndie\DBHandler\MySQL56;
+//use GIndie\DBHandler\MySQL56;
 use GIndie\DBHandler\MySQL57;
 use GIndie\Platform\DataModel;
+use GIndie\DBHandler\MySQL57\Instance\DataType;
 
 /**
  * Description of Record
@@ -27,18 +28,29 @@ use GIndie\Platform\DataModel;
  * @edit 18-10-27
  * - Removed TABLE
  * - DISPLAY_KEY defaults to "id"
- * @todo
- * - Move \Straffsa\SistemaIntegralIngresos funcionality 
+ * @edit 18-10-28
+ * - Created configAttributesFromColumnDefinition()
+ * @edit 18-11-03
+ * - Removed default SCHEMA
+ * @edit 18-11-05
+ * - Created getSelectorsDisplay()
+ * - Removed \Straffsa\SistemaIntegralIngresos dependency
+ * - 
  */
 abstract class Record extends MySQL57\Instance\Table implements RecordINT
 {
+    /**
+     * const JQVALIDATOR_MAY_SIN_COMILLAS = "texto_simple_mayusculas_sin_comillas";
+      public static $jqvalidatorMaySinComillas = "texto_simple_mayusculas_sin_comillas";
+     */
 
     /**
      * @since 18-08-20
+     * @deprecated since 18-11-02
      * @todo
      * - Remove from class
      */
-    protected static function tableDefinition()
+    protected static function tableDefinitionDPR()
     {
         
     }
@@ -48,16 +60,19 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
      * @return string
      * @since 18-08-19
      * - Remove or upgrade
+     * @deprecated since 18-11-02
      */
-    public static function databaseClassname()
+    public static function databaseClassnameDPR()
     {
         return DataModel\TmpDatabasePredial::class;
     }
 
     /**
      * The name of the database storing the record.
+     * @deprecated since 18-11-03
+     * 
      */
-    const SCHEMA = "mmr_prdl";
+    const SCHEMA_DPR = "mmr_prdl";
 
     //"mr_ingresos"
     //"mmr_prdl"
@@ -140,10 +155,15 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
      * Sets data from an associative array
      * @param array $data
      * @return \GIndie\Platform\Model\Record
+     * @edit 18-10-28
+     * - configAttributes() is called only when class hasn't defined attributes
      */
     public static function instance(array $data = [])
     {
-        static::configAttributes();
+        if (!isset(static::$_attribute[static::class])) {
+            static::configAttributes();
+        }
+//        static::configAttributes();
         //static::tableDefinition();
         \array_key_exists(static::PRIMARY_KEY, $data) ?: $data[static::PRIMARY_KEY] = "GIP-UNDEFINED";
         foreach (\array_keys(static::$_attribute[static::class]) as $attribute) {
@@ -195,6 +215,134 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
             //return new static([]);
 
             throw new \Exception("Error: Unable to find record.");
+        }
+    }
+
+    /**
+     * Automatically defines attributes from column definition
+     * @since 18-10-28
+     * @edit 18-11-01
+     * - Temporarly handles DATATYPE_DATETIME, DATATYPE_TIMESTAMP
+     * @todo Explode method
+     */
+    public static function configAttributesFromColumnDefinition()
+    {
+        foreach (static::columns() as $attr => $columnDefinition) {
+            //Handle datatype
+            switch ($columnDefinition->getDataType()->getDatatype())
+            {
+                case DataType::DATATYPE_BIGINT:
+                case DataType::DATATYPE_DEC:
+                case DataType::DATATYPE_DECIMAL:
+                case DataType::DATATYPE_DOUBLE:
+                case DataType::DATATYPE_DOUBLE_PRECISION:
+                case DataType::DATATYPE_FLOAT:
+                case DataType::DATATYPE_INT:
+                case DataType::DATATYPE_INTEGER:
+                case DataType::DATATYPE_NUMERIC:
+                case DataType::DATATYPE_REAL:
+                case DataType::DATATYPE_SERIAL:
+                case DataType::DATATYPE_SMALLINT:
+                    static::attribute($attr)->setType(Attribute::TYPE_NUMERIC);
+//                    $columnDefinition->getAutoIncrement();
+                    break;
+                case DataType::DATATYPE_TINYINT:
+                    static::attribute($attr)->setType(Attribute::TYPE_BOOLEAN);
+//                    static::attribute($attr)->excludeFromForm();
+                    break;
+                case DataType::DATATYPE_TEXT:
+                case DataType::DATATYPE_VARCHAR:
+                    static::attribute($attr)->setType(Attribute::TYPE_STRING);
+                    break;
+                case DataType::DATATYPE_TIME:
+                case DataType::DATATYPE_DATE:
+                case DataType::DATATYPE_DATETIME:
+                    static::attribute($attr)->setType(Attribute::TYPE_STRING);
+                    break;
+                case DataType::DATATYPE_TIMESTAMP:
+                    static::attribute($attr)->setType(Attribute::TYPE_TIMESTAMP);
+                    break;
+                default:
+                    \trigger_error("@todo handle DATATYPE_" . $columnDefinition->getDataType()->getDatatype(), \E_USER_ERROR);
+            }
+            //handle hidden on autoincrement
+            if (\strcmp(static::PRIMARY_KEY, $attr) == 0) {
+                if (static::AUTOINCREMENT == true) {
+                    static::attribute($attr)->excludeFromDisplay();
+                    static::attribute($attr)->excludeFromForm();
+                }
+            }
+            //Handle label and help
+            $tmp = \explode(" NOTAS: ", $columnDefinition->getComment());
+            static::attribute($attr)->setLabel($tmp[0]);
+            if (isset($tmp[1])) {
+                static::attribute($attr)->setHelp($tmp[1]);
+            } else {
+                $tmp2 = \explode(" NOTES: ", $columnDefinition->getComment());
+                static::attribute($attr)->setLabel($tmp2[0]);
+                if (isset($tmp2[1])) {
+                    static::attribute($attr)->setHelp($tmp2[1]);
+                }
+            }
+            //Handle restriction required
+            if ($columnDefinition->getNotNull() === true) {
+                static::attribute($attr)->setRestrictionRequired();
+                static::attribute($attr)->setNotNull();
+            }
+            //Handle virtual attribute|column
+            if ($columnDefinition->isGenerated() === true) {
+                static::attribute($attr)->setVirtualColmn();
+                static::attribute($attr)->excludeFromForm();
+            }
+            //Handle other attributes and restrictions
+            switch ($columnDefinition->getDataType()->getDatatype())
+            {
+                case DataType::DATATYPE_BIGINT:
+                case DataType::DATATYPE_INT:
+                case DataType::DATATYPE_INTEGER:
+                case DataType::DATATYPE_SERIAL:
+                case DataType::DATATYPE_SMALLINT:
+                    static::attribute($attr)->addInputAttribute("step", "1");
+                    //"max" => $columnDefinition->getDataType()->getM(),
+                    if ($columnDefinition->getDataType()->getUnsigned() === true) {
+                        static::attribute($attr)->addInputAttribute("min", "0");
+                    }
+                    break;
+                case DataType::DATATYPE_DEC:
+                case DataType::DATATYPE_DECIMAL:
+                case DataType::DATATYPE_DOUBLE:
+                case DataType::DATATYPE_DOUBLE_PRECISION:
+                case DataType::DATATYPE_FLOAT:
+                case DataType::DATATYPE_NUMERIC:
+                case DataType::DATATYPE_REAL:
+//                    static::attribute($attr)->setRestrictions([
+//                        "max" => $columnDefinition->getDataType()->getM(),
+//                        "min" => "18",
+//                        "step" => ($columnDefinition->getDataType()->getD() / 100)
+//                    ]);
+//                    $d = $columnDefinition->getDataType()->getD();
+//                    $step = 1 / (10 ** $d);
+//                    static::attribute($attr)->addInputAttribute("step", $step);
+                    if ($columnDefinition->getDataType()->getUnsigned() === true) {
+                        static::attribute($attr)->addInputAttribute("min", "0");
+                    }
+                    break;
+                case DataType::DATATYPE_VARCHAR:
+                    static::attribute($attr)->setRestrictions([
+//                        "minlength" => "12",
+                        "maxlength" => $columnDefinition->getDataType()->getM()
+                    ]);
+                    break;
+                case DataType::DATATYPE_TINYINT:
+                case DataType::DATATYPE_TEXT:
+                case DataType::DATATYPE_TIME:
+                case DataType::DATATYPE_DATE:
+                case DataType::DATATYPE_DATETIME:
+                case DataType::DATATYPE_TIMESTAMP:
+                    break;
+                default:
+                    \trigger_error("@todo handle DATATYPE_" . $columnDefinition->getDataType()->getDatatype(), \E_USER_ERROR);
+            }
         }
     }
 
@@ -446,10 +594,14 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
 
     /**
      * @return      array
+     * @edit 18-10-28
+     * - configAttributes() is called only when class hasn't defined attributes
      */
-    final public static function getAttributeNames()
+    public static function getAttributeNames()
     {
-        static::configAttributes();
+        if (!isset(static::$_attribute[static::class])) {
+            static::configAttributes();
+        }
         if (!\array_key_exists(static::PRIMARY_KEY, static::$_attribute[static::class])) {
             //if (!Current::hasRole("DEV")) {
             static::attribute(static::PRIMARY_KEY)->excludeFromDisplay(\TRUE);
@@ -473,9 +625,29 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
     }
 
     /**
+     * @return array
+     * @since 18-11-05
+     */
+    public static function getSelectorsDisplay()
+    {
+        $rtnArray = [];
+        if (static::AUTOINCREMENT == true) {
+//            $rtnArray = [static::SCHEMA => static::PRIMARY_KEY];
+            $rtnArray = [static::PRIMARY_KEY];
+        }
+        foreach (static::getAttributeNames() as $attributeName) {
+            if (static::getAttribute($attributeName)->excludedFromDisplay() !== true) {
+                $rtnArray[] = $attributeName;
+//                $rtnArray = [static::SCHEMA => $attributeName];
+            }
+        }
+        return $rtnArray;
+    }
+
+    /**
      * @return      array
      */
-    final public static function getAttributesDisplay()
+    public static function getAttributesDisplay()
     {
         $rtnArray = [];
         foreach (static::getAttributeNames() as $attributeName) {
@@ -556,9 +728,14 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
      * @param string $attributeName
      * @edit 18-01-14
      * - Attribute::TYPE_ENUM returns empty string if no value
+     * @edit 18-11-05
+     * - Handle error on no defined attribute
      */
     public function getDisplayOf($attributeName)
     {
+        if ((static::getAttribute($attributeName) == false)) {
+            \trigger_error("Attribute {$attributeName} is false. Called in " . \get_called_class(), \E_USER_ERROR);
+        }
         switch (static::getAttribute($attributeName)->getType())
         {
             case Attribute::TYPE_LINK:
@@ -662,11 +839,12 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
     }
 
     /**
-     * @abstract
+     * @todo
+     * @since 18-10-28
      */
-    public static function defineRecordRestrictions()
+    public static function defineCommands()
     {
-        //static::requireRoles($command, $roles)
+        \trigger_error("@todo", \E_USER_ERROR);
     }
 
     protected static $_restrictions = [];

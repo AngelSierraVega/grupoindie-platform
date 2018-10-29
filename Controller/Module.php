@@ -9,7 +9,7 @@
  *
  * @package GIndie\Platform\Controller\Instance\Module
  * 
- * @version 0C.17
+ * @version 0C.A0
  * @since 17-05-23
  */
 
@@ -17,10 +17,11 @@ namespace GIndie\Platform\Controller;
 
 use GIndie\ScriptGenerator\HTML5;
 use GIndie\ScriptGenerator\Bootstrap3;
-use GIndie\Platform\Model;
+//use GIndie\Platform\Model;
 use GIndie\Platform\View;
-use GIndie\Generator\DML\HTML5\Bootstrap3 AS Bootstrap3ToDeprecate;
-use GIndie\Generator\DML\HTML5 AS HTML5ToDeprecate;
+//use GIndie\Generator\DML\HTML5\Bootstrap3 AS Bootstrap3ToDeprecate;
+//use GIndie\Generator\DML\HTML5 AS HTML5ToDeprecate;
+use GIndie\Platform\View\Widget;
 
 /**
  * @edit 18-03-05
@@ -32,6 +33,12 @@ use GIndie\Generator\DML\HTML5 AS HTML5ToDeprecate;
  * @uses GIndie\Platform\Controller\Module\RunRecordAction
  * @edit 18-10-19
  * - Added wdgtModuleInfo()
+ * @edit 18-11-05
+ * - Use of Record instead of Table for some cases
+ * - Moved back methods from Module\ToUpgrade
+ * - Removed use of deprecated libs
+ * - Removed dependency to Straffsa\SII
+ * @todo debug use of Record instead of Table
  */
 abstract class Module extends Platform implements ModuleINT
 {
@@ -345,6 +352,281 @@ abstract class Module extends Platform implements ModuleINT
         $btn->setContext($actionContext);
         $modalContent->addFooterButton($btn);
         return $modalContent;
+    }
+    
+    /**
+     * 
+     * @param type $_classname
+     * @param array $_searchColumns
+     * @param array $_params
+     * @param array $buttons
+     * @return \GIndie\Platform\View\Widget
+     * @edit 18-03-12
+     * - Se agregó código para separar los inputs y sus errores en filas
+     * @edit 18-04-03
+     * - Removed autosubmit
+     * @edit 18-11-05
+     * - Use of Record instead of Table
+     */
+    protected function widgetTableSearch($_classname, array $_searchColumns, array $_params = [], array $buttons = [])
+    {
+//        $record = $_classname::RelatedRecord();
+//        $record::instance();
+        $record = $_classname::instance();
+        $form = new \GIndie\Platform\View\Form(null, false, "#tempContent");
+        $form->setAttribute("gip-action", "tableSearch");
+        $form->setAttribute("gip-action-class", $_classname);
+        //$form->addContent($_classname);
+        $size = 0;
+        foreach ($_searchColumns as $attribute) {
+            if (\is_array($attribute)) {
+                foreach ($attribute as $key => $value) {
+                    $recordAttr = $record::getAttribute($key);
+                    $tmpAttr = \GIndie\Platform\View\Input::constructFromAttribute($recordAttr, $value, \NULL);
+                }
+            } else {
+                if ($record::getAttribute($attribute)) {
+                    $recordAttr = $record::getAttribute($attribute);
+                    $value = static::getSearchValue($_classname, $attribute);
+                    //$value = $_classname;
+                    //$value = isset($_POST[$attribute]) ? $_POST[$attribute] : "";
+                    $tmpAttr = \GIndie\Platform\View\Input::constructFromAttribute($recordAttr, $value, \NULL);
+                } else {
+                    \trigger_error($attribute . " not defined in " . $record::SCHEMA . "." . $record::TABLE . " " . $record, \E_USER_ERROR);
+                }
+            }
+            if ($recordAttr->getSize()) {
+                $tmpSize = $recordAttr->getSize();
+                $tmpSize = \explode("-", $tmpSize);
+                $tmpSize = \array_pop($tmpSize);
+                $size += (integer) $tmpSize;
+                if ($size > 12) {
+                    $form->addContent("<div class='row col-xs-12'></div>");
+                    $size = (integer) $tmpSize;
+                }
+            }
+            $form->addContent($tmpAttr);
+        }
+        $widget = new \GIndie\Platform\View\Widget("" . $_classname::Name(), \FALSE, $form, "<div id='tempContent'></div>");
+//        $reloadButton = Widget\Buttons::Reload($_classname);
+//        $widget->addButtonHeading($reloadButton);
+
+        $searchButton = \GIndie\Platform\View\Widget\Buttons::CustomSuccess("<span class=\"glyphicon glyphicon-search\"></span>", \NULL, \NULL, \FALSE, \NULL);
+        $searchButton->setForm($form->getId());
+        $widget->addButtonHeading($searchButton);
+        //$widget->addContent(\GIndie\Platform\View\Javascript::submitOnChange($form->getId()));
+        $widget->addScriptOnDocumentReady("$('#" . $form->getId() . "').submit();");
+//        foreach ($buttons as $tmpButton) {
+//            $_actionId = $tmpButton["gipActionId"];
+//            if (strcmp($_actionId, "gip-selected-id") == 0) {
+//                if (isset($_POST["gip-selected-id"])) {
+//                    $_actionId = $_POST["gip-selected-id"];
+//                    $this->_selectedId = $_actionId;
+//                } else {
+//                    //this->_selectedId = "NONE";
+//                    $_actionId = $this->_selectedId;
+//                }
+//            }
+//            $tmpButton = \GIndie\Platform\View\Widget\Buttons::Custom($tmpButton["context"], $tmpButton["icon"], $tmpButton["gipAction"], $_actionId, $tmpButton["gipModal"], $tmpButton["gipClass"]);
+//            $widget->addButtonHeading($tmpButton);
+//        }
+        $widget->setContext("primary");
+        return $widget;
+    }
+
+    /**
+     * 
+     * @param string $classname
+     * @param string $params
+     * @return \GIndie\Platform\View\Widget\WidgetReport
+     * @since 18-03-30
+     */
+    protected function widgetReportFromModel($classname, $params = [])
+    {
+        if (\is_subclass_of($classname, \GIndie\Platform\Model\Table::class, true)) {
+            $rtnWidget = new Widget\WidgetReport(new $classname($params));
+            return $rtnWidget;
+        }
+        \trigger_error($classname . " is not subclass of \GIndie\Platform\Model\Table", \E_USER_ERROR);
+    }
+
+    /**
+     * @param string $classname
+     * @param array $params
+     * @return \GIndie\Platform\View\Widget\WidgetTable
+     */
+    protected function widgetTableFromModel($classname, $params = [])
+    {
+        if (\is_subclass_of($classname, \GIndie\Platform\Model\Table::class, true)) {
+            $rtnWidget = new Widget\WidgetTable(new $classname($params));
+            return $rtnWidget;
+        }
+        \trigger_error($classname . " is not subclass of \GIndie\Platform\Model\Table", \E_USER_ERROR);
+    }
+
+    /**
+     * 
+     * @param type $class
+     * @return type
+     * @since 18-03-30
+     * @edit 18-11-05
+     * - Use of Record instead of Table
+     */
+    protected function cnstrctSearchParamsFromPost($class)
+    {
+//        $record = $class::RelatedRecord();
+        $record = $class::instance();
+        $searchArray = [];
+        foreach ($record::getAttributeNames() as $attrName) {
+            if (\array_key_exists($attrName, $_POST)) {
+                $this->searchValues[$class][$attrName] = $_POST[$attrName];
+                switch ($record::getAttribute($attrName)->getType())
+                {
+                    case \GIndie\Platform\Model\Attribute::TYPE_DATE:
+                        $tmp = \explode(" a ", $_POST[$attrName]);
+                        if (\sizeof($tmp) > 1) {
+                            $searchArray[] = $attrName . ">='$tmp[0]'";
+                            $searchArray[] = $attrName . "<='" . $tmp[1] . ' 23:59:59' . "'";
+                        } else {
+                            $searchArray[] = $attrName . " LIKE '%" . $_POST[$attrName] . "%'";
+                        }
+                        break;
+                    case \GIndie\Platform\Model\Attribute::TYPE_TIMESTAMP:
+                        $tmp = \explode(" a ", $_POST[$attrName]);
+                        if (\sizeof($tmp) > 1) {
+                            $searchArray[] = $attrName . ">='" . \strtotime($tmp[0]) . "'";
+                            $searchArray[] = $attrName . "<='" . \strtotime($tmp[1] . " 23:59:59") . "'";
+                        } else {
+                            $searchArray[] = $attrName . ">='" . \strtotime($_POST[$attrName]) . "'";
+                            $searchArray[] = $attrName . "<='" . \strtotime($_POST[$attrName] . " 23:59:59") . "'";
+                        }
+                        break;
+                    default:
+                        switch ($_POST[$attrName])
+                        {
+                            case "":
+                            case "NULL":
+                                break;
+                            case "NOT NULL":
+                                $searchArray[] = $attrName . " IS NOT NULL ";
+                                break;
+                            default:
+                                $searchArray[] = $attrName . " LIKE '%" . $_POST[$attrName] . "%'";
+                                break;
+                        }
+                        break;
+                }
+            }
+        }
+        if (\sizeof($searchArray) > 0) {
+            $searchArray = [\join(" AND ", $searchArray)];
+        } else {
+            
+        }
+        return $searchArray;
+    }
+
+    /**
+     * @since 17-??-??
+     * @param string $class
+     * @return \GIndie\Platform\View\Table
+     * @edit 18-03-20
+     * - Renamed from _searchTable to  cnstrctTableFromSearch
+     */
+    protected function cnstrctTableFromSearch($class)
+    {
+        $_table = new $class($this->cnstrctSearchParamsFromPost($class));
+        return $_table;
+    }
+
+    /**
+     * @todo error handling
+     * 
+     * @since 17-04-21
+     *          
+     * @param string $widgetPlaceholder
+     * @return null|\GIndie\Platform\Controller\Main\WidgetInterface
+     */
+    public function getWidget($placeholderid)
+    {
+        if (\array_key_exists($placeholderid, $this->_placeholder)) {
+            return $this->_placeholder[$placeholderid];
+        } else {
+            return NULL;
+        }
+    }
+
+    /**
+     * @param string $id
+     * @param string $class
+     * @param string $selected
+     * 
+     * 
+     * @return null|\GIndie\Platform\Controller\Main\WidgetInterface
+     * 
+     */
+    protected function widgetReload($id, $class, $selected)
+    {
+
+        $placeholder = \GIndie\Platform\Current::Module()->getWidget($id);
+//        @edit 18-10-19
+//        * - Added validation for ModuleInfo
+//        if ($this->validateModuleInfo == false) {
+//            \trigger_error("wdgtModuleInfo() must be called", \E_USER_ERROR);
+//        }
+        $placeholder = $placeholder->call($selected);
+        return $placeholder;
+    }
+
+    /**
+     * 
+     * @param type $class
+     * @return \GIndie\Platform\View\Tables\TablePagination
+     * @edit 18-11-05
+     * - Use of Record instead of Table
+     */
+    protected function tableSearch($class)
+    {
+        $table = new \GIndie\Platform\View\Tables\TablePagination($class);
+        $table->readFromDB($class::getSelectorsDisplay(), $this->cnstrctSearchParamsFromPost($class));
+        return $table;
+    }
+
+    /**
+     * @since 2017-04-28
+     * @var array 
+     */
+    private $_placeholder = [];
+
+    /**
+     * 
+     * @return type
+     */
+    public function getWidgets()
+    {
+        return $this->_placeholder;
+    }
+
+    /**
+     * 
+     * @return string Un string de un array asociativo para javascript
+     */
+    public function fetchMasterSlaves()
+    {
+        $rtnArray = [];
+        foreach ($this->_placeholder as $placeholder => $interface) {
+            $tmpSlaves = [];
+            foreach ($interface->getSlaves() as $_tmp) {
+                $tmpSlaves[] = "" . $_tmp;
+            }
+            $rtnArray[] = ["" . $placeholder => $tmpSlaves];
+        }
+        $string = json_encode($rtnArray);
+        $string = str_replace("},{", ",", $string);
+        $string = substr($string, 0, -1);
+        $string = substr($string, 1);
+        $string = $string . ";";
+        return $string;
     }
 
 }

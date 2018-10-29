@@ -8,19 +8,22 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0C.00
+ * @version 0D.00
  * @since 
  */
 
 namespace GIndie\Platform\View;
 
-use GIndie\Generator\DML\HTML5\Category\StylesSemantics\Span;
+//use GIndie\Generator\DML\HTML5\Category\StylesSemantics\Span;
+use GIndie\ScriptGenerator\HTML5\Category\StylesSemantics\Span;
 
 /**
  * Description of Icons
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * @edit 18-02-27
+ * @edit 18-11-05
+ * - Removed use of deprecated libs
  */
 class Icons
 {

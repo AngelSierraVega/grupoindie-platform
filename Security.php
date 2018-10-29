@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform
  *
- * @version 0C.00
+ * @version 0C.30
  * @since
  */
 
@@ -151,6 +151,8 @@ class Security
      * @todo Quitar código manual y usar un modelo de datos.
      * @return boolean|string
      * @edit 18-08-02
+     * @edit 18-11-02
+     * - Use of MySQL57
      */
     public static function authenticateUser()
     {
@@ -161,14 +163,14 @@ class Security
 //        );
         $tableUser = DataModel\Platform\User::instance();
         //$tableUser->getName();
-        //$userHandler = new \GIndie\DBHandler\MySQL56\Handler\Table(DataModel\Platform\User::instance());
-        $query = \GIndie\DBHandler\MySQL56\Statement\DataManipulation::select(
+        //$userHandler = new \GIndie\DBHandler\MySQL57\Handler\Table(DataModel\Platform\User::instance());
+        $query = \GIndie\DBHandler\MySQL57\Statement\DataManipulation::select(
                         [$tableUser->name() => ["key", "password_su", "password_enct"]], [$tableUser->databaseName() => $tableUser->name()]);
         $query->addConditionEquals("user", $user);
         $query->addConditionEquals("active", "1");
         $query->setLimit(1);
         //var_dump($query . "");
-        $_resultSet = \GIndie\DBHandler\MySQL56::query($query);
+        $_resultSet = \GIndie\DBHandler\MySQL57::query($query);
         //var_dump($_resultSet);
         if (count($_resultSet) == 1) {
             $_resultSet = $_resultSet->fetch_assoc();

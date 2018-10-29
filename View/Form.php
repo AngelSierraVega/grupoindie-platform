@@ -7,21 +7,26 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0C.00
+ * @version 0D.00
  * @since 17-04-28
  */
 
 namespace GIndie\Platform\View;
 
-use GIndie\Generator\DML\HTML5;
-use GIndie\Generator\DML\HTML5\Category\StylesSemantics;
-use GIndie\Generator\DML\HTML5\Bootstrap3;
+//use GIndie\Generator\DML\HTML5;
+use GIndie\ScriptGenerator\HTML5;
+//use GIndie\Generator\DML\HTML5\Category\StylesSemantics;
+use GIndie\ScriptGenerator\HTML5\Category\StylesSemantics;
+//use GIndie\Generator\DML\HTML5\Bootstrap3;
+use GIndie\ScriptGenerator\Bootstrap3;
 use GIndie\Platform\Model\Record;
 use GIndie\Platform\Model\Attribute;
 
 /**
  * Description of Form
  * @edit 18-05-20
+ * @edit 18-11-05
+ * - Removed use of deprecated libs
  */
 class Form extends HTML5\Category\FormInput\Form
 {

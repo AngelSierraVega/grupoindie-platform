@@ -7,7 +7,7 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0C.30 
+ * @version 0C.90 
  * 
  * @todo
  * - Funcional class with node
@@ -192,6 +192,8 @@ class Container extends Bootstrap3\Grid
      * - Added ID to placeholders: o-o-o, i-i-i
      * @edit 18-10-18
      * - Added placeholders: i-ii-i-large, i-ii-ii-small
+     * @edit 18-10-29
+     * - Added ii-ii-i-large, ii-ii-ii-small
      */
     private function tmpContent()
     {
@@ -249,6 +251,15 @@ class Container extends Bootstrap3\Grid
         <div class="row ">
             <div id="ii-i-i" class="col-xs-12">
                 <?php echo $this->_widgets["ii-i-i"]; ?>
+            </div>
+        </div>
+        
+        <div class="row ">
+            <div id="ii-ii-i-large" class="col-sm-8">
+                <?php echo $this->_widgets["ii-ii-i-large"]; ?>
+            </div>
+            <div id="ii-ii-ii-small" class="col-sm-4">
+                <?php echo $this->_widgets["ii-ii-ii-small"]; ?>
             </div>
         </div>
 

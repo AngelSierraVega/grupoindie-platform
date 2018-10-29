@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0C.A0
+ * @version 0C.C0
  * @since 18-08-25
  */
 
@@ -16,12 +16,12 @@ namespace GIndie\Platform\DataModel\Platform;
 
 use GIndie\Platform\Model\Database\Record;
 use GIndie\Platform\Model;
-use GIndie\DBHandler\MySQL56\Instance\DataType;
+use GIndie\DBHandler\MySQL57\Instance\DataType;
 
 /**
  * Description of Role
  */
-class Role extends Record
+class Role extends AbstractTable
 {
 
     /**
@@ -101,6 +101,19 @@ class Role extends Record
          */
         static::referenceDefinition()->setPrimaryKey("id");
         static::referenceDefinition()->addUniqueKey("dscrptn", "idxunique_dscrptn_pltfrm_rol");
+    }
+
+    /**
+     * 
+     * @return array
+     * @since 18-11-02
+     */
+    public static function defaultRecord()
+    {
+        return [
+            ["id" => "AS",
+                "dscrptn" => "Administrador del sistema."]
+        ];
     }
 
 }

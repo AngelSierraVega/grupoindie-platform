@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0C.A0
+ * @version 0C.D0
  * @since 18-08-25
  */
 
@@ -18,15 +18,17 @@ use GIndie\Platform\Model\Record;
 use GIndie\Platform\Model;
 //use Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\rol;
 //use Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\usuario_cuenta;
-use GIndie\Generator\DML\HTML5\Bootstrap3\Component\Modal;
-use GIndie\Generator\DML\HTML5\Bootstrap3;
-use GIndie\DBHandler\MySQL56\Instance\DataType;
+//use GIndie\Generator\DML\HTML5\Bootstrap3\Component\Modal;
+use GIndie\ScriptGenerator\Bootstrap3\Component\Modal;
+//use GIndie\Generator\DML\HTML5\Bootstrap3;
+use GIndie\ScriptGenerator\Bootstrap3;
+use GIndie\DBHandler\MySQL57\Instance\DataType;
 
 /**
  * Description of UserRole
  *
  */
-class UserRole extends Record
+class UserRole extends AbstractTable
 {
 
     /**
@@ -81,33 +83,23 @@ class UserRole extends Record
          * Column id
          */
         static::columnDefinition("id", DataType::serial());
-
+        static::referenceDefinition()->setPrimaryKey("id");
         /**
          * Column pltfrm_rol_fk
-         * 
          */
-        static::columnDefinition("pltfrm_rol_fk", DataType::char(12));
+        static::columnDefinition("pltfrm_rol_fk", static::getPKDataType(Role::class));
         static::columnDefinition("pltfrm_rol_fk")->setNotNull();
-
+        static::referenceDefinition()->addForeignKey("pltfrm_rol_fk", Role::class, "pltfrm_cta_rol_FK_pltfrm_rol");
         /**
          * Column pltfrm_cta_fk
-         * 
          */
-        static::columnDefinition("pltfrm_cta_fk", DataType::varchar(8));
+        static::columnDefinition("pltfrm_cta_fk", static::getPKDataType(User::class));
         static::columnDefinition("pltfrm_cta_fk")->setNotNull();
-
-
+        static::referenceDefinition()->addForeignKey("pltfrm_cta_fk", User::class, "pltfrm_cta_rol_FK_pltfrm_cta");
         /**
          * Reference Definition
          */
-        static::referenceDefinition()->setPrimaryKey("id");
         static::referenceDefinition()->addUniqueKey(["pltfrm_rol_fk", "pltfrm_cta_fk"], "idxunique_pltfrm_cta_rol");
-        $instance = Role::instance();
-        $instance->columns();
-        static::referenceDefinition()->addForeignKey("pltfrm_rol_fk", $instance, "pltfrm_cta_rol_FK_pltfrm_rol");
-        $instance = User::instance();
-        $instance->columns();
-        static::referenceDefinition()->addForeignKey("pltfrm_cta_fk", $instance, "pltfrm_cta_rol_FK_pltfrm_cta");
     }
 
     /**

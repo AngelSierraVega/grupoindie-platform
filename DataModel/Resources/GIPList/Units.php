@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0C.70
+ * @version 0C.A0
  * @since 18-08-25
  */
 
@@ -21,6 +21,12 @@ namespace GIndie\Platform\DataModel\Resources\GIPList;
  */
 class Units extends \GIndie\Platform\Model\ListSimple
 {
+    
+    /**
+     * The name of the attribute to perform the autonest
+     * @since 18-11-04
+     */
+    const ELEMENT_AUTONEST_ON = "dpnd";
 
     /**
      * 

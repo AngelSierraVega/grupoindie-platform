@@ -8,24 +8,32 @@
  *
  * @package GIndie\Platform\View
  * 
- * @version 0C.00
+ * @version 0D.00
  * @since 
  */
 
 namespace GIndie\Platform\View;
 
 use GIndie\Platform\Current;
-use GIndie\Generator\DML\HTML5\Bootstrap3;
-use GIndie\Generator\DML\HTML5\Category\StylesSemantics\Div;
-use GIndie\Generator\DML\HTML5\Category\StylesSemantics;
-use GIndie\Generator\DML\HTML5\Category\Basic;
+//use GIndie\Generator\DML\HTML5\Bootstrap3;
+use GIndie\ScriptGenerator\Bootstrap3;
+//use GIndie\Generator\DML\HTML5\Category\StylesSemantics\Div;
+use GIndie\ScriptGenerator\HTML5\Category\StylesSemantics\Div;
+//use GIndie\Generator\DML\HTML5\Category\StylesSemantics;
+use GIndie\ScriptGenerator\HTML5\Category\StylesSemantics;
+//use GIndie\Generator\DML\HTML5\Category\Basic;
+use GIndie\ScriptGenerator\HTML5\Category\Basic;
+
+use GIndie\ScriptGenerator\HTML5\Category\Links;
 use GIndie\Platform\Model\Datos\mr_sesion\usuario_cuenta;
 
 /**
  * Pantalla de login
  * @edit 18-03-06
+ * @edit 18-11-05
+ * - Removed use of deprecated libs
  */
-class Login extends Bootstrap3\Component\Document
+class Login extends Bootstrap3\Document
 {
 
     function __construct($logoAplicacion, $slogan, $urlAssets, $logoInstitucion)
@@ -205,7 +213,7 @@ class Login extends Bootstrap3\Component\Document
         $subtext1->addClass("text-center");
         $divsm6->addContent($subtext1);
 
-        $subtext2 = Basic::Header(6, \GIndie\Generator\DML\HTML5\Category\Links::Hyperlink("http://www.mineraldelareforma.gob.mx", "www.mineraldelareforma.gob.mx", "_blank"));
+        $subtext2 = Basic::Header(6, Links::hyperlink("http://www.mineraldelareforma.gob.mx", "www.mineraldelareforma.gob.mx", "_blank"));
         $subtext2->addClass("text-center");
         $divsm6->addContent($subtext2);
 

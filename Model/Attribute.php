@@ -6,21 +6,22 @@
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
  *
- * @package GIndie\Platform
+ * @package GIndie\Platform\Model
  *
- * @version 0C.03
+ * @version 0C.30
  * @since 17-04-23
  * @todo Upgrade class
  */
 
 namespace GIndie\Platform\Model;
 
-use GIndie\DBHandler\MySQL56\Instance\ColumnDefinition;
-use GIndie\DBHandler\MySQL56\Instance\DataType;
+//use GIndie\DBHandler\MySQL57\Instance\ColumnDefinition;
+//use GIndie\DBHandler\MySQL57\Instance\DataType;
 
 /**
  * Description of Attribute
- * 
+ * @edit 18-10-28
+ * - Created addInputAttribute(), setVirtualColmn()
  */
 class Attribute //extends ColumnDefinition
 {
@@ -185,6 +186,35 @@ class Attribute //extends ColumnDefinition
     }
 
     /**
+     * 
+     * @param boolean $value
+     * @return \GIndie\Platform\Model\Attribute
+     * @since 18-10-28
+     */
+    public function setVirtualColmn($value = true)
+    {
+        $this->isVirtualColumn = $value;
+        return $this;
+    }
+
+    /**
+     *
+     * @var boolean
+     * @since 18-10-28
+     */
+    private $isVirtualColumn = false;
+
+    /**
+     * 
+     * @return boolean
+     * @since 18-10-28
+     */
+    public function isVirtualColumn()
+    {
+        return $this->isVirtualColumn;
+    }
+
+    /**
      *
      * @var string 
      */
@@ -212,6 +242,17 @@ class Attribute //extends ColumnDefinition
     public function setRestrictions($restrictions = [])
     {
         $this->_restrictions = $restrictions;
+    }
+
+    /**
+     * 
+     * @param string $name
+     * @param string $value
+     * @since 18-10-28
+     */
+    public function addInputAttribute($name, $value)
+    {
+        $this->_restrictions[$name] = $value;
     }
 
     /**

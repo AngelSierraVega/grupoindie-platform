@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0C.00
+ * @version 0C.A0
  * @since 17-05-21
  */
 
@@ -17,7 +17,7 @@ namespace GIndie\Platform\View\Widget;
 //use GIndie\Platform;
 use GIndie\Platform\View;
 use GIndie\Platform\Model\ListSimple;
-use GIndie\Generator\DML\HTML5\Category\StylesSemantics;
+use GIndie\ScriptGenerator\HTML5\Category\StylesSemantics;
 
 /**
  * Description of WidgetList
@@ -25,6 +25,8 @@ use GIndie\Generator\DML\HTML5\Category\StylesSemantics;
  * 
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * @edit 18-02-27
+ * @edit 18-11-05
+ * - Removed use of deprecated libs
  */
 class WidgetList extends View\Widget
 {

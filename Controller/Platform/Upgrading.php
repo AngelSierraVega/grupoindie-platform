@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform
  *
- * @version UNDEFINED
+ * @version DEPRECATED
  * @since 18-06-24
  */
 

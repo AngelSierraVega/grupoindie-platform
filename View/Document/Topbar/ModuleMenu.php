@@ -8,18 +8,22 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0C.00
+ * @version 0D.00
  * @since 
  */
 
 namespace GIndie\Platform\View\Document\Topbar;
 
-use GIndie\Generator\DML\HTML5;
+//use GIndie\Generator\DML\HTML5;
+use GIndie\ScriptGenerator\HTML5;
+use GIndie\ScriptGenerator\Bootstrap3;
 
 /**
  * Description of ModuleMenu
  *
  * @edit 18-02-27
+ * @edit 18-11-05
+ * - Removed use of deprecated libs
  */
 class ModuleMenu extends HTML5\Category\Lists\Unordered
 {
@@ -41,8 +45,7 @@ class ModuleMenu extends HTML5\Category\Lists\Unordered
                 switch (\TRUE)
                 {
                     case (is_bool($value) == $value):
-                        $this->addListElement(new HTML5\Category\Lists\ListItem([],
-                                                                                ['<a gip-action="setController" gip-action-id="' .
+                        $this->addListElement(new HTML5\Category\Lists\ListItem([], ['<a gip-action="setController" gip-action-id="' .
                             urlencode($controllerClass) .
                             '" href="#">' . $controllerClass::NAME . '</a>']));
                         break;
@@ -50,18 +53,15 @@ class ModuleMenu extends HTML5\Category\Lists\Unordered
 //                    break;
                     default:
                         if ($tmpGroup !== $value) {
-                            $dropdown = new \GIndie\Generator\DML\HTML5\Bootstrap3\Component\Dropdown($value,
-                                                                                                      ['<a gip-action="setController" gip-action-id="' .
+                            $dropdown = new Bootstrap3\Component\Dropdown($value, ['<a gip-action="setController" gip-action-id="' .
                                 urlencode($controllerClass) .
-                                '" href="#">' . $controllerClass::NAME . '</a>'],
-                                          "a");
+                                '" href="#">' . $controllerClass::NAME . '</a>'], "a");
                             $dropdown->setTag("li");
                             $tmpRef = &$dropdown;
                             $this->addListElement($tmpRef);
                             $tmpGroup = $value;
                         } else {
-                            $dropdown->addListElement(new HTML5\Category\Lists\ListItem([],
-                                                                                        ['<a gip-action="setController" gip-action-id="' .
+                            $dropdown->addListElement(new HTML5\Category\Lists\ListItem([], ['<a gip-action="setController" gip-action-id="' .
                                 urlencode($controllerClass) .
                                 '" href="#">' . $controllerClass::NAME . '</a>']));
                         }

@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0C.70
+ * @version 0C.90
  * @since 17-04-20
  */
 
@@ -26,6 +26,8 @@ trait WidgetsDefinition
      * @edit 18-04-01
      * @edit 18-06-18
      * - Added o-o-o, ii-ii-i-small, ii-ii-ii-large
+     * @edit 18-10-29
+     * - Added ii-ii-i-large, ii-ii-ii-small
      */
     protected $WidgetsDefinition = [
         "o-o-o" => "",
@@ -37,6 +39,7 @@ trait WidgetsDefinition
         "i-ii-ii-small" => "",
         "i-iii-i" => "", "i-iii-ii" => "", "i-iii-iii" => "",
         "ii-i-i" => "",
+        "ii-ii-i-large" => "","ii-ii-ii-small" => "",
         "ii-ii-i" => "", "ii-ii-i-small" => "", "ii-ii-ii" => "", "ii-ii-ii-large" => "",
         "ii-iii-i" => "", "ii-iii-ii" => "", "ii-iii-iii" => "",
         "iii-i-i" => "",

@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\Model
  *
- * @version 0C.00
+ * @version 0C.50
  * @since 17-06-26
  */
 
@@ -20,6 +20,8 @@ use GIndie\Platform\Current;
  * Description of Table
  * @edit 18-03-13
  * - Autoformated class
+ * @edit 18-10-29
+ * - Created getAssoc()
  */
 abstract class Table implements TableINT
 {
@@ -217,6 +219,12 @@ abstract class Table implements TableINT
         return $this->getValueOf($rowId, $columnName);
     }
 
+    /**
+     * 
+     * @param array $row
+     * @param type $rowId
+     * 
+     */
     protected function addRowAssoc(array $row, $rowId = \NULL)
     {
         if ($rowId !== \NULL) {
@@ -295,12 +303,26 @@ abstract class Table implements TableINT
 
     /**
      * 
-     * @return      array
+     * @return      array|\GIndie\Platform\Model\Row
      * @since       2017-04-27
      */
     public function getRows()
     {
         return $this->_rows;
+    }
+
+    /**
+     * 
+     * @return array
+     * @since 18-10-29
+     */
+    public function getAssoc()
+    {
+        $rtnAssoc = [];
+        foreach ($this->getRows() as $row) {
+            $rtnAssoc[] = $row->getAssoc();
+        }
+        return $rtnAssoc;
     }
 
 //    public function RelatedRecord()

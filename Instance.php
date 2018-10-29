@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform
  *
- * @version 0C.03
+ * @version 0D.00
  * @since 17-05-23
  * @todo Upgrade class
  */
@@ -16,8 +16,7 @@
 namespace GIndie\Platform;
 
 use GIndie\Platform\Current;
-use GIndie\Platform\Model\Datos\mr_sesion;
-use \GIndie\Generator\DML\HTML5;
+use GIndie\ScriptGenerator\HTML5;
 
 /**
  * Description of Platform
@@ -30,8 +29,9 @@ use \GIndie\Generator\DML\HTML5;
  * - Used \GIndie\Platform\INIHandler::getCategoryValue in previously deprecated methods.
  * @edit 18-01-14 
  * - Bitácora restaurada
- * @todo
- * - Move \Straffsa\SistemaIntegralIngresos funcionality 
+ * @edit 18-11-05
+ * - Removed use of deprecated libs
+ * - Removed \Straffsa\SistemaIntegralIngresos dependency
  */
 abstract class Instance
 {
@@ -97,8 +97,7 @@ abstract class Instance
      */
     public function urlAssets()
     {
-        return \GIndie\Platform\INIHandler::getCategoryValue("Config",
-                                                             "assets_url");
+        return \GIndie\Platform\INIHandler::getCategoryValue("Config", "assets_url");
     }
 
     /**
@@ -147,13 +146,11 @@ abstract class Instance
      */
     public function rutaRespaldos()
     {
-        $ini = \GIndie\Platform\INIHandler::getCategoryValue("Path",
-                                                             "generatedFiles");
+        $ini = \GIndie\Platform\INIHandler::getCategoryValue("Path", "generatedFiles");
         if ($ini) {
             return $ini;
         } else {
-            \GIndie\Common\PHP\Directories::createFolderStructure(\dirname($_SERVER['SCRIPT_FILENAME']),
-                                                                           "\\private\\respaldos\\");
+            \GIndie\Common\PHP\Directories::createFolderStructure(\dirname($_SERVER['SCRIPT_FILENAME']), "\\private\\respaldos\\");
             return \dirname($_SERVER['SCRIPT_FILENAME']) . "\\private\\respaldos\\";
         }
     }
@@ -166,8 +163,7 @@ abstract class Instance
      */
     public function rutaRecibos()
     {
-        $ini = \GIndie\Platform\INIHandler::getCategoryValue("Path",
-                                                             "generatedFiles");
+        $ini = \GIndie\Platform\INIHandler::getCategoryValue("Path", "generatedFiles");
         if ($ini) {
             return $ini;
         } else {
@@ -321,8 +317,7 @@ abstract class Instance
      */
     final private function __construct()
     {
-        static::BRAND_NAME !== \NULL ?: trigger_error("Constant BRAND_NAME must be defined inside class definition of: " . get_called_class(),
-                                                      \E_USER_ERROR);
+        static::BRAND_NAME !== \NULL ?: trigger_error("Constant BRAND_NAME must be defined inside class definition of: " . get_called_class(), \E_USER_ERROR);
         //static::CONFIG_CLASS !== \NULL ?: trigger_error("Constant CONFIG_CLASS must be defined inside class definition of: " . get_called_class(), \E_USER_ERROR);
         if (Current::Instance() !== \NULL) {
             static::config();
@@ -385,8 +380,7 @@ abstract class Instance
     {
         if (!\is_subclass_of($classname, self::class, \TRUE)) {
             $class = self::class;
-            trigger_error("Classname {$classname} is not subclass of {$class} ",
-                          E_USER_ERROR);
+            trigger_error("Classname {$classname} is not subclass of {$class} ", E_USER_ERROR);
             throw new \Exception("Unable to run.");
         }
         self::$_LINKS[$classname] = $href;
@@ -473,57 +467,38 @@ abstract class Instance
                     Current::setInstance(new static());
                     Current::setInstance(new static());
                     Current::setModule(new Controller\Module\Welcome());
-                    /**
-                     * @todo Verify plugin data
-                     */
-                    $sii = \GIndie\Platform\INIHandler::getCategoryValue("Plugins",
-                                                                         "SistemaIntegralIngresos");
-                    $sii = true;
-                    if ($sii) {
-                        $data = [];
-                        $data['pltfrm_cta_fk'] = \GIndie\Platform\Current::User()->getId();
-                        $data['action'] = "gip-login";
-                        $data['timestamp'] = \time();
-                        $nota = "Ingresó al sistema con correo y contraseña";
-                        $data['notes'] = \filter_var($nota,
-                                                     \FILTER_SANITIZE_SPECIAL_CHARS);
-//                        $bitacora = \Straffsa\SistemaIntegralIngresos\Datos\mr_sesion\bitacora\Registro::instance($data);
-                        $bitacora = DataModel\Platform\LogUser::instance($data);
-                        $bitacora->run("gip-inner-create");
-                    }
+                    $data = [];
+                    $data['pltfrm_cta_fk'] = \GIndie\Platform\Current::User()->getId();
+                    $data['action'] = "gip-login";
+                    $data['timestamp'] = \time();
+                    $nota = "Ingresó al sistema con correo y contraseña";
+                    $data['notes'] = \filter_var($nota, \FILTER_SANITIZE_SPECIAL_CHARS);
+                    $bitacora = DataModel\Platform\LogUser::instance($data);
+                    $bitacora->run("gip-inner-create");
                 }
                 if (static::_isRestartAttempt()) {
-//                    var_dump("_isRestartAttempt");
                     Security::restartSession();
                 }
             } catch (\GIndie\Platform\ExceptionLogin $e) {
                 $params = \session_get_cookie_params();
-                \setcookie(\session_name(), '', \time() - 42000,
-                           $params["path"], $params["domain"],
-                           $params["secure"], $params["httponly"]
+                \setcookie(\session_name(), '', \time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]
                 );
                 if ($_SERVER["REQUEST_METHOD"] === "POST") {//
-                    $response = \GIndie\Generator\DML\HTML5\Category\Basic::Paragraph($e->getMessage());
+                    $response = HTML5\Category\Basic::Paragraph($e->getMessage());
                     $response->addScript("setTimeout(function(){location.replace(location.pathname);}, 1000);");
                     return $response;
                 } else {
                     \header("Refresh: 1; url=" . $_SERVER['PHP_SELF']);
                     return "ExceptionLogin: " . $e->getMessage();
                 }
-            } 
-            catch (\Exception $e) {
-//                var_dump($e);
+            } catch (\Exception $e) {
                 \header("Refresh: 1; url=" . $_SERVER['PHP_SELF']);
                 return "Exception: " . $e->getMessage();
             }
         }
         if (\session_status() == \PHP_SESSION_NONE) {
             $instance = new static();
-            //\GIndie\Platform\INIHandler::getCategoryValue("app", "slogan")
-            return new View\Login($instance->logoAplicacion(),
-                                  $instance->sloganAplicacion(),
-                                  $instance->urlAssets(),
-                                  $instance->logoInstitucion());
+            return new View\Login($instance->logoAplicacion(), $instance->sloganAplicacion(), $instance->urlAssets(), $instance->logoInstitucion());
         }
         try {
             switch ($_SERVER["REQUEST_METHOD"])
@@ -576,8 +551,7 @@ abstract class Instance
                     throw new \Exception("Forbiden request method");
                     break;
             }
-            return Current::Module()->run($_action, $_action_id, $_class,
-                                          $_selected_id);
+            return Current::Module()->run($_action, $_action_id, $_class, $_selected_id);
         } catch (\Exception $e) {
             $GLOBALS["gip-error"] = static::displayException($e);
             return static::displayException($e);
