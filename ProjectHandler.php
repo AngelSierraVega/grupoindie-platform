@@ -10,7 +10,7 @@ namespace GIndie\Platform;
  *
  * @package GIndie\Platform
  *
- * @version 0C.70
+ * @version 0C.96
  * 
  * @edit 18-02-24
  * - Added code from GI-DBH
@@ -36,21 +36,36 @@ class ProjectHandler extends \GIndie\ProjectHandler\AbstractProjectHandler
         $rtnArray[\hexdec("0C.20")]["description"] = "Data model upgrade";
         $rtnArray[\hexdec("0C.20")]["code"] = "One";
         $rtnArray[\hexdec("0C.20")]["threshold"] = "0C.20";
-        
+
         $rtnArray[\hexdec("0C.60")]["description"] = "Removed deprecated dependency";
         $rtnArray[\hexdec("0C.60")]["code"] = "PGRD-1";
         $rtnArray[\hexdec("0C.60")]["threshold"] = "0C.60";
+
+        $rtnArray[\hexdec("0C.8C")]["description"] = "GOODBAY 2018";
+        $rtnArray[\hexdec("0C.8C")]["code"] = "PGRD-2018";
+        $rtnArray[\hexdec("0C.8C")]["threshold"] = "0C.8C";
+        
+        /**
+         * 0C.96: DYNMC-HLP
+         */
+        $rtnArray[\hexdec("0C.96")]["description"] = "Dynamic help";
+        $rtnArray[\hexdec("0C.96")]["code"] = "DYNMC-HLP";
+        $rtnArray[\hexdec("0C.96")]["threshold"] = "0C.96";
+        
         //Two
         $rtnArray[\hexdec("0D.00")]["description"] = "Platform for MMR-PRDL";
         $rtnArray[\hexdec("0D.00")]["code"] = "Two";
         $rtnArray[\hexdec("0D.00")]["threshold"] = "0D.00";
         
+        
+
         $rtnArray[\hexdec("10.00")]["description"] = "";
         $rtnArray[\hexdec("10.00")]["code"] = "FINAL";
         $rtnArray[\hexdec("10.00")]["threshold"] = "10.00";
         \ksort($rtnArray);
         return $rtnArray;
     }
+
     /**
      * 
      * @return string

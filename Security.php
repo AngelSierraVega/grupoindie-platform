@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform
  *
- * @version 0C.30
+ * @version 0C.A0
  * @since
  */
 
@@ -169,7 +169,7 @@ class Security
         $query->addConditionEquals("user", $user);
         $query->addConditionEquals("active", "1");
         $query->setLimit(1);
-        //var_dump($query . "");
+//        var_dump($query . "");
         $_resultSet = \GIndie\DBHandler\MySQL57::query($query);
         //var_dump($_resultSet);
         if (count($_resultSet) == 1) {

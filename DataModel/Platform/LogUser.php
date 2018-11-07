@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0C.D0
+ * @version 0C.DA
  * @since 18-08-25
  */
 
@@ -24,6 +24,8 @@ use GIndie\DBHandler\MySQL57\Instance\DataType;
  * - Added databaseClassname() from DataModel\AbstractTable
  * - Class extends Model\RecordAutoincremented 
  * - Removed PRIMARY_KEY and AUTOINCREMENT
+ * @edit 18-11-11
+ * - Upgraded column definition
  */
 class LogUser extends AbstractTable
 {
@@ -68,6 +70,7 @@ class LogUser extends AbstractTable
 
     /**
      * @since 18-08-26
+     * @edit 18-11-11
      */
     protected static function tableDefinition()
     {
@@ -75,6 +78,7 @@ class LogUser extends AbstractTable
          * Column id
          */
         static::columnDefinition("id", DataType::serial());
+        static::referenceDefinition()->setPrimaryKey("id");
 
         /**
          * Column pltfrm_cta_fk
@@ -82,54 +86,51 @@ class LogUser extends AbstractTable
          */
         static::columnDefinition("pltfrm_cta_fk", static::getPKDataType(User::class));
         static::columnDefinition("pltfrm_cta_fk")->setNotNull();
-//        $instance = User::instance();
-//        $instance->columns();
         static::referenceDefinition()->addForeignKey("pltfrm_cta_fk", User::class, "pltfrm_cta_log_FK_pltfrm_cta");
 
         /**
          * Column action
          * 
          */
-        static::columnDefinition("action", DataType::varchar(255));
+        static::columnDefinition("action", DataType::char(255));
         static::columnDefinition("action")->setNotNull();
 
         /**
          * Column action-id
          * 
          */
-        static::columnDefinition("action-id", DataType::varchar(255));
+        static::columnDefinition("action-id", DataType::char(255));
         static::columnDefinition("action-id")->setDefaultValue(null);
 
         /**
          * Column action-class
          * 
          */
-        static::columnDefinition("action-class", DataType::varchar(255));
+        static::columnDefinition("action-class", DataType::char(255));
         static::columnDefinition("action-class")->setDefaultValue(null);
 
         /**
          * Column selected-id
          */
-        static::columnDefinition("selected-id", DataType::varchar(255));
+        static::columnDefinition("selected-id", DataType::char(255));
         static::columnDefinition("selected-id")->setDefaultValue(null);
 
         /**
          * Column timestamp
          */
         static::columnDefinition("timestamp", DataType::integer(11));
+//        static::columnDefinition("timestamp", DataType::timestamp());
         static::columnDefinition("timestamp")->setNotNull();
 
         /**
          * Column notes
          */
-        static::columnDefinition("notes", DataType::text());
+        static::columnDefinition("notes", DataType::varchar(2000));
         static::columnDefinition("notes")->setNotNull();
 
         /**
          * Reference Definition
          */
-        static::referenceDefinition()->setPrimaryKey("id");
-        
     }
 
     /**

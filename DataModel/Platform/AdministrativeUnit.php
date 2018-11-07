@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0C.E0
+ * @version 0C.DA
  * @since 18-08-25
  */
 
@@ -29,6 +29,8 @@ use GIndie\Platform\DataModel\Resources\GIPList;
  * - Upgraded Model
  * @edit 18-11-04
  * - Handle user error
+ * @edit 18-11-11
+ * - Upgraded column definition
  */
 class AdministrativeUnit extends AbstractTable
 {
@@ -103,6 +105,7 @@ class AdministrativeUnit extends AbstractTable
 
     /**
      * @since 18-08-19
+     * @edit 18-11-11
      */
     protected static function tableDefinition()
     {
@@ -123,7 +126,7 @@ class AdministrativeUnit extends AbstractTable
         /**
          * Column dscrpcn
          */
-        static::columnDefinition(static::ATTR_NOMBRE, DataType::varchar(255));
+        static::columnDefinition(static::ATTR_NOMBRE, DataType::char(255));
         static::columnDefinition(static::ATTR_NOMBRE)->setNotNull();
         static::columnDefinition(static::ATTR_NOMBRE)->setComment("Nombre de la unidad administrativa");
 

@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0C.C0
+ * @version 0C.DA
  * @since 18-08-25
  */
 
@@ -19,7 +19,9 @@ use GIndie\Platform\Model;
 use GIndie\DBHandler\MySQL57\Instance\DataType;
 
 /**
- * Description of Role
+ * 
+ * @edit 18-11-11
+ * - Upgraded column definition
  */
 class Role extends AbstractTable
 {
@@ -82,6 +84,7 @@ class Role extends AbstractTable
 
     /**
      * @since 18-08-26
+     * @edit 18-11-11
      */
     protected static function tableDefinition()
     {
@@ -93,7 +96,7 @@ class Role extends AbstractTable
         /**
          * Column pltfrm_cta_fk
          */
-        static::columnDefinition("dscrptn", DataType::varchar(255));
+        static::columnDefinition("dscrptn", DataType::char(255));
         static::columnDefinition("dscrptn")->setNotNull();
 
         /**

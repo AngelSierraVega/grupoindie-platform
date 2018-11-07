@@ -5,15 +5,16 @@
  * 
  * @package GIndie\Platform\Controller\Instance\Module\Placeholder
  * 
- * @version 0C.30
+ * @version 0C.70
  * @since 17-09-03
  */
 
 namespace GIndie\Platform\Controller\Module;
 
-use \GIndie\Platform\View\Widget;
-use \GIndie\Generator\DML\HTML5\Bootstrap3\Component\Button;
-use \GIndie\Platform\Model;
+use GIndie\Platform\View\Widget;
+//use \GIndie\Generator\DML\HTML5\Bootstrap3\Component\Button;
+use GIndie\Platform\Model;
+use GIndie\Platform\View;
 
 /**
  * 
@@ -25,6 +26,102 @@ use \GIndie\Platform\Model;
  */
 class Placeholder
 {
+
+    /**
+     *
+     * @var string 
+     * @since 18-12-07
+     */
+    private $placeholderId;
+
+    /**
+     * 
+     * @param string $placeholderId
+     * @since 18-12-07
+     */
+    public function __construct($placeholderId)
+    {
+        $this->placeholderId = $placeholderId;
+    }
+
+    /**
+     * 
+     * @return string
+     * @since 18-12-07
+     */
+    public function getPlaceholderId()
+    {
+        return $this->placeholderId;
+    }
+
+    /**
+     *
+     * @var int 
+     * @since 18-12-07
+     */
+    private $screenSize = "col-sm";
+
+    /**
+     * 
+     * @return int
+     * @since 18-12-07
+     */
+    public function getScreenSize()
+    {
+        return $this->screenSize;
+    }
+
+    /**
+     * 
+     * @param int $columnSize
+     * @return GIndie\Platform\Controller\Module\Placeholder
+     * @since 18-12-07
+     */
+    public function setScreenSize($screenSize)
+    {
+        $this->screenSize = $screenSize;
+        return $this;
+    }
+
+    /**
+     *
+     * @var int 
+     * @since 18-12-07
+     */
+    private $columnSize = 12;
+
+    /**
+     * 
+     * @return int
+     * @since 18-12-07
+     */
+    public function getColumnSize()
+    {
+        return $this->columnSize;
+    }
+
+    /**
+     * 
+     * @param int $columnSize
+     * @return GIndie\Platform\Controller\Module\Placeholder
+     * @since 18-12-07
+     */
+    public function setColumnSize($columnSize)
+    {
+        switch (true)
+        {
+            case $columnSize > 12:
+                $this->columnSize = 12;
+                break;
+            case $columnSize < 1:
+                $this->columnSize = 1;
+                break;
+            default :
+                $this->columnSize = $columnSize;
+                break;
+        }
+        return $this;
+    }
 
     /**
      *
@@ -46,12 +143,10 @@ class Placeholder
             switch (true)
             {
                 case \is_string($callable):
-                    \trigger_error($callable . " is not callable.",
-                                   \E_USER_ERROR);
+                    \trigger_error($callable . " is not callable.", \E_USER_ERROR);
                     break;
                 case \is_array($callable):
-                    \trigger_error($callable[1] . " is not callable.",
-                                   \E_USER_ERROR);
+                    \trigger_error($callable[1] . " is not callable.", \E_USER_ERROR);
                     break;
                     \trigger_error("Var not callable.", \E_USER_ERROR);
                     break;
@@ -76,9 +171,60 @@ class Placeholder
 
     /**
      * 
+     * @return \GIndie\Platform\View\Widget\WidgetReport
+     * @since 18-11-07
+     */
+    private function callReport()
+    {
+
+//        $_classname = $this->_dynamicClass;
+//        $_params = $this->_startParams;
+//        $_table = new $_classname($_params);
+        $widget = new View\Widgets\Report($this->_dynamicClass, null, $this->_startParams);
+        $this->handleButtons($widget);
+        return $widget;
+    }
+
+    /**
+     * 
+     * @param mixed $widget
+     * @since 18-11-07
+     */
+    private function handleButtons($widget)
+    {
+        switch (true)
+        {
+            case \is_subclass_of($widget, View\Widget::class, false):
+                foreach ($this->_buttons as $tmpButton) {
+                    $_actionId = $tmpButton["gipActionId"];
+                    if (\strcmp($_actionId, "gip-selected-id") == 0) {
+                        if (isset($_POST["gip-selected-id"])) {
+                            $_actionId = $_POST["gip-selected-id"];
+                            $this->_selectedId = $_actionId;
+                        } else {
+                            $_actionId = $this->_selectedId;
+                        }
+                    }
+                    $tmpButton = Widget\Buttons::Custom($tmpButton["context"], $tmpButton["icon"],
+                            $tmpButton["gipAction"], $_actionId, $tmpButton["gipModal"],
+                            $tmpButton["gipClass"]);
+                    $widget->addButtonHeading($tmpButton);
+                }
+                break;
+            default:
+                \trigger_error("Param " . \get_class($widget) . " is not subclass of " . View\Widget::class,
+                    \E_USER_ERROR);
+                break;
+        }
+    }
+
+    /**
+     * 
      * @return mixed
      * @edit 18-05-21
      * - Added funcionality for typeCallable
+     * @edit 18-11-07
+     * - Exploded case "TableReport" into callReport()
      */
     public function call($id)
     {
@@ -115,12 +261,9 @@ class Placeholder
                             //$_actionId = $this->_selectedId;
                         }
                     }
-                    $tmpButton = Widget\Buttons::Custom($tmpButton["context"],
-                                                        $tmpButton["icon"],
-                                                        $tmpButton["gipAction"],
-                                                        $_actionId,
-                                                        $tmpButton["gipModal"],
-                                                        $tmpButton["gipClass"]);
+                    $tmpButton = Widget\Buttons::Custom($tmpButton["context"], $tmpButton["icon"],
+                            $tmpButton["gipAction"], $_actionId, $tmpButton["gipModal"],
+                            $tmpButton["gipClass"]);
                     $widget->addButtonHeading($tmpButton);
                 }
                 return $widget;
@@ -130,8 +273,8 @@ class Placeholder
                 //$_recordId = $this->_record_recordId;
                 if ($id == \NULL) {
                     //$recordId = $this->_record_recordId;
-                    return new \GIndie\Platform\View\Widget("Ningún item seleccionado",
-                                                            \FALSE, \FALSE);
+                    return new \GIndie\Platform\View\Widget("Ningún item seleccionado", \FALSE,
+                        \FALSE);
                     $recordId = $id;
                 }
                 //var_dump($recordId);
@@ -141,27 +284,23 @@ class Placeholder
                 if (strcmp($_record->getId(), $recordId) == 0) {
                     if ($_record->getId() == "") {
                         return new \GIndie\Platform\View\Widget("Los datos <i><b>" . $_classname::NAME . "</b></i> no existen.",
-                                                                \FALSE, \FALSE);
+                            \FALSE, \FALSE);
                     }
-                    $widget = new \GIndie\Platform\View\WidgetMain($_record,
-                                                                   $this->_customTitle);
+                    $widget = new \GIndie\Platform\View\WidgetMain($_record, $this->_customTitle);
                     foreach ($this->_buttons as $tmpButton) {
                         $_actionId = $tmpButton["gipActionId"];
                         if (strcmp($_actionId, "gip-selected-id") == 0) {
                             $_actionId = $recordId;
                         }
                         $tmpButton = Widget\Buttons::Custom($tmpButton["context"],
-                                                            $tmpButton["icon"],
-                                                            $tmpButton["gipAction"],
-                                                            $_actionId,
-                                                            $tmpButton["gipModal"],
-                                                            $tmpButton["gipClass"]);
+                                $tmpButton["icon"], $tmpButton["gipAction"], $_actionId,
+                                $tmpButton["gipModal"], $tmpButton["gipClass"]);
                         $widget->addButtonHeading($tmpButton);
                     }
                     return $widget;
                 }
                 $widget = new \GIndie\Platform\View\Widget("<i><b>" . $_classname::NAME . "</b></i> sin definir.",
-                                                           \FALSE, \FALSE);
+                    \FALSE, \FALSE);
                 $tmpButton = Widget\Buttons::Create($_classname);
                 $tmpButton->setAttribute("gip-action-id", $recordId);
                 $tmpButton->setAttribute("gip-selected-id", $recordId);
@@ -176,21 +315,18 @@ class Placeholder
                 $record = $_classname::RelatedRecord();
                 $record::instance();
                 //$record = $record::instance();
-                $form = new \GIndie\Platform\View\Form(\NULL, \FALSE,
-                                                       "#tempContent");
+                $form = new \GIndie\Platform\View\Form(\NULL, \FALSE, "#tempContent");
                 $form->setAttribute("gip-action", "reportSearch");
                 $form->setAttribute("gip-action-class", $_classname);
                 foreach ($_searchColumns as $attribute) {
                     if (\is_array($attribute)) {
                         foreach ($attribute as $key => $value) {
                             $tmpAttr = \GIndie\Platform\View\Input::constructFromAttribute($record::getAttribute($key),
-                                                                                                                 $value,
-                                                                                                                 \NULL);
+                                    $value, \NULL);
                         }
                     } else {
                         $tmpAttr = \GIndie\Platform\View\Input::constructFromAttribute($record::getAttribute($attribute),
-                                                                                                             "",
-                                                                                                             \NULL);
+                                "", \NULL);
                     }
                     $form->addContent($tmpAttr);
                 }
@@ -199,11 +335,8 @@ class Placeholder
 //                $form->addScript($script);
                 //$_table = new $_classname($_params);
                 //$_table = new \GIndie\Platform\View\Table($_table);
-                $widget = new Widget("Búsqueda", \FALSE, $form,
-                                     "<div id='tempContent'></div>");
-                $searchButton = Widget\Buttons::CustomPrimary("buscar", \NULL,
-                                                              \NULL, \FALSE,
-                                                              \NULL);
+                $widget = new Widget("Búsqueda", \FALSE, $form, "<div id='tempContent'></div>");
+                $searchButton = Widget\Buttons::CustomPrimary("buscar", \NULL, \NULL, \FALSE, \NULL);
                 $searchButton->setForm($form->getId());
 //                $tmpButton = Widget\Buttons::Custom(Widget\Buttons::CustomDanger($icon, $gipAction) $tmpButton["context"],
 //                                                        $tmpButton["icon"],
@@ -224,12 +357,9 @@ class Placeholder
                             $_actionId = $this->_selectedId;
                         }
                     }
-                    $tmpButton = Widget\Buttons::Custom($tmpButton["context"],
-                                                        $tmpButton["icon"],
-                                                        $tmpButton["gipAction"],
-                                                        $_actionId,
-                                                        $tmpButton["gipModal"],
-                                                        $tmpButton["gipClass"]);
+                    $tmpButton = Widget\Buttons::Custom($tmpButton["context"], $tmpButton["icon"],
+                            $tmpButton["gipAction"], $_actionId, $tmpButton["gipModal"],
+                            $tmpButton["gipClass"]);
                     $widget->addButtonHeading($tmpButton);
                 }
                 return $widget;
@@ -239,35 +369,30 @@ class Placeholder
                 $_params = $this->_startParams;
                 $record = $_classname::RelatedRecord();
                 $record::instance();
-                $form = new \GIndie\Platform\View\Form(\NULL, \FALSE,
-                                                       "#tempContent");
+                $form = new \GIndie\Platform\View\Form(\NULL, \FALSE, "#tempContent");
                 $form->setAttribute("gip-action", "tableSearch");
                 $form->setAttribute("gip-action-class", $_classname);
                 foreach ($_searchColumns as $attribute) {
                     if (\is_array($attribute)) {
                         foreach ($attribute as $key => $value) {
                             $tmpAttr = \GIndie\Platform\View\Input::constructFromAttribute($record::getAttribute($key),
-                                                                                                                 $value,
-                                                                                                                 \NULL);
+                                    $value, \NULL);
                         }
                     } else {
                         $tmpAttr = \GIndie\Platform\View\Input::constructFromAttribute($record::getAttribute($attribute),
-                                                                                                             "",
-                                                                                                             \NULL);
+                                "", \NULL);
                     }
                     $form->addContent($tmpAttr);
                 }
-                $widget = new Widget("Búsqueda de " . $_classname::Name(),
-                                     \FALSE, $form,
-                                     "<div id='tempContent'></div>");
+                $widget = new Widget("Búsqueda de " . $_classname::Name(), \FALSE, $form,
+                    "<div id='tempContent'></div>");
 //                $searchButton = Widget\Buttons::CustomDefault("<span class=\"glyphicon glyphicon-refresh\"></span>", "widget-reload", \NULL, \FALSE, \NULL);
 //                $searchButton->setForm($form->getId());
 //                $searchButton = Widget\Buttons::Reload();
 //                $widget->addButtonHeading($searchButton);
 
                 $searchButton = Widget\Buttons::CustomPrimary("<span class=\"glyphicon glyphicon-search\"></span>",
-                                                              \NULL, \NULL,
-                                                              \FALSE, \NULL);
+                        \NULL, \NULL, \FALSE, \NULL);
                 $searchButton->setForm($form->getId());
                 $widget->addButtonHeading($searchButton);
 
@@ -282,42 +407,16 @@ class Placeholder
                             $_actionId = $this->_selectedId;
                         }
                     }
-                    $tmpButton = Widget\Buttons::Custom($tmpButton["context"],
-                                                        $tmpButton["icon"],
-                                                        $tmpButton["gipAction"],
-                                                        $_actionId,
-                                                        $tmpButton["gipModal"],
-                                                        $tmpButton["gipClass"]);
+                    $tmpButton = Widget\Buttons::Custom($tmpButton["context"], $tmpButton["icon"],
+                            $tmpButton["gipAction"], $_actionId, $tmpButton["gipModal"],
+                            $tmpButton["gipClass"]);
                     $widget->addButtonHeading($tmpButton);
                 }
                 return $widget;
 
                 return $widget;
             case "TableReport":
-                $_classname = $this->_dynamicClass;
-                $_params = $this->_startParams;
-                $_table = new $_classname($_params);
-                $widget = new Widget\WidgetReport($_table);
-                foreach ($this->_buttons as $tmpButton) {
-                    $_actionId = $tmpButton["gipActionId"];
-                    if (strcmp($_actionId, "gip-selected-id") == 0) {
-                        if (isset($_POST["gip-selected-id"])) {
-                            $_actionId = $_POST["gip-selected-id"];
-                            $this->_selectedId = $_actionId;
-                        } else {
-                            //this->_selectedId = "NONE";
-                            $_actionId = $this->_selectedId;
-                        }
-                    }
-                    $tmpButton = Widget\Buttons::Custom($tmpButton["context"],
-                                                        $tmpButton["icon"],
-                                                        $tmpButton["gipAction"],
-                                                        $_actionId,
-                                                        $tmpButton["gipModal"],
-                                                        $tmpButton["gipClass"]);
-                    $widget->addButtonHeading($tmpButton);
-                }
-                return $widget;
+                return $this->callReport();
             case "TableDynamic":
                 $_classname = $this->_dynamicClass;
                 $_params = $this->_startParams;
@@ -336,32 +435,24 @@ class Placeholder
                             $_actionId = $this->_selectedId;
                         }
                     }
-                    $tmpButton = Widget\Buttons::Custom($tmpButton["context"],
-                                                        $tmpButton["icon"],
-                                                        $tmpButton["gipAction"],
-                                                        $_actionId,
-                                                        $tmpButton["gipModal"],
-                                                        $tmpButton["gipClass"]);
+                    $tmpButton = Widget\Buttons::Custom($tmpButton["context"], $tmpButton["icon"],
+                            $tmpButton["gipAction"], $_actionId, $tmpButton["gipModal"],
+                            $tmpButton["gipClass"]);
                     $widget->addButtonHeading($tmpButton);
                 }
                 return $widget;
             case "TableInstance":
 //                return new \GIndie\Platform\View\Widget($this->_customContent,
 //                        $this->_customTitle);
-                return new Widget\WidgetTable($this->_table_instance,
-                                              $this->_customTitle
+                return new Widget\WidgetTable($this->_table_instance, $this->_customTitle
                 );
             case "CustomContent":
-                return new \GIndie\Platform\View\Widget($this->_customTitle,
-                                                        \FALSE,
-                                                        $this->_customContent
+                return new \GIndie\Platform\View\Widget($this->_customTitle, \FALSE,
+                    $this->_customContent
                 );
             case "Custom":
-                $widget = new Widget($this->_instanceOfHeading,
-                                     $this->_instanceOfHeadingBody,
-                                     $this->_instanceOfBody,
-                                     $this->_instanceOfBodyFooter,
-                                     $this->_instanceOfFooter);
+                $widget = new Widget($this->_instanceOfHeading, $this->_instanceOfHeadingBody,
+                    $this->_instanceOfBody, $this->_instanceOfBodyFooter, $this->_instanceOfFooter);
                 foreach ($this->_buttons as $tmpButton) {
                     $_actionId = $tmpButton["gipActionId"];
                     //var_dump($_actionId);
@@ -375,26 +466,20 @@ class Placeholder
                             $_actionId = $this->_selectedId;
                         }
                     }
-                    $tmpButton = Widget\Buttons::Custom($tmpButton["context"],
-                                                        $tmpButton["icon"],
-                                                        $tmpButton["gipAction"],
-                                                        $_actionId,
-                                                        $tmpButton["gipModal"],
-                                                        $tmpButton["gipClass"]);
+                    $tmpButton = Widget\Buttons::Custom($tmpButton["context"], $tmpButton["icon"],
+                            $tmpButton["gipAction"], $_actionId, $tmpButton["gipModal"],
+                            $tmpButton["gipClass"]);
                     $widget->addButtonHeading($tmpButton);
                 }
                 return $widget;
-                return new Widget($this->_instanceOfHeading,
-                                  $this->_instanceOfHeadingBody,
-                                  $this->_instanceOfBody,
-                                  $this->_instanceOfBodyFooter,
-                                  $this->_instanceOfFooter);
+                return new Widget($this->_instanceOfHeading, $this->_instanceOfHeadingBody,
+                    $this->_instanceOfBody, $this->_instanceOfBodyFooter, $this->_instanceOfFooter);
 
             case "RecordInstance":
                 return new \GIndie\Platform\View\WidgetMain($this->_record_instance,
-                                                            $this->_customTitle);
+                    $this->_customTitle);
             case "UNDEFINED":
-                \trigger_error("El placeholder no está definido", \E_USER_ERROR);
+                \trigger_error("El placeholder no está definido ".$this->getPlaceholderId(), \E_USER_ERROR);
             default:
                 //var_dump( $this->_type);
                 trigger_error("Unrecognized type " . $this->_type, E_USER_ERROR);
@@ -428,8 +513,7 @@ class Placeholder
      * 
      * 
      */
-    public function addButton($context, $icon, $gipAction, $gipActionId = \NULL,
-                              $gipModal = \FALSE, $gipClass = \NULL)
+    public function addButton($context, $icon, $gipAction, $gipActionId = \NULL, $gipModal = \FALSE, $gipClass = \NULL)
     {
         $this->_buttons[] = ["context" => $context,
             "icon" => $icon,
@@ -463,9 +547,7 @@ class Placeholder
      * @param mixed $content
      * @return \GIndie\Platform\Controller\Module\WidgetInterface
      */
-    public function typeCustom($heading = \FALSE, $heading_body = \FALSE,
-                               $body = \FALSE, $body_footeer = \FALSE,
-                               $footer = \FALSE)
+    public function typeCustom($heading = \FALSE, $heading_body = \FALSE, $body = \FALSE, $body_footeer = \FALSE, $footer = \FALSE)
     {
         //$this->_customContent = $content;
         $this->_type = "Custom";
@@ -500,8 +582,7 @@ class Placeholder
      * @param \GIndie\Platform\Model\Record $record
      * @return \GIndie\Platform\Controller\Module\WidgetInterface
      */
-    public function setTypeTableInstance(\GIndie\Platform\Model\Table $table,
-                                         $title = \FALSE)
+    public function setTypeTableInstance(\GIndie\Platform\Model\Table $table, $title = \FALSE)
     {
         $this->_table_instance = $table;
         $this->_type = "TableInstance";
@@ -519,8 +600,7 @@ class Placeholder
      * @param \GIndie\Platform\Model\Record $record
      * @return \GIndie\Platform\Controller\Module\WidgetInterface
      */
-    public function setTypeRecordInstance(\GIndie\Platform\Model\Record $record,
-                                          $title = NULL)
+    public function setTypeRecordInstance(\GIndie\Platform\Model\Record $record, $title = NULL)
     {
         $this->_record_instance = $record;
         $this->_type = "RecordInstance";
@@ -552,8 +632,7 @@ class Placeholder
     {
         if (!\is_subclass_of($class, Model\ListSimple::class, \TRUE)) {
             \trigger_error($class . " no es subtipo de " .
-                    Model\ListSimple::class . " en " . get_called_class(),
-                           \E_USER_ERROR);
+                Model\ListSimple::class . " en " . get_called_class(), \E_USER_ERROR);
         }
         $this->_dynamicClass = $class;
         $this->_startParams = $params;
@@ -568,8 +647,7 @@ class Placeholder
      * @param string $recordId
      * @return \GIndie\Platform\Controller\Module\WidgetInterface
      */
-    public function typeListDynamic($dynamicClass, $startParams = [],
-                                    $title = \NULL, $selectedId = \NULL)
+    public function typeListDynamic($dynamicClass, $startParams = [], $title = \NULL, $selectedId = \NULL)
     {
         $this->_dynamicClass = $dynamicClass;
         $this->_startParams = $startParams;
@@ -585,8 +663,7 @@ class Placeholder
      * @param string $recordId
      * @return \GIndie\Platform\Controller\Module\WidgetInterface
      */
-    public function typeTableDynamic($tableClass, $parameters = [],
-                                     $title = NULL, $selectedId = \NULL)
+    public function typeTableDynamic($tableClass, $parameters = [], $title = NULL, $selectedId = \NULL)
     {
         $this->_dynamicClass = $tableClass;
         $this->_startParams = $parameters;
@@ -619,8 +696,7 @@ class Placeholder
      * @param       string $recordId
      * @return \GIndie\Platform\Controller\Module\WidgetInterface
      */
-    public function typeReportSearch($tableClass, $searchColumns = [],
-                                     $parameters = [])
+    public function typeReportSearch($tableClass, $searchColumns = [], $parameters = [])
     {
         $this->_dynamicClass = $tableClass;
         $this->_columnsSearch = $searchColumns;
@@ -635,8 +711,7 @@ class Placeholder
      * @param       string $recordId
      * @return \GIndie\Platform\Controller\Module\WidgetInterface
      */
-    public function typeTableSearch($tableClass, $searchColumns = [],
-                                    $parameters = [])
+    public function typeTableSearch($tableClass, $searchColumns = [], $parameters = [])
     {
         $this->_dynamicClass = $tableClass;
         $this->_columnsSearch = $searchColumns;
@@ -651,9 +726,7 @@ class Placeholder
      * @param       string $recordId
      * @return \GIndie\Platform\Controller\Module\WidgetInterface
      */
-    public function typeRecordDynamic($recordClass,
-                                      $recordId = "gip-selected-id",
-                                      $title = NULL)
+    public function typeRecordDynamic($recordClass, $recordId = "gip-selected-id", $title = NULL)
     {
         $this->_record_recordClass = $recordClass;
         $this->_record_recordId = $recordId;

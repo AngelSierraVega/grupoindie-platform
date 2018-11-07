@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\View
  * 
- * @version 0C.00
+ * @version 0C.A0
  * @since 
  */
 
@@ -53,6 +53,15 @@ class WidgetMain extends Widget
             $this->addButtonState($record->getState(), \urlencode(\get_class($record)), $record->getId());
         }
     }
+    
+    /**
+     * 
+     * @return mixed
+     * @since 18-12-11
+     */
+    public function getRecord(){
+        return $this->_record;
+    }
 
     /**
      * @edit 18-03-23
@@ -60,6 +69,13 @@ class WidgetMain extends Widget
      */
     protected function tmpContent()
     {
+        $data = [];
+        foreach ($this->_record->getAttributesDisplay() as $attrName) {
+            $data[$this->_record->getLabelOf($attrName).""] = $this->_record->getDisplayOf($attrName)."";
+        }
+        $table = \GIndie\Framework\View\Table::displayArray($data,null,100)->setAttribute("style","font-size:medium;");
+        $table->addClass("table-condensed");
+        return $table;
         $mainRow = StylesSemantics::div(null, ["class" => "row"]);
 //        $mainRow = new \GIndie\Generator\DML\HTML5\Node("div", \FALSE,
 //                                                        ["class" => "row"]);
@@ -114,7 +130,7 @@ class WidgetMain extends Widget
         return $mainRow;
     }
 
-    protected function addButtonEdit($gipClass, $gipActionId = \NULL)
+    public function addButtonEdit($gipClass, $gipActionId = \NULL)
     {
         $this->addButtonHeading(Buttons::Edit($gipClass, $gipActionId));
     }

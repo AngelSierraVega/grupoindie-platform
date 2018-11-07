@@ -7,7 +7,7 @@
  *
  * @package GIndie\Platform\Model
  *
- * @version 0C.B0
+ * @version 0C.00
  * @since 17-04-23
  */
 
@@ -19,6 +19,8 @@ use GIndie\Generator\DML\HTML5\Bootstrap3;
 use GIndie\DBHandler\MySQL57;
 use GIndie\Platform\DataModel;
 use GIndie\DBHandler\MySQL57\Instance\DataType;
+use GIndie\DBHandler\MySQL57\Statement;
+use GIndie\Common\Parser\Moneda;
 
 /**
  * Description of Record
@@ -39,6 +41,49 @@ use GIndie\DBHandler\MySQL57\Instance\DataType;
  */
 abstract class Record extends MySQL57\Instance\Table implements RecordINT
 {
+
+    /**
+     * @return int
+     * @since 18-12-26
+     */
+    public static function countRows()
+    {
+        $result = \GIndie\DBHandler\MySQL57::query(Statement\DataManipulation::select(
+                    ["COUNT(" . static::PRIMARY_KEY . ")"], static::getTableReference()));
+        return (int) $result->fetch_row()[0];
+    }
+
+    /**
+     * 
+     * @param type $className
+     * @return \GIndie\DBHandler\MySQL57\Instance\DataType
+     * @since 18-11-20
+     */
+    protected static function getPKDataType($className = null)
+    {
+        if (!\is_null($className)) {
+            if (!\is_subclass_of($className, \GIndie\DBHandler\MySQL57\Instance\Table::class)) {
+                \trigger_error("{$className} Is not subclass of \\GIndie\\DBHandler\\MySQL57\\Instance\\Table",
+                    \E_USER_ERROR);
+            }
+            $instance = $className::instance();
+            $instance->columns();
+//            $dataType = $instance::columnDefinition($instance::PRIMARY_KEY)->getDataType();
+        } else {
+//            \trigger_error(static::class,\E_USER_ERROR);
+            $instance = static::instance();
+            $instance->columns();
+        }
+        $dataType = $instance::columnDefinition($instance::PRIMARY_KEY)->getDataType();
+        switch ($dataType->getDatatype())
+        {
+            case DataType::DATATYPE_SERIAL:
+                $dataType = DataType::serializedBigint();
+                break;
+        }
+        return $dataType;
+    }
+
     /**
      * const JQVALIDATOR_MAY_SIN_COMILLAS = "texto_simple_mayusculas_sin_comillas";
       public static $jqvalidatorMaySinComillas = "texto_simple_mayusculas_sin_comillas";
@@ -178,10 +223,14 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
      */
     private function __construct($data)
     {
-        \defined("static::SCHEMA") ?: trigger_error(\get_called_class() . " Necesita definir la constante SCHEMA", \E_USER_ERROR);
-        \defined("static::TABLE") ?: trigger_error(\get_called_class() . " Necesita definir la constante TABLE", \E_USER_ERROR);
-        \defined("static::DISPLAY_KEY") ?: trigger_error(\get_called_class() . " Necesita definir la constante DISPLAY_KEY", \E_USER_ERROR);
-        \defined("static::PRIMARY_KEY") ?: \trigger_error(\get_called_class() . " Necesita definir la constante PRIMARY_KEY", \E_USER_ERROR);
+        \defined("static::SCHEMA") ?: trigger_error(\get_called_class() . " Necesita definir la constante SCHEMA",
+                    \E_USER_ERROR);
+        \defined("static::TABLE") ?: trigger_error(\get_called_class() . " Necesita definir la constante TABLE",
+                    \E_USER_ERROR);
+        \defined("static::DISPLAY_KEY") ?: trigger_error(\get_called_class() . " Necesita definir la constante DISPLAY_KEY",
+                    \E_USER_ERROR);
+        \defined("static::PRIMARY_KEY") ?: \trigger_error(\get_called_class() . " Necesita definir la constante PRIMARY_KEY",
+                    \E_USER_ERROR);
         $this->_recordId = $data[static::PRIMARY_KEY];
         $this->_updatedFields = [];
         foreach ($data as $attribute => $value) {
@@ -200,9 +249,20 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
         //var_dump(static::$_attribute);
         //var_dump(get_called_class());
         $connection = Current::Connection();
-        $_resultSet = $connection->findByPK(static::PRIMARY_KEY, $recordId, static::getAttributeNames(), static::SCHEMA, static::TABLE);
+        $_resultSet = $connection->findByPK(static::PRIMARY_KEY, $recordId,
+            static::getAttributeNames(), static::SCHEMA, static::TABLE);
+//        $query = static::sttmtSelect(static::getSelectorsDisplay());
+//        $query->setTableReferences(static::getTableReference());
+//        $query->addConditionEquals(static::TABLE . "." . static::PRIMARY_KEY, $recordId);
+//        $connection = MySQL57::getConnection();
+//        $_resultSet = MySQL57::query($query)->fetch_assoc();
+//        $conditions = [[static::TABLE . "." . static::PRIMARY_KEY => $recordId]];
+//        $_resultSet = static::fetchAssoc(static::getSelectorsDisplay(), $conditions);
+//        $_resultSet = $connection->query($query."")->fetch_assoc();
+//        var_dump($_resultSet);
         if ($_resultSet) {
             return static::instance($_resultSet);
+            return static::instance(\array_pop($_resultSet));
             //return new static($_resultSet);
 //            foreach ($this->getAttributeNames() as $attr) {
 //                $this->getAttribute($attr)->setValue($_resultSet[$attr]);
@@ -223,6 +283,11 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
      * @since 18-10-28
      * @edit 18-11-01
      * - Temporarly handles DATATYPE_DATETIME, DATATYPE_TIMESTAMP
+     * @edit 18-11-06
+     * - Handles DataType::DATATYPE_ENUM
+     * @edit 18-11-10
+     * - Handles DataType::DATATYPE_CHAR
+     * 
      * @todo Explode method
      */
     public static function configAttributesFromColumnDefinition()
@@ -252,6 +317,7 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
                     break;
                 case DataType::DATATYPE_TEXT:
                 case DataType::DATATYPE_VARCHAR:
+                case DataType::DATATYPE_CHAR:
                     static::attribute($attr)->setType(Attribute::TYPE_STRING);
                     break;
                 case DataType::DATATYPE_TIME:
@@ -262,8 +328,16 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
                 case DataType::DATATYPE_TIMESTAMP:
                     static::attribute($attr)->setType(Attribute::TYPE_TIMESTAMP);
                     break;
+                case DataType::DATATYPE_ENUM:
+                    $enum = [];
+                    foreach ($columnDefinition->getDataType()->getValuesUnformatted() as $value) {
+                        $enum[$value] = $value;
+                    }
+                    static::attribute($attr)->setTypeEnum($enum);
+                    break;
                 default:
-                    \trigger_error("@todo handle DATATYPE_" . $columnDefinition->getDataType()->getDatatype(), \E_USER_ERROR);
+                    \trigger_error("@todo handle DATATYPE_" . $columnDefinition->getDataType()->getDatatype(),
+                        \E_USER_ERROR);
             }
             //handle hidden on autoincrement
             if (\strcmp(static::PRIMARY_KEY, $attr) == 0) {
@@ -327,6 +401,7 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
                         static::attribute($attr)->addInputAttribute("min", "0");
                     }
                     break;
+                case DataType::DATATYPE_CHAR:
                 case DataType::DATATYPE_VARCHAR:
                     static::attribute($attr)->setRestrictions([
 //                        "minlength" => "12",
@@ -339,9 +414,11 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
                 case DataType::DATATYPE_DATE:
                 case DataType::DATATYPE_DATETIME:
                 case DataType::DATATYPE_TIMESTAMP:
+                case DataType::DATATYPE_ENUM:
                     break;
                 default:
-                    \trigger_error("@todo handle DATATYPE_" . $columnDefinition->getDataType()->getDatatype(), \E_USER_ERROR);
+                    \trigger_error("@todo handle DATATYPE_" . $columnDefinition->getDataType()->getDatatype(),
+                        \E_USER_ERROR);
             }
         }
     }
@@ -359,7 +436,8 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
         $selectors = [static::PRIMARY_KEY, $attribute];
         $connection = Current::Connection();
         $conditions = ["`{$table}`.`{$attribute}`='{$value}'"];
-        $_resultSet = $connection->select(static::getAttributeNames(), $schema, $table, $conditions, ["Limit 1"]);
+        $_resultSet = $connection->select(static::getAttributeNames(), $schema, $table,
+            $conditions, ["Limit 1"]);
         //var_dump($_resultSet);
         if ($_resultSet->num_rows != 0) {
             return static::instance($_resultSet->fetch_assoc());
@@ -427,7 +505,8 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
             if ($recordId == 0) {
                 $recordId = $this->getId();
             }
-            $tmp = $connection->select([static::PRIMARY_KEY], static::SCHEMA, static::TABLE, [[static::PRIMARY_KEY => $recordId]]);
+            $tmp = $connection->select([static::PRIMARY_KEY], static::SCHEMA, static::TABLE,
+                [[static::PRIMARY_KEY => $recordId]]);
             $tmp = $tmp->fetch_array()[0];
             $nota = "Creación de '" . static::NAME . "' con los datos ";
             switch (static::TABLE)
@@ -494,13 +573,19 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
      * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
      * @edit Izmir Sanchez Juarez <izmirreffi@gmail.com>
      */
-    protected function _update($postReading = \TRUE)
+    protected function _update($postReading = true)
     {
         $connection = Current::Connection();
         if ($postReading) {
             $this->_handleBooleanPost();
         }
-        $id = isset($_POST["gip-action-id"]) ? $_POST["gip-action-id"] : \NULL;
+        $id = isset($_POST["gip-action-id"]) ? $_POST["gip-action-id"] : null;
+        switch ($id)
+        {
+            case "undefined":
+                $id = null;
+                break;
+        }
         $action = $connection->update($this, $id);
         /**
          * @todo
@@ -545,7 +630,8 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
      */
     protected static function attribute($fieldName)
     {
-        isset(static::$_attribute[static::class][$fieldName]) ?: static::$_attribute[static::class][$fieldName] = new Attribute($fieldName, static::class);
+        isset(static::$_attribute[static::class][$fieldName]) ?: static::$_attribute[static::class][$fieldName] = new Attribute($fieldName,
+                static::class);
         $rtnElement = &static::$_attribute[static::class][$fieldName];
         return $rtnElement;
     }
@@ -562,31 +648,33 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
         {
             case "gip-deactivate":
                 if (static::STATE_ATTRIBUTE == \NULL) {
-                    \trigger_error("Constant STATE_ATTRIBUTE must be declared in " . static::class, \E_USER_ERROR);
+                    \trigger_error("Constant STATE_ATTRIBUTE must be declared in " . static::class,
+                        \E_USER_ERROR);
                 }
                 static::setValueOf(static::STATE_ATTRIBUTE, "0", \FALSE);
                 return static::_update(\FALSE);
             case "gip-activate":
                 if (static::STATE_ATTRIBUTE == \NULL) {
-                    \trigger_error("Constant STATE_ATTRIBUTE must be declared in " . static::class, \E_USER_ERROR);
+                    \trigger_error("Constant STATE_ATTRIBUTE must be declared in " . static::class,
+                        \E_USER_ERROR);
                 }
                 static::setValueOf(static::STATE_ATTRIBUTE, "1", \FALSE);
-                return static::_update(\FALSE);
+                return static::_update(false);
             case "gip-edit":
-                return static::_update(\TRUE);
+                return static::_update(true);
             case "gip-inner-edit":
-                return static::_update(\FALSE);
+                return static::_update(false);
             case "gip-inner-create":
-                return static::_create(\FALSE);
+                return static::_create(false);
             case "gip-create":
-                return static::_create(\TRUE);
+                return static::_create(true);
             case "gip-delete":
                 return static::_delete();
             default:
                 \trigger_error("Unable to run: "
-                        . "gip-action= {$action} "
-                        . "gip-action-id= {$actionId} "
-                        . "gip-selected-id= {$selectedId} ", E_USER_ERROR);
+                    . "gip-action= {$action} "
+                    . "gip-action-id= {$actionId} "
+                    . "gip-selected-id= {$selectedId} ", E_USER_ERROR);
                 throw new \Exception("Unable to run.");
                 break;
         }
@@ -615,6 +703,9 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
      */
     final public static function getAttributesForm()
     {
+        if (!isset(static::$_attribute[static::class])) {
+            static::configAttributes();
+        }
         $rtnArray = [];
         foreach (static::$_attribute[static::class] as $attrName => $attr) {
             if (static::getAttribute($attrName)->excludedFromForm() !== \TRUE) {
@@ -680,7 +771,8 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
             $value = \GIndie\Platform\Current::Connection()->sanitize($value);
         }
         if (isset($this->_data[static::SCHEMA][static::TABLE][$this->_recordId][$attributeName])) {
-            if (\strcmp($this->_data[static::SCHEMA][static::TABLE][$this->_recordId][$attributeName], $value) != 0) {
+            if (\strcmp($this->_data[static::SCHEMA][static::TABLE][$this->_recordId][$attributeName],
+                    $value) != 0) {
                 $this->_updatedFields[] = $attributeName;
             }
         }
@@ -718,7 +810,12 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
         return static::getDisplayOf(static::DISPLAY_KEY);
     }
 
-    public function getName()
+    /**
+     * 
+     * @return string
+     * @since 18-12-26
+     */
+    public static function getName()
     {
         return static::NAME;
     }
@@ -734,7 +831,8 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
     public function getDisplayOf($attributeName)
     {
         if ((static::getAttribute($attributeName) == false)) {
-            \trigger_error("Attribute {$attributeName} is false. Called in " . \get_called_class(), \E_USER_ERROR);
+            \trigger_error("Attribute {$attributeName} is false. Called in " . \get_called_class(),
+                \E_USER_ERROR);
         }
         switch (static::getAttribute($attributeName)->getType())
         {
@@ -781,7 +879,8 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
             case Attribute::TYPE_BOOLEAN:
                 return $this->getValueOf($attributeName) == "1" ? "Si" : "No";
             case Attribute::TYPE_CURRENCY:
-                return "$ " . $this->getValueOf($attributeName);
+                return Moneda::contable($this->getValueOf($attributeName));
+//                return "$ " . $this->getValueOf($attributeName);
             default:
                 return $this->getValueOf($attributeName);
         }
@@ -803,7 +902,8 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
         if (!\array_key_exists($this->_recordId, $this->_data[static::SCHEMA][static::TABLE])) {
             \trigger_error("_recordId {$this->_recordId} not found", \E_USER_ERROR);
         }
-        if (!\array_key_exists($attributeName, $this->_data[static::SCHEMA][static::TABLE][$this->_recordId])) {
+        if (!\array_key_exists($attributeName,
+                $this->_data[static::SCHEMA][static::TABLE][$this->_recordId])) {
             \trigger_error("attribute {$attributeName} not found", \E_USER_ERROR);
         }
         //var_dump($this->_data[static::SCHEMA][static::TABLE]);
@@ -818,7 +918,8 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
     public function getState()
     {
         if (static::STATE_ATTRIBUTE == \NULL) {
-            \trigger_error("Constant STATE_ATTRIBUTE must be declared in " . static::class, \E_USER_ERROR);
+            \trigger_error("Constant STATE_ATTRIBUTE must be declared in " . static::class,
+                \E_USER_ERROR);
         }
         return static::getValueOf(static::STATE_ATTRIBUTE);
     }
@@ -833,7 +934,8 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
             return static::$_attribute[static::class][$attributeName];
         } else {
             return \FALSE;
-            \trigger_error("Atributo " . static::class . "-" . $attributeName . " no declarado", \E_USER_ERROR);
+            \trigger_error("Atributo " . static::class . "-" . $attributeName . " no declarado",
+                \E_USER_ERROR);
         }
         //return isset(static::$_attribute[static::class][$attributeName]) ? static::$_attribute[static::class][$attributeName] : \FALSE;
     }
@@ -877,13 +979,38 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
             static::defineRecordRestrictions();
         }
         if (!\array_key_exists(static::class, static::$_restrictions)) {
-            \trigger_error("El registro " . \get_called_class() . " no tiene definida la restricción para el comando '{$command}'. Utilice la función static::requireRoles(command,roles)", \E_USER_ERROR);
+            \trigger_error("El registro " . \get_called_class() . " no tiene definida la restricción para el comando '{$command}'. Utilice la función static::requireRoles(command,roles)",
+                \E_USER_ERROR);
         }
         if (!\array_key_exists($command, static::$_restrictions[static::class])) {
-            \trigger_error("El registro " . \get_called_class() . " no tiene definida la restricción para el comando '{$command}'. Utilice la función static::requireRoles(command,roles)", \E_USER_ERROR);
+            \trigger_error("El registro " . \get_called_class() . " no tiene definida la restricción para el comando '{$command}'. Utilice la función static::requireRoles(command,roles)",
+                \E_USER_ERROR);
         }
         return static::$_restrictions[static::class][$command];
         //
+    }
+
+    /**
+     * @since 18-11-29
+     */
+    public static function defineRecordRestrictions()
+    {
+        static::requireRoles("gip-create", ["AS"]);
+        static::requireRoles("gip-edit", ["AS"]);
+        static::requireRoles("gip-delete", ["AS"]);
+        if (!\is_null(static::STATE_ATTRIBUTE)) {
+            static::requireRoles("gip-state", ["AS"]);
+        } else {
+            static::requireRoles("gip-state", ["NONE"]);
+        }
+    }
+
+    /**
+     * @since 18-11-29
+     */
+    public static function configAttributes()
+    {
+        static::configAttributesFromColumnDefinition();
     }
 
 }

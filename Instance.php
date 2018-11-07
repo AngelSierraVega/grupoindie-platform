@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform
  *
- * @version 0D.00
+ * @version 0D.70
  * @since 17-05-23
  * @todo Upgrade class
  */
@@ -150,7 +150,8 @@ abstract class Instance
         if ($ini) {
             return $ini;
         } else {
-            \GIndie\Common\PHP\Directories::createFolderStructure(\dirname($_SERVER['SCRIPT_FILENAME']), "\\private\\respaldos\\");
+            \GIndie\Common\PHP\Directories::createFolderStructure(\dirname($_SERVER['SCRIPT_FILENAME']),
+                "\\private\\respaldos\\");
             return \dirname($_SERVER['SCRIPT_FILENAME']) . "\\private\\respaldos\\";
         }
     }
@@ -317,7 +318,8 @@ abstract class Instance
      */
     final private function __construct()
     {
-        static::BRAND_NAME !== \NULL ?: trigger_error("Constant BRAND_NAME must be defined inside class definition of: " . get_called_class(), \E_USER_ERROR);
+        static::BRAND_NAME !== \NULL ?: trigger_error("Constant BRAND_NAME must be defined inside class definition of: " . get_called_class(),
+                    \E_USER_ERROR);
         //static::CONFIG_CLASS !== \NULL ?: trigger_error("Constant CONFIG_CLASS must be defined inside class definition of: " . get_called_class(), \E_USER_ERROR);
         if (Current::Instance() !== \NULL) {
             static::config();
@@ -331,25 +333,28 @@ abstract class Instance
     abstract public function config();
 
     /**
-     * @deprecated
      * 
      * @param string $classname
      * @param boolean|string $config true for show, false for hide, string for group
+     * @param string|null $groupName overrides Module::category() use only if necesary for module
+     * dulplication
      * 
-     * @return \GIndie\Platform\Controller\Platform\ModuleInterface
+     * @return \GIndie\Platform\Controller\Module
      * @throws \Exception
      * @edit 18-06-13
      * - Optimized funcionality
+     * @edit 18-12-21
+     * - Graciously handle $groupName
      */
-    public function setModule($classname, $groupName = \NULL)
+    public function setModule($classname, $groupName = null)
     {
         switch (false)
         {
             case \is_subclass_of($classname, Controller\Module::class, true):
                 \trigger_error("Class {$classname} is not subclass of " .
-                        Controller\Module::class, \E_USER_ERROR);
+                    Controller\Module::class, \E_USER_ERROR);
         }
-        self::$_MODULES[$classname] = $groupName;
+        self::$_MODULES[$classname] = \is_null($groupName) ? $classname::category() : $groupName;
         return isset(self::$_MODULES[$classname]);
     }
 
@@ -451,14 +456,20 @@ abstract class Instance
      * @edit 18-04-01
      * @edit 18-10-27
      * - Se eliminó referencia a SII
+     * @edit 18-12-26
+     * - Max execution time updated to 1200
+     * @edit 19-01-07
+     * - Sleep set to 001000
      */
     final public static function run()
     {
+        \date_default_timezone_set("America/Mexico_City");
+        \set_time_limit(1200);
         /**
          * Retrasa la ejecución del código por 0.1 seg. Distribuye la carga de peticiones.
          * \time_nanosleep(0,100000000);
          */
-        \usleep(100000);
+        \usleep(001000);
         //\usleep(100000);
         if (\session_status() === \PHP_SESSION_NONE) {
             try {
@@ -481,7 +492,8 @@ abstract class Instance
                 }
             } catch (\GIndie\Platform\ExceptionLogin $e) {
                 $params = \session_get_cookie_params();
-                \setcookie(\session_name(), '', \time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]
+                \setcookie(\session_name(), '', \time() - 42000, $params["path"],
+                    $params["domain"], $params["secure"], $params["httponly"]
                 );
                 if ($_SERVER["REQUEST_METHOD"] === "POST") {//
                     $response = HTML5\Category\Basic::Paragraph($e->getMessage());
@@ -498,7 +510,8 @@ abstract class Instance
         }
         if (\session_status() == \PHP_SESSION_NONE) {
             $instance = new static();
-            return new View\Login($instance->logoAplicacion(), $instance->sloganAplicacion(), $instance->urlAssets(), $instance->logoInstitucion());
+            return new View\Login($instance->logoAplicacion(), $instance->sloganAplicacion(),
+                $instance->urlAssets(), $instance->logoInstitucion());
         }
         try {
             switch ($_SERVER["REQUEST_METHOD"])

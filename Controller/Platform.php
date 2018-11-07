@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\Controller\Instance
  * 
- * @version 0C.A0
+ * @version 0C.A4
  * @since 17-05-22
  */
 
@@ -123,6 +123,7 @@ abstract class Platform
                     switch (\get_class(Current::Instance()))
                     {
                         case "MunicipioMineralReforma\Predial":
+                        case "GIndie\FrameworkInstance\ProjectHandler\Instance":
                             $record = \MunicipioMineralReforma\Predial\ModeloDatos\Plataforma\Compuesto\UsuarioContrasenaFinal::findById(\GIndie\Platform\Current::User()->getId());
                             $form = new \GIndie\Platform\View\Form($record);
                             $modalContent = View\Modal\Content::warning("Necesita definir contraseña de usuario final", $form);
@@ -146,20 +147,7 @@ abstract class Platform
 //                return $document->getBody();
             case "container":
                 return $this->cnstrctContainer();
-                $container = new \GIndie\Platform\View\Document\Container();
-                $widgets = \GIndie\Platform\Current::Module()->getWidgets();
-                $widgets = array_keys($widgets);
-                foreach ($widgets as $id) {
-//                    $container->addWidget($id,
-//                                          \GIndie\Platform\Current::Controller()->getWidget($id)
-//                            != NULL ? \GIndie\Platform\Current::Controller()->getWidget($id)->call(\NULL) : \NULL);
-                    $container->addWidget($id, \GIndie\Platform\Current::Module()->getWidget($id) != NULL ? \GIndie\Platform\Current::Module()->run("widget-reload", $id, \NULL, \NULL) : \NULL);
-                }
-//                foreach ($this->WidgetsDefinition as $id) {
-//                    $container->addWidget($id,
-//                            $this->getWidget($id) != NULL ? $this->getWidget($id)->call() : NULL);
-//                }
-                return $container;
+                
             default:
                 trigger_error("Unable to run load: gip-action-id={$id}", E_USER_ERROR);
                 throw new \Exception("Unable to run.");
@@ -304,11 +292,20 @@ abstract class Platform
                 $data['timestamp'] = \time();
                 switch ($action)
                 {
+                    /**
+                     * @edit 18-12-21
+                     */
                     case "setController":
-                        $modulo = \urldecode($id);
-                        $nota = "Ingresó al módulo " . $modulo::NAME;
+                        $moduleClass = \urldecode($id);
+                        $moduleName = $moduleClass::name();
+                        $moduleCategory = \is_null($moduleClass::category())?"":$moduleClass::category()."-";
+                        $nota = "Ingresó al módulo {$moduleCategory}{$moduleName}";
+                        unset($moduleClass);
+                        unset($moduleName);
+                        unset($moduleCategory);
                         break;
                     default:
+                        var_dump($action);
                         \trigger_error("POR DEFINIR ACCION EN HISTORIAL. {$action}", \E_USER_ERROR);
                         break;
                 }

@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\View
  * 
- * @version 0C.00
+ * @version 0C.A0
  * @since 17-04-21
  */
 
@@ -40,6 +40,7 @@ class Widget extends Dashboard\Widget
     {
         $form = new \GIndie\Platform\View\Form(null, true, isset($params["target"]) ? $params["target"] : false);
         !isset($params["gip-action"]) ?: $form->setAttribute("gip-action", $params["gip-action"]);
+        !isset($params["gip-action-id"]) ?: $form->setAttribute("gip-action-id", $params["gip-action-id"]);
         switch (false)
         {
             case \is_null($this->getHeadingBody()):

@@ -6,7 +6,7 @@
  *
  * @package GIndie\Platform
  * 
- * @version 0C.10
+ * @version DEPRECATED
  * @since 17-05-22
  */
 

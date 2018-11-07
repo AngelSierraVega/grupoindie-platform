@@ -6,7 +6,7 @@
  * 
  * @package GIndie\Platform\Module
  * 
- * @version 0D.00
+ * @version 0D.30
  * @since 17-06-13
  */
 
@@ -31,24 +31,39 @@ class Welcome extends \GIndie\Platform\Controller\Module
 {
 
     /**
-     * @var string 
+     * {@inheritdoc}
+     * @since 18-12-21
      */
-    const NAME = "Bienvenido";
-
-    /**
-     * 
-     * @return array
-     */
-    public static function RequiredRoles()
+    public static function name()
     {
-        return ["AS", "AO"];
+        return "Bienvenido";
     }
 
     /**
-     * 
+     * {@inheritdoc}
+     * @since 18-12-21
      */
-    public function config()
+    public static function description()
     {
+        return null;
+    }
+    
+    /**
+     * {@inheritdoc}
+     * @since 19-01-29
+     */
+    public static function configActions()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @edit 18-12-21
+     */
+    public function wdgtModuleInfo()
+    {
+
         $imageBRAND = Current::Instance()->logoAplicacion();
         $heading = date("d-m-Y");
         $row = new Div("", ["class" => "row text-center"]);
@@ -69,7 +84,7 @@ class Welcome extends \GIndie\Platform\Controller\Module
 
         $h1 = StylesSemantics::Span();
         $h1->setTag("h1");
-        $h1->addContent("<b>" . \GIndie\Platform\INIHandler::getCategoryValue("Instance", "name") . "</b> -");
+        $h1->addContent("<b>" . \GIndie\Platform\INIHandler::getCategoryValue("Instance", "name") . "</b>");
         $h1->addContent(Current::Instance()->appNombre());
         $col->addContent($h1);
 
@@ -118,14 +133,30 @@ class Welcome extends \GIndie\Platform\Controller\Module
         $footer1->addContent($url1);
         $footer->addContent($footer1);
 
-//        $footer2 = new Div("", ["class" => "col-xs-6 text-center"]);
-//        $url2 = new Anchor("www.hidalgo.gob.mx");
-//        $url2->setAttribute("target", "_blank");
-//        $url2->setAttribute("href", "http://www.hidalgo.gob.mx/");
-//        $footer2->addContent($url2);
-//        $footer->addContent($footer2);
 
-        $this->placeholder("ii-i-i")->typeCustom($heading, false, $row, false, $footer);
+        $rtnWidget = new \GIndie\Platform\View\Widget($heading, false, $row, false, $footer);
+        $rtnWidget->setContext("primary");
+        return $rtnWidget;
+    }
+
+    /**
+     * 
+     * @return array
+     */
+    public static function requiredRoles()
+    {
+        return ["AS"];
+    }
+
+    /**
+     * 
+     * @edit 18-12-07
+     * - Upgraded from config() to configPlaceholders()
+     */
+    public function configPlaceholders()
+    {
+        $this->placeholder("i-i-i")->typeHTMLString("");
+        return;
     }
 
 }

@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\Model
  *
- * @version 0C.50
+ * @version 0C.70
  * @since 
  */
 

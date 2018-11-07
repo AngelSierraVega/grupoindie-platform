@@ -32,7 +32,7 @@ class Platform extends MySQL57\Instance\Database
      */
     public static function name()
     {
-        return "pltfrm";
+        return "u278724529_t1";
     }
 
     /**

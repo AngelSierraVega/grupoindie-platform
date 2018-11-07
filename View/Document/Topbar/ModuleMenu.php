@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0D.00
+ * @version 0D.30
  * @since 
  */
 
@@ -28,6 +28,10 @@ use GIndie\ScriptGenerator\Bootstrap3;
 class ModuleMenu extends HTML5\Category\Lists\Unordered
 {
 
+    /**
+     * @edit 18-12-21
+     * - Use ::name()
+     */
     public function __construct()
     {//
         parent::__construct([]);
@@ -41,13 +45,13 @@ class ModuleMenu extends HTML5\Category\Lists\Unordered
              * @todo Evaluar $controllerClass::REQUIRED_ROLES antes de agregar un 
              * elemento en el menú
              */
-            if (\GIndie\Platform\Current::hasRole($controllerClass::RequiredRoles())) {
+            if (\GIndie\Platform\Current::hasRole($controllerClass::requiredRoles())) {
                 switch (\TRUE)
                 {
                     case (is_bool($value) == $value):
                         $this->addListElement(new HTML5\Category\Lists\ListItem([], ['<a gip-action="setController" gip-action-id="' .
                             urlencode($controllerClass) .
-                            '" href="#">' . $controllerClass::NAME . '</a>']));
+                            '" href="#">' . $controllerClass::name() . '</a>']));
                         break;
 //                case (is_bool($value) != $value):
 //                    break;
@@ -55,7 +59,7 @@ class ModuleMenu extends HTML5\Category\Lists\Unordered
                         if ($tmpGroup !== $value) {
                             $dropdown = new Bootstrap3\Component\Dropdown($value, ['<a gip-action="setController" gip-action-id="' .
                                 urlencode($controllerClass) .
-                                '" href="#">' . $controllerClass::NAME . '</a>'], "a");
+                                '" href="#">' . $controllerClass::name()  . '</a>'], "a");
                             $dropdown->setTag("li");
                             $tmpRef = &$dropdown;
                             $this->addListElement($tmpRef);
@@ -63,7 +67,7 @@ class ModuleMenu extends HTML5\Category\Lists\Unordered
                         } else {
                             $dropdown->addListElement(new HTML5\Category\Lists\ListItem([], ['<a gip-action="setController" gip-action-id="' .
                                 urlencode($controllerClass) .
-                                '" href="#">' . $controllerClass::NAME . '</a>']));
+                                '" href="#">' . $controllerClass::name()  . '</a>']));
                         }
                         break;
                 }

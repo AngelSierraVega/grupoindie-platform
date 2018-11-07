@@ -6,7 +6,7 @@
  *
  * @package GIndie\Platform
  * 
- * @version 0C.00
+ * @version 0C.F0
  * @since 17-12-27
  * @edit 18-03-18
  * - Renamed file from autoloader.php to AutoloaderPlatform.php

@@ -27,7 +27,7 @@ abstract class AbstractTable extends Model\Record
     /**
      * @since 18-11-03
      */
-    const SCHEMA = "pltfrm";
+    const SCHEMA = "u278724529_t1";
 
     /**
      * 

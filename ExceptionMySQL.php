@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform
  *
- * @version UNDEFINED
+ * @version 0C.C0
  */
 
 namespace GIndie\Platform;
@@ -62,6 +62,8 @@ class ExceptionMySQL extends \Exception
      * @edit 18-03-20
      * - Updated visual info for AS
      * - Exploded method into parseSQLError() and parseForeingKeyError()
+     * @edit 18-12-16
+     * - Handle error 1452
      */
     public static function handleException($exc)
     {
@@ -84,6 +86,11 @@ class ExceptionMySQL extends \Exception
                 $rtnSrt .= "<p>Su solicitud no puede ser completada debido a la <em>Integridad de la Base de Datos</em>.</p>";
                 $rtnSrt .= "<p>Esta es una funcionalidad del sistema que impide que se eliminen o editen registros que de algún modo están presentes en otras tablas (como la bitácora).</p>";
                 $rtnSrt .= "<p>Si considera necesaria la eliminación/edición del registro contacte al administrador del sistema para posibles alternativas.</p>";
+                break;
+            case 1452:
+//                $sqlMsj = $exc->getMessage();
+//                $rfrncName = \explode("REFERENCES `", $sqlMsj);
+                $rtnSrt .= "<p>Falló una referencia foránea</p>";
                 break;
             case 1048:
                 $rtnSrt .= "<p>El campo no puede estar \"sin definir\".</p>";

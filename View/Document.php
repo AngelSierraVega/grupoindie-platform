@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0D.00
+ * @version 0D.30
  * @since 17-01-05
  */
 
@@ -164,7 +164,7 @@ class Document extends Bootstrap3\Document
         $this->addScript($assetsFolder . 'js/libs/jszip/jszip.min.js', true);
         $this->addScript($assetsFolder . 'js/libs/pdfmake/pdfmake.min.js', true);
         $this->addScript($assetsFolder . 'js/libs/pdfmake/vfs_fonts.js', true);
-        $this->addScript($assetsFolder . 'js/gip-scripts.js?version=6', true);
+        $this->addScript($assetsFolder . 'js/gip-scripts.js?version=7', true);
     }
 
     /**

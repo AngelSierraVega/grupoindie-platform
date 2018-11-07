@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\Model
  *
- * @version 0C.00
+ * @version 0C.70
  * @since 
  * @todo Upgrade class
  */

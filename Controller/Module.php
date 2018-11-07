@@ -9,7 +9,7 @@
  *
  * @package GIndie\Platform\Controller\Instance\Module
  * 
- * @version 0C.A0
+ * @version 0D.00
  * @since 17-05-23
  */
 
@@ -22,6 +22,7 @@ use GIndie\Platform\View;
 //use GIndie\Generator\DML\HTML5\Bootstrap3 AS Bootstrap3ToDeprecate;
 //use GIndie\Generator\DML\HTML5 AS HTML5ToDeprecate;
 use GIndie\Platform\View\Widget;
+use GIndie\ScriptGenerator\Bootstrap3\Instance\Button\DropdownSingle;
 
 /**
  * @edit 18-03-05
@@ -38,43 +39,197 @@ use GIndie\Platform\View\Widget;
  * - Moved back methods from Module\ToUpgrade
  * - Removed use of deprecated libs
  * - Removed dependency to Straffsa\SII
+ * @edit 18-11-27
+ * - Updated search
+ * @edit 18-12-21
+ * - Use \GIndie\Platform\DataDefinition
  * @todo debug use of Record instead of Table
  */
-abstract class Module extends Platform implements ModuleINT
+abstract class Module extends Platform implements \GIndie\Platform\DataDefinition\Module
 {
 
     /**
+     * {@inheritdoc}
+     * 
+     * @since 18-12-21
+     */
+    public static function category()
+    {
+        return null;
+    }
+
+/**
      * @since 18-03-13
      * @edit 18-03-14
      * @edit 18-05-21
      * @edit 18-06-24
      * - Added Module\RunRecordAction
+     * @edit 18-12-21
+     * - Moved back code from Module\RunRecordAction
      */
-    use Module\RunRecordAction;
+//    use Module\RunRecordAction;
     use Module\ToUpgrade;
     use Module\ToDeprecate;
     use Module\Upgrading;
     use Module\Deprecated;
 
     /**
-     *
-     * @var boolean Validates if wdgtModuleInfo() has been called
-     */
-    private $validateModuleInfo = false;
-
-    /**
      * Placeholder o-o-o. Module info.
      * 
      * @return \GIndie\Platform\View\Widget
      * @since 18-10-19
-     * @todo Functional validation
+     * @edit 18-12-21
+     * @edit 19-01-19
+     * @edit 19-01-28
+     * @edit 19-01-30
+     * - Graciously handles Module Info - Module Help
      */
     public function wdgtModuleInfo()
     {
-        $this->validateModuleInfo = true;
-        $rtnWidget = new View\Widget("<strong>" . static::NAME . ".</strong>", false, false);
-        $rtnWidget->setContext("info");
+        if (isset($_POST["@helpId"])) {
+            $rtnWidget = new View\Widget("", false, true);
+            $rtnWidget->getHeading()->getTitle()->addContent(HTML5\Category\Phrase::emphasis("Ayuda del módulo - "));
+            $rtnWidget->getHeading()->getTitle()->addContent(
+                HTML5\Category\Phrase::strong(static::name()));
+            $rtnWidget->getHeading()->addContent(HTML5\Category\Basic::paragraph(static::getHelpTopic($_POST["@helpId"])["actionDescription"]));
+            $rtnWidget->getBody()->addContent($this->getHelpContent($_POST["@helpId"]));
+            $rtnWidget->setContext("warning");
+            $rtnWidget->addButtonHeading($this->cnstrctHelpDropdown());
+        } else {
+            $rtnWidget = new View\Widget("");
+            $rtnWidget->getHeading()->getTitle()->addContent(HTML5\Category\Phrase::emphasis(\is_null(
+                        static::category()) ? "" : static::category() . " - "));
+            $rtnWidget->getHeading()->getTitle()->addContent(
+                HTML5\Category\Phrase::strong(static::name()));
+            $rtnWidget->getHeading()->addContent(HTML5\Category\Basic::paragraph(static::description()));
+            $rtnWidget->setContext("info");
+            if (\count(static::getHelpTopics()) > 1) {
+                $rtnWidget->addButtonHeading($this->cnstrctHelpDropdown());
+            }
+        }
+        $rtnWidget->setAttribute("style", "overflow:visible;");
+
         return $rtnWidget;
+    }
+
+    /**
+     * 
+     * @return \GIndie\ScriptGenerator\Bootstrap3\Instance\Button\DropdownSingle
+     * @since 19-01-28
+     * @edit 19-01-30
+     */
+    private function cnstrctHelpDropdown()
+    {
+        $formulario = new View\Form(null, false, "#o-o-o");
+        $formulario->setId("setModuleHelp");
+        $formulario->setAttribute("gip-action", "@setModuleHelp");
+        $formulario->addSubmitOnChange();
+        $help = new DropdownSingle(View\Icons::Help() . " Ayuda del módulo", []);
+        if (isset($_POST["@helpId"])) {
+            $help->button->setContext("info");
+            $listItem = new HTML5\Category\Lists\ListItem();
+            $element = \GIndie\Framework\View\FormInput::inputRadio();
+            $element->removeClass("btn");
+            $element->removeClass("btn-default");
+            $element->setId("helpId-moduleInfo");
+            $element->setAttribute("hidden");
+            $formCtrl = Bootstrap3\FormInput\FormGroup::instance("Información del módulo", $element);
+            $formCtrl->setAttribute("style", "color:Black;");
+            $listItem->addContent($formCtrl);
+            $help->dropdownMenu->addListElement($listItem);
+        } else {
+            $help->button->setContext("warning");
+        }
+        foreach (static::getHelpTopics() as $actionId => $actionData) {
+            if (isset($_POST["@helpId"]) && $_POST["@helpId"] == $actionId) {
+                
+            } else {
+                $listItem = new HTML5\Category\Lists\ListItem();
+                $element = \GIndie\Framework\View\FormInput::inputRadio();
+                $element->removeClass("btn");
+                $element->removeClass("btn-default");
+                $element->setAttribute("name", "@helpId");
+                $element->setId("helpId-" . $actionId);
+                $element->setAttribute("value", $actionId);
+                $element->setAttribute("hidden");
+                $formCtrl = Bootstrap3\FormInput\FormGroup::instance($actionData["actionDescription"],
+                        $element);
+                $formCtrl->setAttribute("style", "color:Black;");
+                $listItem->addContent($formCtrl);
+                $help->dropdownMenu->addListElement($listItem);
+            }
+        }
+        $formulario->addContent($help);
+        return $formulario;
+    }
+
+    /**
+     * 
+     * @param string $actionId
+     * @return \GIndie\Framework\View\Table
+     * @since 19-01-28
+     * @edit 19-01-30
+     */
+    public static function getHelpContent($actionId)
+    {
+        $rtnTable = new \GIndie\Framework\View\Table();
+        $rtnTable->addClass("table-striped table-bordered table-hover");
+        $rtnTable->addHeader(["", HTML5\Category\Basic::header(5,
+                "Requerimiento: " . static::getHelpTopic($actionId)["actionDescription"]), ""]);
+        $rtnTable->addHeader(["#", "Descripción", "Imagen"]);
+        foreach (static::getActionHelp($actionId) as $helpIndex => $helpData) {
+            $assets = \GIndie\Platform\INIHandler::getCategoryValue("Config", "assets_url");
+            $src = $assets . "\\tmp\\" . $helpData["imageId"] . ".jpg";
+            $img = HTML5\Category\Images::img($src, $helpData["imageId"]);
+            $img->setAttribute("style", "max-width: 300px;"); //
+            $rtnTable->addRow([$helpIndex, $helpData["text"], $img]);
+        }
+        return $rtnTable;
+    }
+
+    /**
+     * 
+     * @return array
+     * @since 19-01-28
+     */
+    public static function getHelpTopics()
+    {
+        if (!is_array(self::$actionTopic)) {
+            self::$actionTopic = [];
+        }
+        if (!isset(self::$actionTopic[static::class])) {
+            static::configActions();
+        }
+        return isset(self::$actionTopic[static::class]) ? self::$actionTopic[static::class] : [];
+    }
+
+    /**
+     * 
+     * @param string $actionId
+     * @return array
+     */
+    public static function getHelpTopic($actionId)
+    {
+        if (!is_array(self::$actionTopic)) {
+            self::$actionTopic = [];
+        }
+        if (!isset(self::$actionTopic[static::class])) {
+            static::configActions();
+        }
+        return isset(self::$actionTopic[static::class][$actionId]) ? self::$actionTopic[static::class][$actionId] : [];
+    }
+
+    /**
+     * 
+     * {@inheritdoc}
+     * @since 19-01-28
+     */
+    public static function getActionHelp($actionId)
+    {
+        if (!isset(self::$actionHelp[static::class])) {
+            static::configActions();
+        }
+        return self::$actionHelp[static::class][$actionId];
     }
 
     /**
@@ -84,10 +239,65 @@ abstract class Module extends Platform implements ModuleINT
      */
     public function placeholder($placeholderId)
     {
-        if (!isset($this->_placeholder[$placeholderId]))
-            $this->_placeholder[$placeholderId] = new \GIndie\Platform\Controller\Module\Placeholder();
+        if (\count($this->_placeholder) == 0) {
+            $this->_placeholder["o-o-o"] = new Module\Placeholder("o-o-o");
+            $this->_placeholder["o-o-o"]->typeCallable([$this, "wdgtModuleInfo"]);
+        }
+        if (!isset($this->_placeholder[$placeholderId])) {
+            $this->_placeholder[$placeholderId] = new Module\Placeholder($placeholderId);
+            if (!\in_array($placeholderId, \array_keys($this->WidgetsDefinition))) {
+                $this->_placeholder[$placeholderId]->typeCallable([$this, $placeholderId]);
+            }
+        }
         $rnt = &$this->_placeholder[$placeholderId];
         return $rnt;
+    }
+
+/**
+     * @since 18-12-07
+     */
+    use \GIndie\Platform\WidgetsDefinition;
+
+    /**
+     * 
+     * @param type $id
+     * @param type $class
+     * @param type $selected
+     * @return type
+     * @since 18-12-03
+     */
+    protected function runGetInput($id, $class, $selected)
+    {
+        $record = $class::findById($_POST["gip-record-id"]);
+        $attribute = $record->getAttribute($id);
+        switch ($attribute->getType())
+        {
+
+            case \GIndie\Platform\Model\Attribute::TYPE_FOREIGN_KEY:
+                return $form_element = \GIndie\Platform\View\Input::selectFromAttribute($attribute,
+                        $record->getValueOf($attribute->getName()), $_POST["gip-record-id"]);
+            default:
+                return View\Input::constructFromAttribute($attribute,
+                        $record->getValueOf($attribute->getName()), $_POST["gip-record-id"]);
+        }
+    }
+
+    /**
+     * 
+     * {@inheritdoc}
+     * 
+     * @since 19-01-28
+     */
+    protected function _createLog($action, $id, $class, $selected)
+    {
+        switch ($action)
+        {
+            case "@setModuleHelp":
+                break;
+            default:
+                parent::_createLog($action, $id, $class, $selected);
+                break;
+        }
     }
 
     /**
@@ -107,6 +317,9 @@ abstract class Module extends Platform implements ModuleINT
         $this->_createLog($action, $id, $class, $selected);
         switch ($action)
         {
+            case "@setModuleHelp":
+                return $this->widgetReload("o-o-o", $class, $selected);
+                break;
             case "@selectRow":
                 return $this->runActionSelectRow($_POST["@placeholderId"], $_POST["@selectedId"]);
             case "reportSearch":
@@ -115,10 +328,7 @@ abstract class Module extends Platform implements ModuleINT
             case "tableSearch":
                 return static::tableSearch($class);
             case "get-input":
-                $record = $class::findById($_POST["gip-record-id"]);
-                $attribute = $record->getAttribute($id);
-                return $form_element = \GIndie\Platform\View\Input::selectFromAttribute($attribute, $record->getValueOf($attribute->getName()), $_POST["gip-record-id"]);
-                return \GIndie\Platform\View\Input::formGroup($attribute, $form_element);
+                return $this->runGetInput($id, $class, $selected);
             case "form-create":
             case "form-edit":
             case "form-delete":
@@ -156,7 +366,203 @@ abstract class Module extends Platform implements ModuleINT
      */
     protected function runActionSelectRow($placeholderId, $selectedId)
     {
+//        return HTML5\Category\StylesSemantics::span()->addContent(View\Javascript::reloadWidget($widgetId));
         return HTML5\Category\StylesSemantics::span()->addScriptOnDocumentReady('triggerInteraction("' . $placeholderId . '", "' . $selectedId . '");');
+    }
+
+    /**
+     * 
+     * @param type $action
+     * @param type $id
+     * @param type $class
+     * @return type
+     * @throws \Exception
+     * @edit 18-03-14
+     * @edit 18-03-15
+     * - Explode content into smaller methods
+     * @edit 18-06-24
+     * - Added token validation funcionality
+     * @edit 18-12-21
+     * - Moved from trait Module\RunRecordAction 
+     */
+    protected function runRecordAction($action, $id, $class)
+    {
+        $response = HTML5\Category\StylesSemantics::Span();
+        if (!isset($_POST["gip-token"])) {
+            $msj = "Falló validación de token.";
+            $modalContent = $this->cnstrctModal("Operación ilegal", $msj);
+            $modalContent->getHeader()->setBackground("danger");
+            $response->addScript("$('#gip-modal .modal-content').html('{$modalContent}');");
+            return $response;
+        }
+        $tokenValidation = \GIndie\Platform\Current::uniqueTokenValidate($_POST["gip-token"]);
+        if (!$tokenValidation) {
+            $msj = "Falló validación de token.";
+            $modalContent = $this->cnstrctModal("Operación ilegal", $msj);
+            $modalContent->getHeader()->setBackground("danger");
+            $response->addScript("$('#gip-modal .modal-content').html('{$modalContent}');");
+            return $response;
+        }
+        try {
+            switch ($action)
+            {
+                case "gip-create":
+                    $modalContent = $this->runRecordActionGipCreate($action, $id, $class);
+                    break;
+                case "gip-edit":
+                    $modalContent = $this->runRecordActionGipEdit($action, $id, $class);
+                    break;
+                case "gip-deactivate":
+                    $modalContent = $this->runRecordActionGipDeactivate($action, $id, $class);
+                    break;
+                case "gip-activate":
+                    $modalContent = $this->runRecordActionGipActivate($action, $id, $class);
+                    break;
+                case "gip-delete":
+                    $modalContent = $this->runRecordActionGipDelete($action, $id, $class);
+                    break;
+                default:
+                    $msj = "Contacte al administrador del sistema si el problema persiste.";
+                    $modalContent = View\Modal\Content::danger("Algo salió mal en la ejecución",
+                            $msj);
+//                    $modalContent = $this->cnstrctModal(, $msj);
+//                    $modalContent->getHeader()->setBackground("danger");
+                    \trigger_error("Unable to run recordAction: gip-action={$action} gip-action-id={$id} gip-action-class={$class}",
+                        \E_USER_ERROR);
+                    break;
+            }
+        } catch (\GIndie\Platform\ExceptionMySQL $exc) {
+            $msj = \GIndie\Platform\ExceptionMySQL::handleException($exc);
+            $modalContent = View\Modal\Content::warning("Algo salió mal. Error de usuario.", $msj);
+//            $modalContent = $this->cnstrctModal("Algo salió mal. Error de usuario.",
+//                                                $msj);
+//            $modalContent->getHeader()->setBackground("warning");
+        }
+        $response->addScript("$('#gip-modal .modal-content').html('{$modalContent}');");
+        return $response;
+    }
+
+    /**
+     * @since 18-03-15
+     * 
+     * @param string $action
+     * @param string $id
+     * @param string $class
+     * 
+     * @return \GIndie\ScriptGenerator\Bootstrap3\Component\Modal\Content
+     * @edit 18-12-21
+     * - Moved from trait Module\RunRecordAction 
+     * 
+     */
+    protected function runRecordActionGipCreate($action, $id, $class)
+    {
+        $record = $class::findById($id);
+        $record->run($action);
+        $msj = "El registro ha sido creado exitosamente.";
+        $modalContent = View\Modal\Content::succcess("Registro creado.", $msj);
+//        $modalContent = $this->cnstrctModal("Registro creado.", $msj);
+//        $modalContent->getHeader()->setBackground("success");
+        return $modalContent;
+    }
+
+    /**
+     * @since 18-03-15
+     * 
+     * @param string $action
+     * @param string $id
+     * @param string $class
+     * 
+     * @return \GIndie\ScriptGenerator\Bootstrap3\Component\Modal\Content
+     * 
+     * @edit 18-12-21
+     * - Moved from trait Module\RunRecordAction 
+     * 
+     */
+    protected function runRecordActionGipDeactivate($action, $id, $class)
+    {
+        $record = $class::findById($id);
+        $record->run($action);
+        $msj = "El registro ha sido desactivado exitosamente.";
+        $modalContent = View\Modal\Content::succcess("Registro desactivado.", $msj);
+//        $modalContent = $this->cnstrctModal("Registro desactivado.", $msj);
+//        $modalContent->getHeader()->setBackground("success");
+        return $modalContent;
+    }
+
+    /**
+     * @since 18-03-15
+     * 
+     * @param string $action
+     * @param string $id
+     * @param string $class
+     * 
+     * @return \GIndie\ScriptGenerator\Bootstrap3\Component\Modal\Content
+     * 
+     * @edit 18-12-21
+     * - Moved from trait Module\RunRecordAction 
+     * 
+     */
+    protected function runRecordActionGipActivate($action, $id, $class)
+    {
+        $record = $class::findById($id);
+        $record->run($action);
+        $msj = "El registro ha sido activado exitosamente.";
+        $modalContent = View\Modal\Content::succcess("Registro activado.", $msj);
+//        $modalContent = $this->cnstrctModal("Registro activado.", $msj);
+//        $modalContent->getHeader()->setBackground("success");
+        return $modalContent;
+    }
+
+    /**
+     * @since 18-03-15
+     * 
+     * @param string $action
+     * @param string $id
+     * @param string $class
+     * 
+     * @return \GIndie\ScriptGenerator\Bootstrap3\Component\Modal\Content
+     * 
+     * @edit 18-12-21
+     * - Moved from trait Module\RunRecordAction 
+     * 
+     */
+    protected function runRecordActionGipDelete($action, $id, $class)
+    {
+        $record = $class::findById($id);
+        $record->run($action);
+        $msj = "El registro ha sido eliminado exitosamente.";
+        $modalContent = View\Modal\Content::succcess("Registro eliminado.", $msj);
+        return $modalContent;
+    }
+
+    /**
+     * @since 18-01-24
+     * 
+     * @param type $action
+     * @param type $id
+     * @param type $class
+     * 
+     * @return \GIndie\ScriptGenerator\Bootstrap3\Component\Modal\Content
+     * 
+     * @edit 18-03-14
+     * @edit 18-03-15
+     * - Refactor method to runRecordActionGipEdit
+     * - Use cnstrctModal()
+     * @edit 18-12-21
+     * - Moved from trait Module\RunRecordAction 
+     */
+    protected function runRecordActionGipEdit($action, $id, $class)
+    {
+        $record = $class::findById($id);
+        try {
+            $record->run($action);
+            $msj = "El registro ha sido actualizado exitosamente.";
+            $modalContent = View\Modal\Content::succcess("Registro actualizado.", $msj);
+        } catch (\GIndie\Platform\ExceptionMySQL $exc) {
+            $msj = \GIndie\Platform\ExceptionMySQL::handleException($exc);
+            $modalContent = View\Modal\Content::warning("Error de usuario", $msj);
+        }
+        return $modalContent;
     }
 
     /**
@@ -171,8 +577,9 @@ abstract class Module extends Platform implements ModuleINT
     /**
      * @since 17-04-23
      * @var string 
+     * @deprecated since 18-12-21
+     * const NAME = "UnnamedModule";
      */
-    const NAME = "UnnamedModule";
 
     /**
      * @since 17-04-21
@@ -233,11 +640,15 @@ abstract class Module extends Platform implements ModuleINT
     }
 
     /**
-     * [description]
-     * @abstract
+     * 
      * @since 17-04-28
+     * @edit 18-12-07
+     * @todo Deprecate
      */
-    abstract public function config();
+    public function config()
+    {
+        $this->configPlaceholders();
+    }
 
     /**
      * 
@@ -320,6 +731,26 @@ abstract class Module extends Platform implements ModuleINT
 
     /**
      * 
+     * @param type $actionId
+     * @return mixed
+     * @since 19-01-30
+     */
+    public static function getActionDescription($actionId)
+    {
+        $rtnValue = "";
+        switch ($actionId)
+        {
+            case "form-deactivate":
+                $rtnValue = View\Alert::info("Confirme que desea desactivar el registro.");
+                break;
+            default:
+                break;
+        }
+        return $rtnValue;
+    }
+
+    /**
+     * 
      * @param string $action
      * @param string $id
      * @param string $class
@@ -330,6 +761,8 @@ abstract class Module extends Platform implements ModuleINT
      * - Return ModalContent
      * @edit 18-07-13
      * - Use View\Modal\Content
+     * @edit 18-11-20
+     * - Handle $recordDisplay = "GIP-UNDEFINED"
      */
     protected function runRecordForm($action, $id, $class)
     {
@@ -342,18 +775,27 @@ abstract class Module extends Platform implements ModuleINT
         $form->setAttribute("gip-action-id", $id);
         $actionName = static::getActionName($action);
         $actionContext = static::getActionContext($action);
+        $recordDisplay = $record->getDisplay();
+        switch ($recordDisplay)
+        {
+            case "GIP-UNDEFINED":
+                $recordDisplay = "";
+                break;
+        }
         $modalTitle = $actionName . " <b>" .
-                $record->getName() . "</b> <i>" .
-                $record->getDisplay() . "</i>";
+            $record->getName() . "</b> <i>" .
+            $recordDisplay . "</i>";
         $modalContent = View\Modal\Content::defaultModalContent($modalTitle, $form, true);
         $modalContent->getHeader()->setBackground("primary");
-        $btn = new Bootstrap3\Component\Button($actionName, Bootstrap3\Component\Button::TYPE_SUBMIT);
+        $modalContent->addContent(static::getActionDescription($action));
+        $btn = new Bootstrap3\Component\Button($actionName,
+            Bootstrap3\Component\Button::TYPE_SUBMIT);
         $btn->setForm($form->getId())->setValue("Submit");
         $btn->setContext($actionContext);
         $modalContent->addFooterButton($btn);
         return $modalContent;
     }
-    
+
     /**
      * 
      * @param type $_classname
@@ -367,6 +809,10 @@ abstract class Module extends Platform implements ModuleINT
      * - Removed autosubmit
      * @edit 18-11-05
      * - Use of Record instead of Table
+     * @edit 18-11-07
+     * - Upgrade search button and name
+     * @edit 19-01-11
+     * - Trigger error when attribute is not defined
      */
     protected function widgetTableSearch($_classname, array $_searchColumns, array $_params = [], array $buttons = [])
     {
@@ -376,13 +822,20 @@ abstract class Module extends Platform implements ModuleINT
         $form = new \GIndie\Platform\View\Form(null, false, "#tempContent");
         $form->setAttribute("gip-action", "tableSearch");
         $form->setAttribute("gip-action-class", $_classname);
+        $form->setAttribute("autocomplete", "off");
         //$form->addContent($_classname);
         $size = 0;
         foreach ($_searchColumns as $attribute) {
             if (\is_array($attribute)) {
                 foreach ($attribute as $key => $value) {
                     $recordAttr = $record::getAttribute($key);
-                    $tmpAttr = \GIndie\Platform\View\Input::constructFromAttribute($recordAttr, $value, \NULL);
+                    if (\is_bool($recordAttr)) {
+                        \trigger_error("Attribute {$key} not defined in model {$_classname}",
+                            \E_USER_ERROR);
+                    } else {
+                        $tmpAttr = \GIndie\Platform\View\Input::constructFromAttribute($recordAttr,
+                                $value, \NULL);
+                    }
                 }
             } else {
                 if ($record::getAttribute($attribute)) {
@@ -390,9 +843,11 @@ abstract class Module extends Platform implements ModuleINT
                     $value = static::getSearchValue($_classname, $attribute);
                     //$value = $_classname;
                     //$value = isset($_POST[$attribute]) ? $_POST[$attribute] : "";
-                    $tmpAttr = \GIndie\Platform\View\Input::constructFromAttribute($recordAttr, $value, \NULL);
+                    $tmpAttr = \GIndie\Platform\View\Input::constructFromAttribute($recordAttr,
+                            $value, \NULL);
                 } else {
-                    \trigger_error($attribute . " not defined in " . $record::SCHEMA . "." . $record::TABLE . " " . $record, \E_USER_ERROR);
+                    \trigger_error($attribute . " not defined in " . $record::SCHEMA . "." . $record::TABLE . " " . \get_class($record),
+                        \E_USER_ERROR);
                 }
             }
             if ($recordAttr->getSize()) {
@@ -407,13 +862,17 @@ abstract class Module extends Platform implements ModuleINT
             }
             $form->addContent($tmpAttr);
         }
-        $widget = new \GIndie\Platform\View\Widget("" . $_classname::Name(), \FALSE, $form, "<div id='tempContent'></div>");
+
+        $widget = new \GIndie\Platform\View\Widget("" . $_classname::NAME, \FALSE, $form,
+            "<div id='tempContent'></div>");
+//        $widget->getBody()->addContent("<input type='submit' form='".$form->getId()."'/>");
 //        $reloadButton = Widget\Buttons::Reload($_classname);
 //        $widget->addButtonHeading($reloadButton);
+        $widget->addButtonHeading("<input class='btn btn-sm btn-success' value='Buscar' type='submit' form='" . $form->getId() . "'/>");
 
-        $searchButton = \GIndie\Platform\View\Widget\Buttons::CustomSuccess("<span class=\"glyphicon glyphicon-search\"></span>", \NULL, \NULL, \FALSE, \NULL);
-        $searchButton->setForm($form->getId());
-        $widget->addButtonHeading($searchButton);
+//        $searchButton = \GIndie\Platform\View\Widget\Buttons::CustomSuccess("<span class=\"glyphicon glyphicon-search\"></span>", \NULL, \NULL, \FALSE, \NULL);
+//        $searchButton->setForm($form->getId());
+//        $widget->addButtonHeading($searchButton);
         //$widget->addContent(\GIndie\Platform\View\Javascript::submitOnChange($form->getId()));
         $widget->addScriptOnDocumentReady("$('#" . $form->getId() . "').submit();");
 //        foreach ($buttons as $tmpButton) {
@@ -447,7 +906,8 @@ abstract class Module extends Platform implements ModuleINT
             $rtnWidget = new Widget\WidgetReport(new $classname($params));
             return $rtnWidget;
         }
-        \trigger_error($classname . " is not subclass of \GIndie\Platform\Model\Table", \E_USER_ERROR);
+        \trigger_error($classname . " is not subclass of \GIndie\Platform\Model\Table",
+            \E_USER_ERROR);
     }
 
     /**
@@ -461,16 +921,20 @@ abstract class Module extends Platform implements ModuleINT
             $rtnWidget = new Widget\WidgetTable(new $classname($params));
             return $rtnWidget;
         }
-        \trigger_error($classname . " is not subclass of \GIndie\Platform\Model\Table", \E_USER_ERROR);
+        \trigger_error($classname . " is not subclass of \GIndie\Platform\Model\Table",
+            \E_USER_ERROR);
     }
 
     /**
      * 
      * @param type $class
-     * @return type
+     * @return array
      * @since 18-03-30
      * @edit 18-11-05
      * - Use of Record instead of Table
+     * @edit 18-11-27
+     * - Stores result by attribute name
+     * - Return array instead of string
      */
     protected function cnstrctSearchParamsFromPost($class)
     {
@@ -485,20 +949,20 @@ abstract class Module extends Platform implements ModuleINT
                     case \GIndie\Platform\Model\Attribute::TYPE_DATE:
                         $tmp = \explode(" a ", $_POST[$attrName]);
                         if (\sizeof($tmp) > 1) {
-                            $searchArray[] = $attrName . ">='$tmp[0]'";
-                            $searchArray[] = $attrName . "<='" . $tmp[1] . ' 23:59:59' . "'";
+                            $searchArray[$attrName . "_a"] = $attrName . ">='$tmp[0]'";
+                            $searchArray[$attrName . "_b"] = $attrName . "<='" . $tmp[1] . ' 23:59:59' . "'";
                         } else {
-                            $searchArray[] = $attrName . " LIKE '%" . $_POST[$attrName] . "%'";
+                            $searchArray[$attrName] = $attrName . " LIKE '%" . $_POST[$attrName] . "%'";
                         }
                         break;
                     case \GIndie\Platform\Model\Attribute::TYPE_TIMESTAMP:
                         $tmp = \explode(" a ", $_POST[$attrName]);
                         if (\sizeof($tmp) > 1) {
-                            $searchArray[] = $attrName . ">='" . \strtotime($tmp[0]) . "'";
-                            $searchArray[] = $attrName . "<='" . \strtotime($tmp[1] . " 23:59:59") . "'";
+                            $searchArray[$attrName . "_a"] = $attrName . ">='" . \strtotime($tmp[0]) . "'";
+                            $searchArray[$attrName . "_b"] = $attrName . "<='" . \strtotime($tmp[1] . " 23:59:59") . "'";
                         } else {
-                            $searchArray[] = $attrName . ">='" . \strtotime($_POST[$attrName]) . "'";
-                            $searchArray[] = $attrName . "<='" . \strtotime($_POST[$attrName] . " 23:59:59") . "'";
+                            $searchArray[$attrName . "_a"] = $attrName . ">='" . \strtotime($_POST[$attrName]) . "'";
+                            $searchArray[$attrName . "_b"] = $attrName . "<='" . \strtotime($_POST[$attrName] . " 23:59:59") . "'";
                         }
                         break;
                     default:
@@ -508,21 +972,22 @@ abstract class Module extends Platform implements ModuleINT
                             case "NULL":
                                 break;
                             case "NOT NULL":
-                                $searchArray[] = $attrName . " IS NOT NULL ";
+                                $searchArray[$attrName] = $attrName . " IS NOT NULL ";
                                 break;
                             default:
-                                $searchArray[] = $attrName . " LIKE '%" . $_POST[$attrName] . "%'";
+                                $searchArray[$attrName] = $attrName . " LIKE '%" . $_POST[$attrName] . "%'";
                                 break;
                         }
                         break;
                 }
             }
         }
-        if (\sizeof($searchArray) > 0) {
-            $searchArray = [\join(" AND ", $searchArray)];
-        } else {
-            
-        }
+        /**
+         * @edit 18-11-27
+         * if (\sizeof($searchArray) > 0) {
+         *     $searchArray = [\join(" AND ", $searchArray)];
+         * }
+         */
         return $searchArray;
     }
 
@@ -563,18 +1028,25 @@ abstract class Module extends Platform implements ModuleINT
      * 
      * 
      * @return null|\GIndie\Platform\Controller\Main\WidgetInterface
-     * 
+     * @edit 18-12-09
      */
     protected function widgetReload($id, $class, $selected)
     {
-
         $placeholder = \GIndie\Platform\Current::Module()->getWidget($id);
+        switch (true)
+        {
+            case \is_null($placeholder):
+                \trigger_error("id: {$id}, class: {$class}, selected: {$selected}", \E_USER_ERROR);
+                break;
+            default:
+                $placeholder = $placeholder->call($selected);
+                break;
+        }
 //        @edit 18-10-19
 //        * - Added validation for ModuleInfo
 //        if ($this->validateModuleInfo == false) {
 //            \trigger_error("wdgtModuleInfo() must be called", \E_USER_ERROR);
 //        }
-        $placeholder = $placeholder->call($selected);
         return $placeholder;
     }
 
@@ -588,7 +1060,8 @@ abstract class Module extends Platform implements ModuleINT
     protected function tableSearch($class)
     {
         $table = new \GIndie\Platform\View\Tables\TablePagination($class);
-        $table->readFromDB($class::getSelectorsDisplay(), $this->cnstrctSearchParamsFromPost($class));
+        $table->readFromDB($class::getSelectorsDisplay(),
+            $this->cnstrctSearchParamsFromPost($class));
         return $table;
     }
 
@@ -597,6 +1070,26 @@ abstract class Module extends Platform implements ModuleINT
      * @var array 
      */
     private $_placeholder = [];
+
+    /**
+     * 
+     * @return type
+     * @since 18-12-07
+     */
+    public function getPlaceholderIds()
+    {
+        return \array_keys($this->_placeholder);
+    }
+
+    /**
+     * 
+     * @return array|\GIndie\Platform\Controller\Module\Placeholder
+     * @since 18-12-07
+     */
+    public function getPlaceholders()
+    {
+        return $this->_placeholder;
+    }
 
     /**
      * 
@@ -627,6 +1120,114 @@ abstract class Module extends Platform implements ModuleINT
         $string = substr($string, 1);
         $string = $string . ";";
         return $string;
+    }
+
+    /**
+     *
+     * @var array 
+     * @since 19-01-28
+     */
+    private static $actionTopic;
+
+    /**
+     * 
+     * @param type $actionId
+     * @param type $relatedModel
+     * @param type $relatedAction
+     * @since 19-01-21
+     * @edit 19-01-28
+     * - Funcional method
+     */
+    protected static function setActionModel($actionId, $relatedModel, $relatedAction)
+    {
+        if (!is_array(self::$actionTopic)) {
+            self::$actionTopic = [];
+        }
+        switch ($relatedAction)
+        {
+            case "gip-create":
+                $actionDescription = "Crear " . $relatedModel::name();
+                $actionContext = "success";
+                $actionButton = View\Icons::Create();
+                break;
+            case "gip-edit":
+                $actionDescription = "Modificar " . $relatedModel::name();
+                $actionContext = "success";
+                $actionButton = View\Icons::Edit();
+                break;
+            case "gip-delete":
+                $actionDescription = "Eliminar " . $relatedModel::name();
+                $actionContext = "danger";
+                $actionButton = View\Icons::Delete();
+                break;
+            case "gip-deactivate":
+                $actionDescription = "Desactivar " . $relatedModel::name();
+                $actionContext = "default";
+                $actionButton = View\Icons::Active();
+                break;
+            case "gip-activate":
+                $actionDescription = "Activar " . $relatedModel::name();
+                $actionContext = "success";
+                $actionButton = View\Icons::Active();
+                break;
+        }
+        self::$actionTopic[static::class][$actionId] = [
+            "actionDescription" => $actionDescription,
+            "actionContext" => $actionContext,
+            "actionDisplay" => $actionButton];
+        return true;
+    }
+
+    /**
+     * 
+     * @param string $actionId
+     * @param string $actionDescription
+     * @param mixed $actionDisplay
+     * @param string $actionContext
+     * @return boolean
+     * @since 19-01-21
+     * @edit 19-01-30
+     * - Funcional method
+     */
+    protected static function setActionCustom($actionId, $actionDescription, $actionDisplay, $actionContext, $actionRequirements)
+    {
+        if (!is_array(self::$actionTopic)) {
+            self::$actionTopic = [];
+        }
+        if (\GIndie\Platform\Current::hasRole($actionRequirements)) {
+            self::$actionTopic[static::class][$actionId] = [
+                "actionDescription" => $actionDescription,
+                "actionContext" => $actionContext,
+                "actionDisplay" => $actionDisplay,
+                "actionRequirements" => $actionRequirements];
+        }
+        return true;
+    }
+
+    /**
+     *
+     * @var array 
+     * @since 19-01-28
+     */
+    private static $actionHelp;
+
+    /**
+     * 
+     * @param string $actionId
+     * @param float $helpIndex
+     * @param string $text
+     * @param string $imageId
+     * @since 19-01-21
+     * @edit 19-01-28
+     * - Funcional method
+     */
+    protected static function setActionHelp($actionId, $helpIndex, $text, $imageId)
+    {
+        if (!is_array(self::$actionHelp)) {
+            self::$actionHelp = [];
+        }
+        self::$actionHelp[static::class][$actionId][$helpIndex] = ["text" => $text, "imageId" => $imageId];
+        return true;
     }
 
 }

@@ -7,15 +7,21 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0C.50
+ * @version 0C.F0
  * @since 18-11-04
  */
 
 namespace GIndie\Platform\View\Tables;
 
+use GIndie\ScriptGenerator\HTML5\Category\StylesSemantics;
+use GIndie\Platform\View\Widget;
+use GIndie\Common\Parser\Moneda;
+
 /**
  * @edit 18-11-04
  * - Copied code from View\Table
+ * @edit 18-11-07
+ * - Created instanceFromArray(), getData()
  */
 class Table extends \GIndie\ScriptGenerator\Dashboard\Tables\Table
 {
@@ -93,9 +99,11 @@ class Table extends \GIndie\ScriptGenerator\Dashboard\Tables\Table
         switch (false)
         {
             case \is_string($classname):
-                \trigger_error("classname should be string. Called in " . \get_called_class(), \E_USER_ERROR);
+                \trigger_error("classname should be string. Called in " . \get_called_class(),
+                    \E_USER_ERROR);
             case \is_subclass_of($classname, \GIndie\Platform\Model\Record::class, true):
-                \trigger_error("classname should be subclass of Record. Called in " . \get_called_class(), \E_USER_ERROR);
+                \trigger_error("classname should be subclass of Record. Called in " . \get_called_class(),
+                    \E_USER_ERROR);
         }
         $this->recordInstance = $classname::instance();
         $this->showFooter = $showFooter;
@@ -129,14 +137,69 @@ class Table extends \GIndie\ScriptGenerator\Dashboard\Tables\Table
      * @param array $selectors
      * @param array $conditions
      * @param array $params
+     * @since 18-11-14
+     * @edit 18-11-16
+     * - Upgraded to Record:::fetchAssoc()
+     * @edit 19-01-08
+     * - Graciously handle more than 100000 rows
+     * @edit 19-01-24
+     * - Changed to 110000 rows
      */
     public function readFromDB(array $selectors, array $conditions = [], array $params = [])
     {
+        $this->queryRows = $this->recordInstance->fetchAssoc($selectors, $conditions, $params);
+        if (\count($this->queryRows) > 110000) {
+            $this->addContent(\GIndie\Platform\View\Alert::warning("No se puede visualizar la tabla completa pues contiene más de 110000 registros: " . \count($this->queryRows) . "."));
+            $this->queryRows = \array_slice($this->queryRows, 0, 110000, true);
+        }
+        $this->addContent($this->tableContent());
+        return true;
+        $select = $this->recordInstance->sttmtSelect($selectors);
+        foreach ($conditions as $condition) {
+            switch (true)
+            {
+                case \is_array($condition):
+                    $expr1 = \array_keys($condition)[0];
+                    $expr2 = \array_values($condition)[0];
+                    $select->addConditionEquals($expr1, $expr2);
+                    break;
+                default:
+                    $select->addCondition($condition);
+                    break;
+            }
+        }
+
+        if ($this->recordInstance->groupBy() !== null) {
+            $select->addGroupBy($this->recordInstance->groupBy(), true);
+        }
         $databaseConnection = \GIndie\Platform\Current::Connection();
-//        $selectors = $this->recordInstance->getAttributeNames();
-//        $selectors[] = ["test" => ["nombre", "paterno"]];
-        $result = $databaseConnection->select($selectors, $this->recordInstance->databaseName(), $this->recordInstance->name(), $conditions, $params);
-        $this->queryRows = $result->fetch_all(\MYSQLI_ASSOC);
+        $result = $databaseConnection->query($select);
+        $this->queryRows = [];
+        while ($row = $result->fetch_assoc()) {
+            $tmpInstance = $this->recordInstance;
+            $this->queryRows[$row[$tmpInstance::PRIMARY_KEY]] = $row;
+        }
+        $this->addContent($this->tableContent());
+    }
+
+    /**
+     * 
+     * @return array
+     * @since 18-11-07
+     */
+    public function getData()
+    {
+        return $this->queryRows;
+    }
+
+    /**
+     * 
+     * @param array $data
+     * @since 18-11-07
+     */
+    public function instanceFromArray(array $data)
+    {
+        $this->queryRows = $data;
         $this->addContent($this->tableContent());
     }
 
@@ -163,15 +226,21 @@ class Table extends \GIndie\ScriptGenerator\Dashboard\Tables\Table
      */
     public function defineScript()
     {
-//        $tableModel = 
-        $title = $this->recordInstance->name();
+        $title = $this->recordInstance->getName();
         ob_start();
         ?>
         <script>
             var columns = [<?= $this->getColumns(); ?>];
             var title = "<?= $title; ?>";
             $(document).ready(function () {
-                create_datatable("<?= $this->getId(); ?>", {"title": title, "columns": columns, "search": false, "export": false, "pagination": false, "selectable": true});
+                create_datatable("<?= $this->getId(); ?>", {
+                    "title": title,
+                    "columns": columns,
+                    "search": false,
+                    "export": false,
+                    "pagination": false,
+                    "selectable": true
+                });
             });
         </script>
         <?php
@@ -253,15 +322,16 @@ class Table extends \GIndie\ScriptGenerator\Dashboard\Tables\Table
         <tbody> 
         <?php
         $inc = 0;
-        $total = 0;
+        $totales = [];
+//        $total = 0;
         foreach ($this->queryRows as $key => $row) {
             $inc++;
             ?>
                 <tr <?= strcmp($selectedId, $row[$this->pkAttribute]) == 0 ? 'class="selected"' : "" ?> gip-record="<?= $row[$this->pkAttribute]; ?>"> 
                     <th scope="row"><?= $inc; ?></th>
-                <?php
-                if ($this->isEditable()) {
-                    ?>
+            <?php
+            if ($this->isEditable()) {
+                ?>
                         <td class="text-center"><?= $this->_btnGroup($row[$this->pkAttribute]); ?></td>
                         <?php
                     }
@@ -275,7 +345,11 @@ class Table extends \GIndie\ScriptGenerator\Dashboard\Tables\Table
                         switch ($column->getType())
                         {
                             case \GIndie\Platform\Model\Attribute::TYPE_CURRENCY:
-                                $total = $total + \floatval($row[$columnName]);
+                                if (!isset($totales[$columnName])) {
+                                    $totales[$columnName] = 0;
+                                }
+                                $totales[$columnName] += \floatval($row[$columnName]);
+//                                $total = $total + \floatval($row[$columnName]);
                             default:
                                 echo $this->recordInstance->getDisplayOf($columnName);
                         }
@@ -309,10 +383,14 @@ class Table extends \GIndie\ScriptGenerator\Dashboard\Tables\Table
                         {
 
                             case \GIndie\Platform\Model\Attribute::TYPE_CURRENCY:
-                                if (isset($total)) {
-                                    $total = bcadd(\strval($total), 0, 2);
-                                    echo isset($total) ? "$" . $total : "";
+                                if (isset($totales[$colName])) {
+                                    echo Moneda::contable($totales[$colName]);
                                 }
+//                                if (isset($total)) {
+//                                        $total = bcadd(\strval($total), 0, 2);
+//                                    echo Moneda::contable($total);
+//                                        echo isset($total) ? "$" . $total : "";
+//                                }
                                 break;
 
                             default:

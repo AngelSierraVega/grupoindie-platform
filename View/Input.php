@@ -7,7 +7,7 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0C.00
+ * @version 0C.80
  * @since 
  */
 
@@ -32,9 +32,10 @@ class Input
      *      - Evalua si el elemento esta required
      * @edit 2017-06-12 <angel.sierra.vega@gmail.com>
      *      - Se actualizó el marcado para input checkbox
+     * @edit 18-12-11
+     * - Added change trigger on enum
      */
-    public static function constructFromAttribute(\GIndie\Platform\Model\Attribute $attribute, $value,
-                                                  $recordId)
+    public static function constructFromAttribute(\GIndie\Platform\Model\Attribute $attribute, $value, $recordId)
     {
         $form_element = '';
         if (strcmp($value, "GIP-UNDEFINED") == 0) {
@@ -52,34 +53,34 @@ class Input
         {
             case Attribute::TYPE_STRING:
                 $form_element = "<input class='form-control' type='text' id='{$attribute->getName()}' name='{$attribute->getName()}' value='" .
-                        $value . "' " . $required . $restrictions . " >";
+                    $value . "' " . $required . $restrictions . " >";
                 break;
             case Attribute::TYPE_NUMERIC:
                 $form_element = "<input class='form-control' type='number' id='{$attribute->getName()}' name='{$attribute->getName()}' value='" .
-                        $value . "' " . $required . $restrictions . " >";
+                    $value . "' " . $required . $restrictions . " >";
                 break;
             case Attribute::TYPE_BOOLEAN:
                 $form_element = static::Checkbox($attribute->getName(), $value);
                 break;
             case Attribute::TYPE_DATE:
                 $form_element = "<input class='form-control dateinputtext' type='text' id='{$attribute->getName()}' name='{$attribute->getName()}' value='" .
-                        $value . "' " . $required . $restrictions . " >";
+                    $value . "' " . $required . $restrictions . " >";
                 break;
 
             case Attribute::TYPE_PASSWORD:
                 $form_element = "<input class='form-control' type='password' id='{$attribute->getName()}' name='{$attribute->getName()}' value='" .
-                        $value . "' " . $required . $restrictions . " >";
+                    $value . "' " . $required . $restrictions . " >";
                 break;
             case Attribute::TYPE_EMAIL:
                 $form_element = "<input class='form-control' type='email' id='{$attribute->getName()}' name='{$attribute->getName()}' value='" .
-                        $value . "' " . $required . $restrictions . " >";
+                    $value . "' " . $required . $restrictions . " >";
                 break;
             case Attribute::TYPE_TIMESTAMP:
                 if ($value == "") {
                     $value = 0;
                 }
                 $form_element = "<input class='form-control dateinputtext' type='text' id='{$attribute->getName()}' name='{$attribute->getName()}' value='" .
-                        \date("Y-m-d", $value) . "' " . $required . " >";
+                    \date("Y-m-d", $value) . "' " . $required . " >";
                 break;
             case Attribute::TYPE_FOREIGN_KEY:
                 $form_element = static::selectFromAttribute($attribute, $value, $recordId);
@@ -91,29 +92,67 @@ class Input
                 break;
             case Attribute::TYPE_ENUM:
                 $form_element = "<select class='form-control selectpicker' "
-                        . "data-live-search='false' id='{$attribute->getName()}' "
-                        . "name='{$attribute->getName()}' " . $required . " >"
-                        . static::_selectOptionsFromEnum($value, $attribute->getEnumOptions())
-                        . "</select>";
+                    . "data-live-search='false' id='{$attribute->getName()}' "
+                    . "name='{$attribute->getName()}' " . $required . " >"
+                    . static::_selectOptionsFromEnum($value, $attribute->getEnumOptions())
+                    . "</select>";
                 $form_element .= '<script>
                 $(document).ready(function () {
                 $("#' . $attribute->getName() . '").selectpicker({size: 8});});</script>';
+                $scriptTemp = "";
+                if (($slaveAttr = $attribute->getSlave()) !== \NULL) {
+                    $recordClass = \urlencode($attribute->getRecordClass());
+//                    $recordClass = \urlencode("NON");
+                    ob_start();
+                    ?>
+                    <script>
+                        $(document).ready(function () {
+                            $("#<?= $attribute->getName(); ?>").change(function () {
+                                $("#<?= $slaveAttr; ?>").parent().replaceWith("<div><div id='<?= $slaveAttr; ?>'>Cargando contenido, por favor espere...</div></div>");
+                                var data = {
+                                    'gip-action': "get-input",
+                                    'gip-action-id': '<?= $slaveAttr; ?>',
+                                    'gip-selected-id': this.value,
+                                    'gip-action-class': "<?= $recordClass; ?>",
+                                    'gip-record-id': "<?= $recordId; ?>"
+                                };
+                                $.ajax({
+                                    type: "POST",
+                                    data: data,
+                                    url: "?", //
+                                    success: function (data) {
+                                        $("#<?= $slaveAttr; ?>").parent().replaceWith(data);
+                                        //parent(".form-group")
+                                    }
+                                });
+                            });
+                            setTimeout(function () {
+                                $("#<?= $attribute->getName(); ?>").change();
+                            }, 50);
+                            //$("#<?= ""; //$attribute->getName();              ?>").change();
+                        });
+                    </script>
+                    <?php
+                    $scriptTemp = ob_get_contents();
+                    ob_end_clean();
+                }
+                $form_element .= $scriptTemp;
                 break;
             case Attribute::TYPE_HIDDEN:
                 $form_element = "<input type='hidden' "
-                        . "id='{$attribute->getName()}' "
-                        . "name='{$attribute->getName()}' "
-                        . "value='{$value}' "
-                        . " >"
-                        . "</input>";
+                    . "id='{$attribute->getName()}' "
+                    . "name='{$attribute->getName()}' "
+                    . "value='{$value}' "
+                    . " >"
+                    . "</input>";
                 break;
             case Attribute::TYPE_CURRENCY:
                 $form_element = "<input class='form-control' type='number' id='{$attribute->getName()}' name='{$attribute->getName()}' value='" .
-                        $value . "' " . $required . $restrictions . " >";
+                    $value . "' " . $required . $restrictions . " >";
                 break;
             default:
                 $form_element = "<input class='form-control' type='text' id='{$attribute->getName()}' name='{$attribute->getName()}' value='" .
-                        $value . "' " . $required . " >";
+                    $value . "' " . $required . " >";
                 break;
         }
         switch (\TRUE)
@@ -178,7 +217,7 @@ class Input
             $required = "required='required'";
         }
         $form_element = "<input class='form-control' type='number' id='{$name}' name='{$name}' value='" .
-                $value . "' " . $required . " >";
+            $value . "' " . $required . " >";
         return $form_element;
     }
 
@@ -192,18 +231,30 @@ class Input
     public static function hidden($name, $value)
     {
         $form_element = "<input type='hidden' id='{$name}' name='{$name}' value='" .
-                $value . "' >";
+            $value . "' >";
         return $form_element;
     }
 
-    public static function Text($name, $value, $required = \false, $placeholder = "", $helpBlock = null)
+    /**
+     * 
+     * @param type $name
+     * @param type $value
+     * @param string $required
+     * @param type $placeholder
+     * @param type $helpBlock
+     * @return type
+     * @edit 19-01-14
+     * - Use of $required
+     */
+    public static function Text($name, $value, $required = false, $placeholder = "", $helpBlock = null)
     {
-        $required = "";
+//        $required = "";
         if ($required) {
+//            var_dump($required);
             $required = "required='required'";
         }
         $form_element = "<input class='form-control' type='text' placeholder='{$placeholder}' id='{$name}' name='{$name}' value='" .
-                $value . "' " . $required . " >";
+            $value . "' " . $required . " >";
         if ($helpBlock !== null) {
             $form_element .= "<p class='help-block'>{$helpBlock}</p>";
         }
@@ -217,7 +268,7 @@ class Input
             $required = "";
         }
         $form_element = "<input class='form-control' type='text' placeholder='{$placeholder}' id='{$name}' name='{$name}' value='" .
-                $value . "' disabled >";
+            $value . "' disabled >";
         return $form_element;
     }
 
@@ -236,8 +287,7 @@ class Input
                return $form_element;
            }
 
-           public static function selectFromAttribute(\GIndie\Platform\Model\Attribute $attribute,
-                                                      $selectedId, $recordId)
+           public static function selectFromAttribute(\GIndie\Platform\Model\Attribute $attribute, $selectedId, $recordId)
            {
                $recordClass = $attribute->getRecordClass();
                $required = "";
@@ -251,11 +301,12 @@ class Input
                    $options[] = $recordClass::PRIMARY_KEY . " != '" . $recordId . "'";
                }
                $form_element = "<select class='form-control selectpicker' "
-                       . "data-live-search='true' id='{$attribute->getName()}' "
-                       . "name='{$attribute->getName()}' " . $required . " >"
-                       . static::_selectOptionsFromList($selectedId, $class, $options, $attribute->getNotNull())
+                   . "data-live-search='true' id='{$attribute->getName()}' "
+                   . "name='{$attribute->getName()}' " . $required . " >"
+                   . static::_selectOptionsFromList($selectedId, $class, $options,
+                       $attribute->getNotNull())
 //                    . $this->_dynamicOptionsForSelect($value, $class, $options)
-                       . "</select>";
+                   . "</select>";
 
                $form_element .= '<script>
                 $(document).ready(function () {
@@ -289,7 +340,7 @@ class Input
                     setTimeout(function () {
                         $("#<?= $attribute->getName(); ?>").change();
                     }, 50);
-                    //$("#<?= ""; //$attribute->getName();             ?>").change();
+                    //$("#<?= ""; //$attribute->getName();              ?>").change();
                 });
             </script>
             <?php
@@ -310,7 +361,8 @@ class Input
         }
         //$rtnStr = "";
         foreach ($tmpList->getElements() as $elementId) {
-            $rtnStr .= static::_selectOptionFromElement($tmpList->getElementAt($elementId), $selectedId, 0);
+            $rtnStr .= static::_selectOptionFromElement($tmpList->getElementAt($elementId),
+                    $selectedId, 0);
         }
 
         return $rtnStr;
@@ -323,13 +375,13 @@ class Input
     {
         $rtnStr = "";
         foreach ($list->getElements() as $elementId) {
-            $rtnStr .= static::_selectOptionFromElement($list->getElementAt($elementId), $selectedId, $indent);
+            $rtnStr .= static::_selectOptionFromElement($list->getElementAt($elementId),
+                    $selectedId, $indent);
         }
         return $rtnStr;
     }
 
-    private static function _selectOptionFromElement(\GIndie\Platform\Model\Element $element, $selectedId,
-                                                     $indent)
+    private static function _selectOptionFromElement(\GIndie\Platform\Model\Element $element, $selectedId, $indent)
     {
         $rtnStr = "<option value='" . $element->getId() . "'";
         if ($element->getCategory()) {

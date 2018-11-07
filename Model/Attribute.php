@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\Model
  *
- * @version 0C.30
+ * @version 0C.70
  * @since 17-04-23
  * @todo Upgrade class
  */
@@ -405,12 +405,14 @@ class Attribute //extends ColumnDefinition
      * @param string $listClass
      * @param array $restrictions
      * @return $this
+     * @edit 18-12-16
      */
     public function setTypeFK($listClass, array $restrictions = [])
     {
         $this->_type = static::TYPE_FOREIGN_KEY;
         if (!\is_subclass_of($listClass, ListSimple::class, \TRUE)) {
-            \trigger_error($listClass . " no es de tipo ListSimple en " . get_called_class(), \E_USER_ERROR);
+            \trigger_error($listClass . " no es de tipo ListSimple en " . get_called_class(),
+                \E_USER_ERROR);
         }
         $this->_fk_class = $listClass;
         //$this->_fk_column = $columnName;

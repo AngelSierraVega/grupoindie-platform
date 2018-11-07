@@ -1,5 +1,4 @@
 <?php
-
 /**
  * GI-Platform-DVLP - 
  *
@@ -8,7 +7,7 @@
  *
  * @package GIndie\Platform\View
  * 
- * @version 0C.00
+ * @version 0C.D0
  * @since 18-03-14
  */
 
@@ -24,6 +23,30 @@ namespace GIndie\Platform\View;
  */
 class Javascript
 {
+
+    /**
+     * 
+     * @param string $button
+     *  @param int $time
+     * @return string
+     * @since 18-12-25
+     * @edit 19-01-07
+     * - Added param $time
+     */
+    public static function clickOnTimeout($button, $time = 450)
+    {
+        \ob_start();
+        ?>
+        <script>
+            setTimeout(function () {
+                $("<?= $button; ?>").click();
+            }, <?= $time; ?>);
+        </script>
+        <?php
+        $out = \ob_get_contents();
+        \ob_end_clean();
+        return $out;
+    }
 
     /**
      * 

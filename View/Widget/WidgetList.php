@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0C.A0
+ * @version 0C.C0
  * @since 17-05-21
  */
 
@@ -50,7 +50,7 @@ class WidgetList extends View\Widget
         $this->_id = \GIndie\Platform\Security::tokenize(\get_class($list));
         $this->_selectedId = $selectedId;
         $title = $list::Name();
-        parent::__construct($title, \FALSE, static::getContent());
+        parent::__construct($title, \FALSE, static::getContentLocal());
         $this->addButtonHeading(Buttons::Reload(\NULL, $selectedId));
         $relatedRecord = $list::RelatedRecord();
         if ($relatedRecord !== \NULL) {
@@ -78,9 +78,9 @@ class WidgetList extends View\Widget
     /**
      * @return  string
      * @since   GIP.02
-     * @edit  Izmir Sanchez Juarez <izmirreffi@gmail.com>
+     * @edit 18-12-12
      */
-    protected function getContent()
+    protected function getContentLocal()
     {
         $rtnStr = "<input class='form-control' id=\"search_$this->_id\" type=\"text\" placeholder=\"Buscar\">";
         $rtnStr .= "<div class=\"list-group\" id=\"$this->_id\" >";

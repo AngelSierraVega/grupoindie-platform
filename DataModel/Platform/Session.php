@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0C.D0
+ * @version 0C.DA
  * @since 18-08-27
  */
 
@@ -19,7 +19,8 @@ use GIndie\DBHandler\MySQL57\Instance\DataType;
 
 /**
  * Description of Session
- *
+ * @edit 18-11-11
+ * - Upgraded column definition
  */
 class Session extends AbstractTable
 {
@@ -60,6 +61,7 @@ class Session extends AbstractTable
 
     /**
      * @since 18-08-26
+     * @edit 18-11-11
      */
     protected static function tableDefinition()
     {
@@ -74,7 +76,7 @@ class Session extends AbstractTable
         /**
          * Column php_sess_id
          */
-        static::columnDefinition("php_sess_id", DataType::varchar(255));
+        static::columnDefinition("php_sess_id", DataType::char(255));
 
         /**
          * Reference Definition

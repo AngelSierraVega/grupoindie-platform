@@ -10,7 +10,7 @@ namespace GIndie\Platform\Model;
  *
  * @package GIndie\Platform\Model
  *
- * @version 0C.10
+ * @version 0C.70
  * @since 18-03-30
  */
 abstract class View extends Record implements ViewINT

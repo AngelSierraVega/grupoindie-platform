@@ -7,7 +7,7 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0C.50
+ * @version 0C.A0
  * @since 18-11-04
  */
 
@@ -28,7 +28,7 @@ class TablePagination extends Table
      */
     public function defineScript()
     {
-        $title = $this->recordInstance->name();
+        $title = $this->recordInstance->getName();
         ob_start();
         ?>
         <script>

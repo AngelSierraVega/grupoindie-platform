@@ -81,14 +81,15 @@ abstract class Connection
      */
     function __construct()
     {
-        $this->_conection = new \mysqli("p:" . \GIndie\DBHandler\INIHandler::getHost(), \GIndie\DBHandler\INIHandler::getMainUsername(), \GIndie\DBHandler\INIHandler::getMainPassword());
-        $this->_conection->set_charset("utf8");
-        if (\mysqli_connect_errno()) {
-            trigger_error(\mysqli_connect_errno() .
-                    ". Unnable to create connection " .
-                    mysqli_connect_error(), E_USER_ERROR);
-            throw new \Exception("Unnable to create connection " . mysqli_connect_error());
-        }
+        $this->_conection = \GIndie\DBHandler\MySQL57::getConnection();
+//        $this->_conection = new \mysqli("p:" . \GIndie\DBHandler\INIHandler::getHost(), \GIndie\DBHandler\INIHandler::getMainUsername(), \GIndie\DBHandler\INIHandler::getMainPassword());
+//        $this->_conection->set_charset("utf8");
+//        if (\mysqli_connect_errno()) {
+//            trigger_error(\mysqli_connect_errno() .
+//                    ". Unnable to create connection " .
+//                    mysqli_connect_error(), E_USER_ERROR);
+//            throw new \Exception("Unnable to create connection " . mysqli_connect_error());
+//        }
     }
 
     /**
@@ -104,7 +105,8 @@ abstract class Connection
      */
     public function query($query)
     {
-        //var_dump($query);
+//        var_dump($query);
+//        \print_r($query);
         //var_dump($this->_conection);
         $result = $this->_conection->query($query);
 
@@ -124,8 +126,10 @@ abstract class Connection
             //var_dump($this->_conection);
 //            throw new \Exception($error, $this->_conection->errno);
             //var_dump($this->_conection);
-            throw new \GIndie\Platform\ExceptionMySQL($error, $this->_conection->errno);
-            \trigger_error("" . $this->_conection->error . "\n Query: {$query} ", \E_USER_ERROR);
+            throw new \GIndie\Platform\ExceptionMySQL($error,
+                                                      $this->_conection->errno);
+            \trigger_error("" . $this->_conection->error . "\n Query: {$query} ",
+                           \E_USER_ERROR);
             //var_dump($result);
             //var_dump($this->_conection);
 
@@ -157,7 +161,7 @@ abstract class Connection
     public function select(array $selectors, $schema = \NULL, $table = \NULL, array $conditions = [], array $params = [])
     {
         //$selectors = ["*"];
-
+        $joins = [];
         if ($table !== \NULL) {
             $tmpSelectors = [];
             foreach ($selectors as $selector) {
@@ -183,6 +187,19 @@ abstract class Connection
                         case (\substr_count($selector, " AS ") > 0):
                             $tmpSelectors[] = "{$selector}";
                             break;
+                        case (\substr_count($selector, "`.`") > 0):
+                            $tmpSelectors[] = "{$selector}";
+                            $tmpExpl = \explode("`.`", $selector);
+//                            var_dump($tmpExpl);
+                            if (isset($tmpExpl[1])) {
+                                $tmpTable = \substr($tmpExpl[0], 1);
+                                if ($tmpTable == $table) {
+                                    
+                                } else {
+                                    $joins[] = $tmpTable;
+                                }
+                            }
+                            break;
                         default:
                             $tmpSelectors[] = "`{$table}`.`{$selector}`";
                             break;
@@ -194,6 +211,9 @@ abstract class Connection
         $_strQuery = "SELECT " . \join(",", $selectors);
         if (($schema !== \NULL) && ($table !== \NULL)) {
             $_strQuery .= " FROM `{$schema}`.`{$table}`";
+            if (count($joins) > 0) {
+                $_strQuery .= " JOIN `{$schema}`.`" . $joins[0] . "`";
+            }
             if (!empty($conditions)) {
                 $_where = [];
                 foreach ($conditions as $condition) {
@@ -223,8 +243,9 @@ abstract class Connection
         }
         !empty($params) ? $_strQuery .= " " . \join(" ", $params) : \NULL;
         $_strQuery .= ";";
-//        if (strcmp($table, "contribuyente") == 0) {
+//        if (strcmp($table, "cobros") == 0) {
 //        var_dump($_strQuery);
+//        trigger_error($_strQuery, \E_USER_ERROR);
 //        }
         return $this->query($_strQuery);
     }
@@ -264,13 +285,18 @@ abstract class Connection
     public function update(\GIndie\Platform\Model\Record $newRecordData, $id)
     {
         $PKname = $newRecordData::PRIMARY_KEY;
-        if ($id == \NULL) {
-            $PKvalue = $newRecordData->getValueOf($newRecordData::PRIMARY_KEY);
-        } else {
-            $PKvalue = $id;
+        switch (true)
+        {
+            case \is_null($id):
+                $PKvalue = $newRecordData->getValueOf($PKname);
+//                var_dump($PKvalue);
+                break;
+            default:
+                $PKvalue = $id;
+//                var_dump($PKvalue);
+                break;
         }
-
-
+        
         $schema = $newRecordData::SCHEMA;
         $table = $newRecordData::TABLE;
         $attribute_pairs = array();
@@ -304,8 +330,10 @@ abstract class Connection
         $sql .= join(", ", $attribute_pairs);
         $sql .= " WHERE `{$table}`.`{$PKname}` = '{$PKvalue}' ";
         $sql .= ";";
+//        var_dump($sql);
         //var_dump(" WHERE `{$table}`.`{$PKname}` = '{$PKvalue}' ");
-        //print_r($sql);
+//        print_r($PKvalue);
+//        print_r($sql);
         return $this->query($sql);
     }
 
@@ -408,7 +436,8 @@ abstract class Connection
     public function findByPK($PKname, $PKvalue, array $selectors, $schema, $table)
     {
         $conditions = ["`{$table}`.`{$PKname}`='{$PKvalue}'"];
-        $_resultSet = $this->select($selectors, $schema, $table, $conditions, ["Limit 1"]);
+        $_resultSet = $this->select($selectors, $schema, $table, $conditions,
+                                    ["Limit 1"]);
         return $_resultSet->num_rows < 1 ? \FALSE : $_resultSet->fetch_assoc();
 //        if ($_resultSet->num_rows < 1) {
 //            trigger_error("Error: Unable to find record '{$recordId}'",

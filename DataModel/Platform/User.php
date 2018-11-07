@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0C.CF
+ * @version 0C.DA
  * @since 18-08-25
  */
 
@@ -24,6 +24,8 @@ use GIndie\DBHandler\MySQL57\Instance\ColumnDefinition;
  * - Commented class
  * @edit 18-08-30
  * - Added defineRecordRestrictions()
+ * @edit 18-11-11
+ * - Upgraded column definition
  */
 class User extends AbstractTable
 {
@@ -113,13 +115,14 @@ class User extends AbstractTable
      * - Added virtual column nbr_cmplt
      * @edit 18-11-05
      * - Upgraded column definition
+     * @edit 18-11-11
      */
     protected static function tableDefinition()
     {
         /**
          * Column key
          */
-        static::clmnDfntn("key", DataType::varchar(8));
+        static::clmnDfntn("key", DataType::char(8));
         static::clmnDfntn("key")->setNotNull();
         static::clmnDfntn("key")->setComment("key");
         static::rfrncDfntn()->setPrimaryKey("key");
@@ -128,7 +131,7 @@ class User extends AbstractTable
         /**
          * Column user
          */
-        static::clmnDfntn("user", DataType::varchar(255));
+        static::clmnDfntn("user", DataType::char(255));
         static::clmnDfntn("user")->setNotNull();
         static::clmnDfntn("user")->setComment("user");
         static::rfrncDfntn()->addUniqueKey("user", "idxdsply_pltfrm_cta");
@@ -136,14 +139,14 @@ class User extends AbstractTable
         /**
          * Column password_su 
          */
-        static::clmnDfntn("password_su", DataType::varchar(60));
+        static::clmnDfntn("password_su", DataType::char(60));
         static::clmnDfntn("password_su")->setComment("password_su");
         static::clmnDfntn("password_su")->setDefaultValue(null);
 
         /**
          * Column password_enct
          */
-        static::clmnDfntn("password_enct", DataType::varchar(60));
+        static::clmnDfntn("password_enct", DataType::char(60));
         static::clmnDfntn("password_enct")->setComment("password_enct");
         static::clmnDfntn("password_enct")->setDefaultValue(null);
 
@@ -172,23 +175,23 @@ class User extends AbstractTable
         /**
          * Column nmbrs
          */
-        static::clmnDfntn("nmbrs", DataType::varchar(100));
+        static::clmnDfntn("nmbrs", DataType::char(100));
         static::clmnDfntn("nmbrs")->setComment("nmbrs");
         /**
          * Column ap_pat
          */
-        static::clmnDfntn("ap_pat", DataType::varchar(50));
+        static::clmnDfntn("ap_pat", DataType::char(50));
         static::clmnDfntn("ap_pat")->setComment("ap_pat");
         /**
          * Column apo_mat
          */
-        static::clmnDfntn("ap_mat", DataType::varchar(50));
+        static::clmnDfntn("ap_mat", DataType::char(50));
         static::clmnDfntn("ap_mat")->setComment("ap_mat");
 
         /**
          * Virtual column nbr_cmplt
          */
-        static::clmnDfntn("nbr_cmplt", DataType::varchar(208));
+        static::clmnDfntn("nbr_cmplt", DataType::char(208));
         static::clmnDfntn("nbr_cmplt")->setComment("nbr_cmplt");
         static::clmnDfntn("nbr_cmplt")->setGenerated("(CONCAT_WS(' ',trtmnt,nmbrs,ap_pat,ap_mat))", "STORED");
     }

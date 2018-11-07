@@ -8,13 +8,12 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0D.00
+ * @version 0D.70
  * @since 
  */
 
 namespace GIndie\Platform\View;
 
-//use GIndie\Generator\DML\HTML5\Category\StylesSemantics\Span;
 use GIndie\ScriptGenerator\HTML5\Category\StylesSemantics\Span;
 
 /**
@@ -24,6 +23,8 @@ use GIndie\ScriptGenerator\HTML5\Category\StylesSemantics\Span;
  * @edit 18-02-27
  * @edit 18-11-05
  * - Removed use of deprecated libs
+ * @edit 19-01-30
+ * - Added eyeClose(), eyeOpen()
  */
 class Icons
 {
@@ -51,6 +52,26 @@ class Icons
     public static function Help()
     {
         return new Span("", ["class" => "glyphicon glyphicon-question-sign"]);
+    }
+
+    /**
+     * 
+     * @return \GIndie\ScriptGenerator\HTML5\Category\StylesSemantics\Span
+     * @since 19-01-30
+     */
+    public static function eyeClose()
+    {
+        return new Span("", ["class" => "glyphicon glyphicon-eye-close"]);
+    }
+
+    /**
+     * 
+     * @return \GIndie\ScriptGenerator\HTML5\Category\StylesSemantics\Span
+     * @since 19-01-30
+     */
+    public static function eyeOpen()
+    {
+        return new Span("", ["class" => "glyphicon glyphicon-eye-open"]);
     }
 
 }
