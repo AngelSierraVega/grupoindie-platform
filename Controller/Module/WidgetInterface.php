@@ -5,7 +5,7 @@
  *
  * @package GIndie\Platform\Controller\Instance\Module
  *
- * @version 0C.00
+ * @version 0D.00
  * @since 17-06-22
  */
 

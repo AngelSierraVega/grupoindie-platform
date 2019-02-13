@@ -13,6 +13,7 @@
  * @todo Upgrade class
  */
 
+
 namespace GIndie\Platform\Model\Database;
 
 use GIndie\Platform\Current;

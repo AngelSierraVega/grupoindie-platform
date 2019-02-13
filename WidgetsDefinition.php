@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0C.B0
+ * @version 0D.00
  * @since 17-04-20
  */
 

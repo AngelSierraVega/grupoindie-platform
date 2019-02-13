@@ -48,8 +48,8 @@ class Table extends View\Widget
     {
         if (!\is_subclass_of($modelClassname, \GIndie\Platform\Model\Record::class)) {
             \trigger_error("recordClass is not subclass of " .
-                    \GIndie\Platform\Model\Record::class
-                    . " called in " . \get_called_class(), \E_USER_ERROR);
+                \GIndie\Platform\Model\Record::class
+                . " called in " . \get_called_class(), \E_USER_ERROR);
         }
         $this->modelClassname = $modelClassname;
 //        if ($selectors === null) {
@@ -63,7 +63,7 @@ class Table extends View\Widget
                 break;
             case (!\is_array($selectors)):
                 \trigger_error("selectors should be array or null "
-                        . "called in " . \get_called_class(), \E_USER_ERROR);
+                    . "called in " . \get_called_class(), \E_USER_ERROR);
                 break;
             case (empty($selectors)):
                 $selectors = $modelClassname::getSelectorsDisplay();
@@ -94,17 +94,24 @@ class Table extends View\Widget
 
     /**
      * @since 18-11-08
+     * @edit 19-03-27
      */
     protected function cnstrctButtons()
     {
         $modelClassname = $this->modelClassname;
         $this->addButtonHeading(Buttons::Reload(null));
-        if (\GIndie\Platform\Current::hasRole($modelClassname::getValidRolesFor("gip-create"))) {
-            $this->setContext(static::$COLOR_PRIMARY, true);
-            $this->addButtonCreate(\urlencode($modelClassname));
-        } else {
-            $this->setContext(static::$COLOR_PRIMARY, true);
+//        var_dump();
+        switch (true)
+        {
+            case \is_null($modelClassname::getValidRolesFor("gip-create")):
+            case \GIndie\Platform\Current::hasRole($modelClassname::getValidRolesFor("gip-create")):
+                $this->addButtonCreate(\urlencode($modelClassname));
+                break;
+//            default:
+//                $this->setContext(static::$COLOR_PRIMARY, true);
+//                break;
         }
+        $this->setContext(static::$COLOR_PRIMARY, true);
     }
 
     /**

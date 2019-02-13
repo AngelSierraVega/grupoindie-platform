@@ -213,7 +213,8 @@ class Login extends Bootstrap3\Document
         $subtext1->addClass("text-center");
         $divsm6->addContent($subtext1);
 
-        $subtext2 = Basic::Header(6, Links::hyperlink("http://www.mineraldelareforma.gob.mx", "www.mineraldelareforma.gob.mx", "_blank"));
+        $link = \GIndie\Platform\INIHandler::getCategoryValue("Vendor", "url");
+        $subtext2 = Basic::Header(6, Links::hyperlink($link, $link, "_blank"));
         $subtext2->addClass("text-center");
         $divsm6->addContent($subtext2);
 

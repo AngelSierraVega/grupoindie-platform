@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform
  *
- * @version OC.70
+ * @version DOING 00.80
  * @since 18-08-27
  */
 
@@ -17,7 +17,7 @@ namespace GIndie\Platform\DataModel\Resources\GIPTable;
 /**
  * Description of Logs
  *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @todo Deprecate class. Cannot surpass version 00.80
  */
 class Logs extends \GIndie\Platform\Model\Table
 {

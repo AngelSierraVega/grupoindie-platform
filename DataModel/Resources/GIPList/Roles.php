@@ -8,16 +8,15 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0C.70
+ * @version DOING 00.80
  * @since 18-08-25
  */
 
 namespace GIndie\Platform\DataModel\Resources\GIPList;
 
 /**
- * Description of Roles
- *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * 
+ * @todo Deprecate class. Cannot surpass version 00.80
  */
 class Roles extends \GIndie\Platform\Model\ListSimple
 {

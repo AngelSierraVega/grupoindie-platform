@@ -164,7 +164,7 @@ class Document extends Bootstrap3\Document
         $this->addScript($assetsFolder . 'js/libs/jszip/jszip.min.js', true);
         $this->addScript($assetsFolder . 'js/libs/pdfmake/pdfmake.min.js', true);
         $this->addScript($assetsFolder . 'js/libs/pdfmake/vfs_fonts.js', true);
-        $this->addScript($assetsFolder . 'js/gip-scripts.js?version=7', true);
+        $this->addScript($assetsFolder . 'js/gip-scripts.js?version=8', true);
     }
 
     /**

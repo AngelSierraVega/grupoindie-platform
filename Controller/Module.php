@@ -9,7 +9,7 @@
  *
  * @package GIndie\Platform\Controller\Instance\Module
  * 
- * @version 0D.00
+ * @version 0D.40
  * @since 17-05-23
  */
 
@@ -103,7 +103,7 @@ abstract class Module extends Platform implements \GIndie\Platform\DataDefinitio
                 HTML5\Category\Phrase::strong(static::name()));
             $rtnWidget->getHeading()->addContent(HTML5\Category\Basic::paragraph(static::description()));
             $rtnWidget->setContext("info");
-            if (\count(static::getHelpTopics()) > 1) {
+            if (\count(static::getHelpTopics()) > 0) {
                 $rtnWidget->addButtonHeading($this->cnstrctHelpDropdown());
             }
         }
@@ -176,12 +176,12 @@ abstract class Module extends Platform implements \GIndie\Platform\DataDefinitio
         $rtnTable->addClass("table-striped table-bordered table-hover");
         $rtnTable->addHeader(["", HTML5\Category\Basic::header(5,
                 "Requerimiento: " . static::getHelpTopic($actionId)["actionDescription"]), ""]);
-        $rtnTable->addHeader(["#", "Descripción", "Imagen"]);
+        $rtnTable->addHeader(["#", "Descripción", "Ayuda visual"]);
         foreach (static::getActionHelp($actionId) as $helpIndex => $helpData) {
             $assets = \GIndie\Platform\INIHandler::getCategoryValue("Config", "assets_url");
             $src = $assets . "\\tmp\\" . $helpData["imageId"] . ".jpg";
             $img = HTML5\Category\Images::img($src, $helpData["imageId"]);
-            $img->setAttribute("style", "max-width: 300px;"); //
+            $img->setAttribute("style", "max-width: 400px;"); //
             $rtnTable->addRow([$helpIndex, $helpData["text"], $img]);
         }
         return $rtnTable;

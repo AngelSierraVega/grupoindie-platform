@@ -5,7 +5,7 @@
  * 
  * @package GIndie\Platform\Controller\Instance\Module\Placeholder
  * 
- * @version 0C.70
+ * @version 0C.80
  * @since 17-09-03
  */
 

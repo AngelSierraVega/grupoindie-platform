@@ -87,9 +87,9 @@ class Table extends \GIndie\ScriptGenerator\HTML5\Category\StylesSemantics\Div
             }
 
             //$roles = ;
-            if (\GIndie\Platform\Current::hasRole($table::getValidRolesFor("gip-state"))) {
-                $this->_state = \TRUE;
-            }
+//            if (\GIndie\Platform\Current::hasRole($table::getValidRolesFor("gip-state"))) {
+//                $this->_state = \TRUE;
+//            }
         }
 
         $this->_model = $table;

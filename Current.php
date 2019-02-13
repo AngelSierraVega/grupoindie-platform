@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform
  *
- * @version 0C.70
+ * @version 0C.80
  * @since 17-01-05
  */
 

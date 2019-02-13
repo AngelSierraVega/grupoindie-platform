@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\Model
  *
- * @version 0C.70
+ * @version DEPRECATED
  * @since 
  */
 
@@ -17,6 +17,7 @@ namespace GIndie\Platform\Model;
 /**
  * @edit 18-10-29
  * - Created setValueOf(), getAssoc()
+ * @todo check deprecate
  */
 class Row
 {

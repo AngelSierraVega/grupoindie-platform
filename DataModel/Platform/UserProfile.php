@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0C.D0
+ * @version 0D.00
  * @since 18-08-27
  */
 
@@ -23,6 +23,13 @@ use GIndie\Platform\Model;
  */
 class UserProfile extends User
 {
+
+    /**
+     * {@inheritdoc}
+     * 
+     * @since 19-04-04
+     */
+    const STATE_ATTRIBUTE = null;
 
     /**
      * Nombre del modelo de datos.

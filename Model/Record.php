@@ -7,7 +7,7 @@
  *
  * @package GIndie\Platform\Model
  *
- * @version 0C.00
+ * @version 0D.70
  * @since 17-04-23
  */
 
@@ -21,6 +21,8 @@ use GIndie\Platform\DataModel;
 use GIndie\DBHandler\MySQL57\Instance\DataType;
 use GIndie\DBHandler\MySQL57\Statement;
 use GIndie\Common\Parser\Moneda;
+use GIndie\Platform\DataModel\Command;
+use GIndie\Platform\View\Icons;
 
 /**
  * Description of Record
@@ -339,11 +341,18 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
                     \trigger_error("@todo handle DATATYPE_" . $columnDefinition->getDataType()->getDatatype(),
                         \E_USER_ERROR);
             }
-            //handle hidden on autoincrement
+            //
+            /**
+             * handle hidden on autoincrement
+             * @edit 19-02-15
+             * - Handle required on non autoincremented primary key
+             */
             if (\strcmp(static::PRIMARY_KEY, $attr) == 0) {
                 if (static::AUTOINCREMENT == true) {
                     static::attribute($attr)->excludeFromDisplay();
                     static::attribute($attr)->excludeFromForm();
+                } else {
+                    static::attribute($attr)->setRestrictionRequired();
                 }
             }
             //Handle label and help
@@ -724,11 +733,13 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
         $rtnArray = [];
         if (static::AUTOINCREMENT == true) {
 //            $rtnArray = [static::SCHEMA => static::PRIMARY_KEY];
-            $rtnArray = [static::PRIMARY_KEY];
+//            $rtnArray = [static::PRIMARY_KEY];
         }
         foreach (static::getAttributeNames() as $attributeName) {
-            if (static::getAttribute($attributeName)->excludedFromDisplay() !== true) {
-                $rtnArray[] = $attributeName;
+            if (static::PRIMARY_KEY == $attributeName) {
+                $rtnArray[static::name()] = [static::PRIMARY_KEY];
+            } elseif (static::getAttribute($attributeName)->excludedFromDisplay() !== true) {
+                $rtnArray[static::name()][] = $attributeName;
 //                $rtnArray = [static::SCHEMA => $attributeName];
             }
         }
@@ -943,24 +954,112 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
     /**
      * @todo
      * @since 18-10-28
+     * @edit 19-03-27
+     * - Functional method
      */
-    public static function defineCommands()
+    protected static function defineCommands()
     {
-        \trigger_error("@todo", \E_USER_ERROR);
+        static::commandDefinition("gip-create", "Nuevo(a) " . static::NAME);
+        static::commandDefinition("gip-create")->definePrerequisites(["AS"]);
+//        static::commandDefinition("gip-create", ["AS"], null, "Crear", "success",
+//            \GIndie\Platform\View\Icons::Create(), true);
+//        static::commandDefinition("form-edit", ["AS"], null, "Editar " . static::NAME, "success",
+//            \GIndie\Platform\View\Icons::Edit(), "lg");
+        static::commandDefinition("gip-edit", "Editar " . static::NAME);
+        static::commandDefinition("gip-edit")->setAccess("success", Icons::Edit(), "lg");
+        static::commandDefinition("gip-edit")->definePrerequisites(["AS"]);
+//        static::requireRoles();
+//        static::requireRoles("gip-edit", ["AS"]);
+//        static::requireRoles("gip-delete", ["AS"]);
+        static::commandDefinition("gip-delete", "Eliminar " . static::NAME);
+        static::commandDefinition("gip-delete")->setAccess("danger", Icons::Delete(), "lg");
+        static::commandDefinition("gip-delete")->definePrerequisites(["AS"]);
+        if (!\is_null(static::STATE_ATTRIBUTE)) {
+//            static::commandDefinition("gip-state", ["AS"]);
+            static::commandDefinition("gip-state", "Estado");
+            static::commandDefinition("gip-state")->setAccess("default", Icons::eyeClose(), "lg");
+            static::commandDefinition("gip-state")->definePrerequisites(["AS"]);
+        } else {
+            static::commandDefinition("gip-state", "Estado");
+            static::commandDefinition("gip-state")->setAccess("default", Icons::eyeClose(), "lg");
+            static::commandDefinition("gip-state")->definePrerequisites(["NONE"]);
+        }
+//        \trigger_error("@todo", \E_USER_ERROR);
     }
 
-    protected static $_restrictions = [];
+    /**
+     * 
+     * @param string $commandId
+     * @param string|null $name
+     * 
+     * @return \GIndie\Platform\DataModel\Command
+     * @since 19-03-27
+     * @edit 19-03-28
+     */
+    protected static function commandDefinition($commandId, $name = null)
+    {
+        if (!is_null($name)) {
+            self::$commands[static::class][$commandId] = new Command($commandId, static::class,
+                $name);
+        }
+        if (!isset(self::$commands[static::class][$commandId])) {
+            static::defineCommands();
+        }
+        return self::$commands[static::class][$commandId];
+    }
+
+    /**
+     *
+     * @var array|\GIndie\Platform\Model\Record\Command
+     * @edit 19-03-21
+     * - Visibility to private.
+     * - Renamed var from _restrictions to $commandRoles
+     * @edit 19-03-27
+     * - Remade var to $commands
+     */
+    private static $commands = [];
 
     /**
      * @todo interal store for command - roles
+     * @deprecated since 19-03-27 Use commandDefinition() instead
      */
     protected static function requireRoles($command, array $roles)
     {
-        if (!\array_key_exists(static::class, static::$_restrictions)) {
-            static::$_restrictions[static::class] = [];
-        }
-        static::$_restrictions[static::class][$command] = $roles;
+        \trigger_error("deprecated since 19-03-27 Use commandDefinition() instead", \E_USER_ERROR);
+//        if (!\array_key_exists(static::class, self::$commands)) {
+//            self::$commands[static::class] = [];
+//        }
+//        self::$commands[static::class][$command] = $roles;
     }
+
+    /**
+     * Returns an array of the commands of the class.
+     * @return array
+     * @since 19-03-21
+     */
+    public static function commands()
+    {
+        if (!isset(self::$commands[static::class])) {
+            static::defineCommands();
+        }
+//        return isset(self::$commands[static::class]) ? \array_keys(self::$commands[static::class]) : [];
+        return isset(self::$commands[static::class]) ? self::$commands[static::class] : [];
+    }
+
+    /**
+     * @since 18-11-29
+     * @deprecated since 09-03-27 Use defineCommands() instead
+     */
+    public static function defineRecordRestrictions()
+    {
+        var_dump(static::class);
+        \trigger_error("defineRecordRestrictions() deprecated since 19-03-27 Use defineCommands() instead",
+            \E_USER_ERROR);
+
+//        
+    }
+
+//    public static function 
 
     /**
      * @todo interal store for command - roles
@@ -972,37 +1071,25 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
 
     /**
      * @todo interal return for command - roles
+     * @edit 19-03-27
+     * - Use of defineCommands()
+     * - Use of Record\Commnad->getRequiredRoles()
      */
     public static function getValidRolesFor($command)
     {
-        if (!\array_key_exists(static::class, static::$_restrictions)) {
-            static::defineRecordRestrictions();
+        if (!\array_key_exists(static::class, self::$commands)) {
+            static::defineCommands();
         }
-        if (!\array_key_exists(static::class, static::$_restrictions)) {
-            \trigger_error("El registro " . \get_called_class() . " no tiene definida la restricción para el comando '{$command}'. Utilice la función static::requireRoles(command,roles)",
+        if (!\array_key_exists(static::class, self::$commands)) {
+            \trigger_error("El registro " . \get_called_class() . " no tiene definida la restricción para el comando '{$command}'. Utilice la función commandDefinition()",
                 \E_USER_ERROR);
         }
-        if (!\array_key_exists($command, static::$_restrictions[static::class])) {
-            \trigger_error("El registro " . \get_called_class() . " no tiene definida la restricción para el comando '{$command}'. Utilice la función static::requireRoles(command,roles)",
+        if (!\array_key_exists($command, self::$commands[static::class])) {
+            \trigger_error("El registro " . \get_called_class() . " no tiene definida la restricción para el comando '{$command}'. Utilice la función commandDefinition()",
                 \E_USER_ERROR);
         }
-        return static::$_restrictions[static::class][$command];
+        return self::$commands[static::class][$command]->getRequiredRoles();
         //
-    }
-
-    /**
-     * @since 18-11-29
-     */
-    public static function defineRecordRestrictions()
-    {
-        static::requireRoles("gip-create", ["AS"]);
-        static::requireRoles("gip-edit", ["AS"]);
-        static::requireRoles("gip-delete", ["AS"]);
-        if (!\is_null(static::STATE_ATTRIBUTE)) {
-            static::requireRoles("gip-state", ["AS"]);
-        } else {
-            static::requireRoles("gip-state", ["NONE"]);
-        }
     }
 
     /**

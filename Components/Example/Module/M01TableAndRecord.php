@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\Components\Example
  *
- * @version 0D.00
+ * @version 0D.10
  * @since 18-11-29
  */
 

@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform
  *
- * @version 0D.70
+ * @version 0D.78
  * @since 17-05-23
  * @todo Upgrade class
  */

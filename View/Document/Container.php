@@ -7,7 +7,7 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0D.30 
+ * @version 0D.40
  * 
  * @todo
  * - Funcional class with node
@@ -237,7 +237,7 @@ class Container extends Bootstrap3\Grid
                 </div>
             </div>
         </div>
-        
+
         <div class="row ">
             <div id="i-i-i-b" class="placeholder col-xs-12">
                 <?php echo $this->placeholders["i-i-i-b"]; ?>
@@ -358,12 +358,14 @@ class Container extends Bootstrap3\Grid
      * @since 18-12-07
      * @edit 19-01-11
      * - Debugged method
+     * @edit 19-02-20
+     * - Debuged row generation an agrupation of columns
      */
     private function cnstrctCustomPlaceholders()
     {
         $grid = new Bootstrap3\Grid();
         $grid->removeClass("container");
-        $row = null;
+        $row = $grid->addRowGP();
         $ocuppiedColumns = 0;
         foreach (Current::Module()->getPlaceholders() as $placeholder) {
             if (!\in_array($placeholder->getPlaceholderId(), \array_keys($this->WidgetsDefinition))) {
@@ -373,15 +375,14 @@ class Container extends Bootstrap3\Grid
                 $column->setId($placeholder->getPlaceholderId());
                 $column->addClass("placeholder");
                 $ocuppiedColumns += $placeholder->getColumnSize();
-                if ($ocuppiedColumns > 12) {
-                    $row = $grid->addRowGP();
-                    $row->addContent($column);
-                    $ocuppiedColumns = 0;
-                } else {
-                    if ($row === null) {
+                switch (true)
+                {
+                    case ($ocuppiedColumns > 12):
                         $row = $grid->addRowGP();
-                    }
-                    $row->addContent($column);
+                        $ocuppiedColumns = $placeholder->getColumnSize();
+                    default:
+                        $row->addContent($column);
+                        break;
                 }
             }
         }

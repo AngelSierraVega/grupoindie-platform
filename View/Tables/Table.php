@@ -7,7 +7,7 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0C.F0
+ * @version 0C.FC
  * @since 18-11-04
  */
 
@@ -87,11 +87,22 @@ class Table extends \GIndie\ScriptGenerator\Dashboard\Tables\Table
     private $showFooter;
 
     /**
+     *
+     * @var array|\GIndie\Platform\Model\Record\Command
+     * @since 09-03-21
+     * @edit 19-03-27
+     * - Use of \GIndie\Platform\Model\Record\Command
+     */
+    protected $recordCommands;
+
+    /**
      * Construye una tabla HTML con funcionalidad de DataTable.
      * @param \GIndie\Platform\Model\Table  $table
      * @param boolean $selectable
      * @param string|null $selectedId
      * @since GIP.00.01
+     * @edit 19-03-27
+     * - Use of \GIndie\Platform\Model\Record\Command
      */
     public function __construct($classname, $showFooter = false)
     {
@@ -108,18 +119,45 @@ class Table extends \GIndie\ScriptGenerator\Dashboard\Tables\Table
         $this->recordInstance = $classname::instance();
         $this->showFooter = $showFooter;
         $this->dprRecordClass = $classname;
-        if (\GIndie\Platform\Current::hasRole($this->recordInstance->getValidRolesFor("gip-create"))) {
-            $this->dprCreate = true;
+        $this->recordCommands = [];
+        foreach ($classname::commands() as $idCommand => $objCommand) {
+            switch (true)
+            {
+                case ($idCommand == "gip-create"):
+                    break;
+                case \is_null($this->recordInstance->getValidRolesFor($idCommand)):
+                case \GIndie\Platform\Current::hasRole($this->recordInstance->getValidRolesFor($idCommand)):
+                    $this->recordCommands[] = $objCommand;
+                    break;
+                default:
+                    break;
+            }
+//            var_dump($idCommand);
+//            var_dump($objCommand);
+//            var_dump($this->recordInstance->getValidRolesFor($idCommand));
+//            if (\GIndie\Platform\Current::hasRole($this->recordInstance->getValidRolesFor($idCommand))) {
+//                if ($idCommand != "gip-create") {
+//                    $this->recordCommands[] = $objCommand;
+//                }
+//
+////                $this->dprCreate = true;
+//            }
         }
-        if (\GIndie\Platform\Current::hasRole($this->recordInstance->getValidRolesFor("gip-edit"))) {
-            $this->dprEdit = true;
-        }
-        if (\GIndie\Platform\Current::hasRole($this->recordInstance->getValidRolesFor("gip-delete"))) {
-            $this->dprDelete = true;
-        }
-        if (\GIndie\Platform\Current::hasRole($this->recordInstance->getValidRolesFor("gip-state"))) {
-            $this->dprState = true;
-        }
+//        var_dump($this->recordCommands);
+//        var_dump($classname::commands());
+//        var_dump($this->recordInstance->commands());
+//        if (\GIndie\Platform\Current::hasRole($this->recordInstance->getValidRolesFor("gip-create"))) {
+//            $this->dprCreate = true;
+//        }
+//        if (\GIndie\Platform\Current::hasRole($this->recordInstance->getValidRolesFor("gip-edit"))) {
+//            $this->dprEdit = true;
+//        }
+//        if (\GIndie\Platform\Current::hasRole($this->recordInstance->getValidRolesFor("gip-delete"))) {
+//            $this->dprDelete = true;
+//        }
+//        if (\GIndie\Platform\Current::hasRole($this->recordInstance->getValidRolesFor("gip-state"))) {
+//            $this->dprState = true;
+//        }
         $this->pkAttribute = $classname::PRIMARY_KEY;
         $this->addClass("display table-bordered");
         $this->setId(\GIndie\Platform\Security::tokenizeSecure(static::class));
@@ -154,32 +192,32 @@ class Table extends \GIndie\ScriptGenerator\Dashboard\Tables\Table
         }
         $this->addContent($this->tableContent());
         return true;
-        $select = $this->recordInstance->sttmtSelect($selectors);
-        foreach ($conditions as $condition) {
-            switch (true)
-            {
-                case \is_array($condition):
-                    $expr1 = \array_keys($condition)[0];
-                    $expr2 = \array_values($condition)[0];
-                    $select->addConditionEquals($expr1, $expr2);
-                    break;
-                default:
-                    $select->addCondition($condition);
-                    break;
-            }
-        }
-
-        if ($this->recordInstance->groupBy() !== null) {
-            $select->addGroupBy($this->recordInstance->groupBy(), true);
-        }
-        $databaseConnection = \GIndie\Platform\Current::Connection();
-        $result = $databaseConnection->query($select);
-        $this->queryRows = [];
-        while ($row = $result->fetch_assoc()) {
-            $tmpInstance = $this->recordInstance;
-            $this->queryRows[$row[$tmpInstance::PRIMARY_KEY]] = $row;
-        }
-        $this->addContent($this->tableContent());
+//        $select = $this->recordInstance->sttmtSelect($selectors);
+//        foreach ($conditions as $condition) {
+//            switch (true)
+//            {
+//                case \is_array($condition):
+//                    $expr1 = \array_keys($condition)[0];
+//                    $expr2 = \array_values($condition)[0];
+//                    $select->addConditionEquals($expr1, $expr2);
+//                    break;
+//                default:
+//                    $select->addCondition($condition);
+//                    break;
+//            }
+//        }
+//
+//        if ($this->recordInstance->groupBy() !== null) {
+//            $select->addGroupBy($this->recordInstance->groupBy(), true);
+//        }
+//        $databaseConnection = \GIndie\Platform\Current::Connection();
+//        $result = $databaseConnection->query($select);
+//        $this->queryRows = [];
+//        while ($row = $result->fetch_assoc()) {
+//            $tmpInstance = $this->recordInstance;
+//            $this->queryRows[$row[$tmpInstance::PRIMARY_KEY]] = $row;
+//        }
+//        $this->addContent($this->tableContent());
     }
 
     /**
@@ -209,13 +247,20 @@ class Table extends \GIndie\ScriptGenerator\Dashboard\Tables\Table
      */
     private $queryRows;
 
+    /**
+     * 
+     * @return boolean
+     * @edit 19-03-21
+     * - Use of $recordCommands
+     */
     private function isEditable()
     {
+        return (\count($this->recordCommands) > 0);
         //if ($this->dprCreate || $this->dprEdit || $this->dprState || $this->dprDelete) {
-        if ($this->dprEdit || $this->dprState || $this->dprDelete) {
-            return true;
-        }
-        return false;
+//        if ($this->dprEdit || $this->dprState || $this->dprDelete) {
+//            return true;
+//        }
+//        return false;
     }
 
     /**
@@ -264,20 +309,54 @@ class Table extends \GIndie\ScriptGenerator\Dashboard\Tables\Table
         return \join(",", $arrayTmp);
     }
 
+    /**
+     * 
+     * @param type $rowId
+     * @return \GIndie\ScriptGenerator\HTML5\Category\StylesSemantics\Div
+     * @todo Use inner var
+     * @edit 19-03-21
+     */
     protected function _btnGroup($rowId)
     {
         $bntGroup = new StylesSemantics\Div("", ["class" => "btn-group btn-group-xs"]);
-        if ($this->dprDelete) {
-//            $button = Widget\Buttons::CustomDanger(Icons::Delete(),
-//                                                   "form-delete", $rowId, \TRUE,
-//                                                   $this->dprRecordClass);
-            $button = Widget\Buttons::Delete($this->dprRecordClass, $rowId);
+        foreach ($this->recordCommands as $command) {
+            switch ($command->getCommandId())
+            {
+                case "gip-edit":
+                    $gipAction = "form-edit";
+                    break;
+                case "gip-delete":
+                    $gipAction = "form-delete";
+                    break;
+//                case "gip-edit":
+//                    $gipAction = "form-edit";
+//                    break;
+                default:
+                    $gipAction = $command->getCommandId();
+                    break;
+            }
+            $context = $command->getContext();
+            $icon = $command->getIcon();
+
+            $gipActionId = $rowId;
+            $gipModal = $command->getSize();
+            $gipClass = $command->getExecutableClassname();
+//            $gipSelectedId = "gip-selected-id";
+            $button = Widget\Buttons::Custom($context, $icon, $gipAction, $gipActionId, $gipModal,
+                    $gipClass);
             $bntGroup->addContent($button);
         }
-        if ($this->dprEdit) {
-            $button = Widget\Buttons::Edit($this->dprRecordClass, $rowId);
-            $bntGroup->addContent($button);
-        }
+//        if ($this->dprDelete) {
+////            $button = Widget\Buttons::CustomDanger(Icons::Delete(),
+////                                                   "form-delete", $rowId, \TRUE,
+////                                                   $this->dprRecordClass);
+//            $button = Widget\Buttons::Delete($this->dprRecordClass, $rowId);
+//            $bntGroup->addContent($button);
+//        }
+//        if ($this->dprEdit) {
+//            $button = Widget\Buttons::Edit($this->dprRecordClass, $rowId);
+//            $bntGroup->addContent($button);
+//        }
         return $bntGroup;
     }
 
@@ -300,38 +379,39 @@ class Table extends \GIndie\ScriptGenerator\Dashboard\Tables\Table
         <thead> 
             <tr> 
                 <th>#</th> 
-        <?php
-        if ($this->isEditable()) {
-            ?>
+                <?php
+                if ($this->isEditable()) {
+                    ?>
                     <th>Acciones</th>
                     <?php
                 }
                 foreach ($this->recordInstance->getAttributesDisplay() as $colName) {
                     ?>
                     <th>
-                    <?=
-                    //if()
-                    $this->recordInstance->getLabelOf($colName)
-                    //$colName
-                    ?></th>
-                        <?php
-                    }
-                    ?> 
+                        <?=
+                        //if()
+                        $this->recordInstance->getLabelOf($colName)
+                        //$colName
+                        ?></th>
+                    <?php
+                }
+                ?> 
             </tr> 
         </thead> 
         <tbody> 
-        <?php
-        $inc = 0;
-        $totales = [];
+            <?php
+            $inc = 0;
+            $totales = [];
 //        $total = 0;
-        foreach ($this->queryRows as $key => $row) {
-            $inc++;
-            ?>
+//        var_dump($this->queryRows);
+            foreach ($this->queryRows as $key => $row) {
+                $inc++;
+                ?>
                 <tr <?= strcmp($selectedId, $row[$this->pkAttribute]) == 0 ? 'class="selected"' : "" ?> gip-record="<?= $row[$this->pkAttribute]; ?>"> 
                     <th scope="row"><?= $inc; ?></th>
-            <?php
-            if ($this->isEditable()) {
-                ?>
+                    <?php
+                    if ($this->isEditable()) {
+                        ?>
                         <td class="text-center"><?= $this->_btnGroup($row[$this->pkAttribute]); ?></td>
                         <?php
                     }
@@ -341,36 +421,36 @@ class Table extends \GIndie\ScriptGenerator\Dashboard\Tables\Table
                         $this->recordInstance->setValueOf($columnName, $row[$columnName]);
                         ?>
                         <td >
-                        <?php
-                        switch ($column->getType())
-                        {
-                            case \GIndie\Platform\Model\Attribute::TYPE_CURRENCY:
-                                if (!isset($totales[$columnName])) {
-                                    $totales[$columnName] = 0;
-                                }
-                                $totales[$columnName] += \floatval($row[$columnName]);
-//                                $total = $total + \floatval($row[$columnName]);
-                            default:
-                                echo $this->recordInstance->getDisplayOf($columnName);
-                        }
-                        ?></td>
                             <?php
-                        }
-                        ?> 
+                            switch ($column->getType())
+                            {
+                                case \GIndie\Platform\Model\Attribute::TYPE_CURRENCY:
+                                    if (!isset($totales[$columnName])) {
+                                        $totales[$columnName] = 0;
+                                    }
+                                    $totales[$columnName] += \floatval($row[$columnName]);
+//                                $total = $total + \floatval($row[$columnName]);
+                                default:
+                                    echo $this->recordInstance->getDisplayOf($columnName);
+                            }
+                            ?></td>
+                        <?php
+                    }
+                    ?> 
                 </tr> 
-                    <?php
-                }
-                ?>
+                <?php
+            }
+            ?>
         </tbody> 
-            <?php
-            if ($this->showFooter) {
-                ?>
+        <?php
+        if ($this->showFooter) {
+            ?>
             <tfoot>
                 <tr>
                     <td></td>
-            <?php
-            if ($this->isEditable()) {
-                ?>
+                    <?php
+                    if ($this->isEditable()) {
+                        ?>
                         <td></td>
                         <?php
                     }
@@ -378,39 +458,38 @@ class Table extends \GIndie\ScriptGenerator\Dashboard\Tables\Table
                         $columnTmp = $this->recordInstance->getAttribute($colName);
                         ?>
                         <td>
-                        <?php
-                        switch ($columnTmp->getType())
-                        {
+                            <?php
+                            switch ($columnTmp->getType())
+                            {
 
-                            case \GIndie\Platform\Model\Attribute::TYPE_CURRENCY:
-                                if (isset($totales[$colName])) {
-                                    echo Moneda::contable($totales[$colName]);
-                                }
+                                case \GIndie\Platform\Model\Attribute::TYPE_CURRENCY:
+                                    if (isset($totales[$colName])) {
+                                        echo Moneda::contable($totales[$colName]);
+                                    }
 //                                if (isset($total)) {
 //                                        $total = bcadd(\strval($total), 0, 2);
 //                                    echo Moneda::contable($total);
 //                                        echo isset($total) ? "$" . $total : "";
 //                                }
-                                break;
+                                    break;
 
-                            default:
-                                echo "";
-                                break;
-                        }
-                        ?>
+                                default:
+                                    echo "";
+                                    break;
+                            }
+                            ?>
                         </td>
-                            <?php
-                        }
-                        ?> 
+                        <?php
+                    }
+                    ?> 
                 </tr>
             </tfoot>
-                    <?php
-                }
-
-                $str = ob_get_contents();
-                ob_end_clean();
-                return $str;
-            }
-
+            <?php
         }
-        
+
+        $str = ob_get_contents();
+        ob_end_clean();
+        return $str;
+    }
+
+}

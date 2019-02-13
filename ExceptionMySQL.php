@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform
  *
- * @version 0C.C0
+ * @version 0C.D0
  */
 
 namespace GIndie\Platform;

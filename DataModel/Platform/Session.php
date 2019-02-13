@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0C.DA
+ * @version 0D.00
  * @since 18-08-27
  */
 

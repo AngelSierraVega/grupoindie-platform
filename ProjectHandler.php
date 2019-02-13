@@ -10,7 +10,7 @@ namespace GIndie\Platform;
  *
  * @package GIndie\Platform
  *
- * @version 0C.96
+ * @version 0C.A6
  * 
  * @edit 18-02-24
  * - Added code from GI-DBH
@@ -51,6 +51,14 @@ class ProjectHandler extends \GIndie\ProjectHandler\AbstractProjectHandler
         $rtnArray[\hexdec("0C.96")]["description"] = "Dynamic help";
         $rtnArray[\hexdec("0C.96")]["code"] = "DYNMC-HLP";
         $rtnArray[\hexdec("0C.96")]["threshold"] = "0C.96";
+        
+         /**
+         * 0C.A6: AREACLIE
+         */
+        $rtnArray[\hexdec("0C.A6")]["description"] = "Platform for GI-MPRSRL-AREACLIE";
+        $rtnArray[\hexdec("0C.A6")]["code"] = "AREACLIE";
+        $rtnArray[\hexdec("0C.A6")]["threshold"] = "0C.A6";
+        
         
         //Two
         $rtnArray[\hexdec("0D.00")]["description"] = "Platform for MMR-PRDL";

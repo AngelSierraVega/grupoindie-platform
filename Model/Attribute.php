@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\Model
  *
- * @version 0C.70
+ * @version 0C.80
  * @since 17-04-23
  * @todo Upgrade class
  */
@@ -22,6 +22,8 @@ namespace GIndie\Platform\Model;
  * Description of Attribute
  * @edit 18-10-28
  * - Created addInputAttribute(), setVirtualColmn()
+ * @edit 19-04-13
+ * - Added TYPE_FILE TYPE_COLOR
  */
 class Attribute //extends ColumnDefinition
 {
@@ -95,6 +97,16 @@ class Attribute //extends ColumnDefinition
      * @var int TYPE_LINK
      */
     const TYPE_LINK = 12;
+
+    /**
+     * @since 19-04-13
+     */
+    const TYPE_FILE = 13;
+
+    /**
+     * @since 19-04-13
+     */
+    const TYPE_COLOR = 14;
 
     /**
      * @version     GIP.00.03

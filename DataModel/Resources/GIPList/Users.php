@@ -8,18 +8,17 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0C.70
+ * @version DOING 00.80
  * @since 18-08-25
  */
 
 namespace GIndie\Platform\DataModel\Resources\GIPList;
 
 use GIndie\Platform\Model\ListSimple;
+use GIndie\Platform\DataModel\Platform\User;
 
 /**
- * Description of Users
- *
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @todo Deprecate class. Cannot surpass version 00.80
  */
 class Users extends ListSimple
 {
@@ -27,10 +26,12 @@ class Users extends ListSimple
     /**
      * Modelo de datos relacionado con la lista.
      * @since 18-08-25
+     * @edit 19-02-15
+     * - Use \GIndie\Platform\DataModel\Platform\User
      */
     public static function relatedRecord()
     {
-        return \MunicipioMineralReforma\Predial\ModeloDatos\Plataforma\Usuario::class;
+        return User::class;
     }
 
     /**

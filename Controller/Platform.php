@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\Controller\Instance
  * 
- * @version 0C.A4
+ * @version 0C.F8
  * @since 17-05-22
  */
 
@@ -105,6 +105,7 @@ abstract class Platform
      * @edit 18-11-05
      * - Removed use of deprecated libs
      * - Removed Straffsa\SII dependancy
+     * @edit 19-04-08
      */
     protected function load($id)
     {
@@ -112,9 +113,6 @@ abstract class Platform
         {
             case "loginDPR":
                 return new \GIndie\Platform\View\Login();
-//            case "document":
-//            case "bodyDPR":
-//                
             case "document":
                 $document = new \GIndie\Platform\View\Document();
                 if (\GIndie\Platform\Current::User()->getValueOf("password_su") !== \NULL) {
@@ -122,13 +120,15 @@ abstract class Platform
                     $document->getGIPModal()->removeContent();
                     switch (\get_class(Current::Instance()))
                     {
+                        case "GIndie\Empresarial\AreaClientes\Controlador":
                         case "MunicipioMineralReforma\Predial":
                         case "GIndie\FrameworkInstance\ProjectHandler\Instance":
-                            $record = \MunicipioMineralReforma\Predial\ModeloDatos\Plataforma\Compuesto\UsuarioContrasenaFinal::findById(\GIndie\Platform\Current::User()->getId());
+//                            $record = \MunicipioMineralReforma\Predial\ModeloDatos\Plataforma\Compuesto\UsuarioContrasenaFinal::findById(\GIndie\Platform\Current::User()->getId());
+                            $record = \GIndie\Platform\DataModel\Platform\UserFinalPassword::findById(\GIndie\Platform\Current::User()->getId());
                             $form = new \GIndie\Platform\View\Form($record);
                             $modalContent = View\Modal\Content::warning("Necesita definir contraseña de usuario final", $form);
                             $form->setAttribute("gip-action", "gip-edit");
-                            $form->setAttribute("gip-action-class", \MunicipioMineralReforma\Predial\ModeloDatos\Plataforma\Compuesto\UsuarioContrasenaFinal::class);
+                            $form->setAttribute("gip-action-class", \GIndie\Platform\DataModel\Platform\UserFinalPassword::class);
                             break;
                         default:
                             \trigger_error("To handle single_use for class " . \get_class(Current::Instance()), \E_USER_ERROR);
@@ -143,11 +143,8 @@ abstract class Platform
                 }
                 $document->setContainer($this->load("container"));
                 return $document;
-//            case "bodyDPR":
-//                return $document->getBody();
             case "container":
                 return $this->cnstrctContainer();
-                
             default:
                 trigger_error("Unable to run load: gip-action-id={$id}", E_USER_ERROR);
                 throw new \Exception("Unable to run.");

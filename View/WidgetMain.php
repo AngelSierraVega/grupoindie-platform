@@ -35,12 +35,14 @@ class WidgetMain extends Widget
      * @param string $title
      * @edit 18-10-22
      * - Default color: $COLOR_PRIMARY
+     * @edit 19-02-01
+     * - Create heading-body in widget
      */
     public function __construct(\GIndie\Platform\Model\Record $record, $title = \NULL)
     {
         $this->_record = $record;
         //$record::ICON
-        parent::__construct($title !== \NULL ? $title : $record::NAME, \FALSE, $this->tmpContent(), true);
+        parent::__construct($title !== \NULL ? $title : $record::NAME, true, $this->tmpContent(), true);
         $this->setContext(static::$COLOR_PRIMARY);
         $this->addButtonHeading(Buttons::Reload(\urlencode(\get_class($record)), $record->getId()));
         if (\GIndie\Platform\Current::hasRole($record->getValidRolesFor("gip-edit"))) {

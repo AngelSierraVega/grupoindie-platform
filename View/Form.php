@@ -7,7 +7,7 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0D.00
+ * @version 0D.80
  * @since 17-04-28
  */
 
@@ -48,6 +48,8 @@ class Form extends HTML5\Category\FormInput\Form
     public function __construct(Record $record = \NULL, $uniqueToken = \TRUE, $customTarget = \FALSE)
     {
         parent::__construct();
+//        $this->addClass("multipart/form-data");
+        $this->setAttribute("enctype", "multipart/form-data");
         $this->_record = $record;
         $this->setId(\GIndie\Platform\Security::tokenize(\microtime(\TRUE) . \mt_rand()));
 

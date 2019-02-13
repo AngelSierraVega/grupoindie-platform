@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0C.DA
+ * @version 0D.00
  * @since 18-08-25
  */
 
@@ -78,6 +78,7 @@ class User extends AbstractTable
          */
         static::attribute("key")->setLabel("Llave");
         static::attribute("key")->excludeFromDisplay()->excludeFromForm();
+        static::attribute("key")->excludeFromForm();
         /**
          * Attribute user
          */

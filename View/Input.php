@@ -7,7 +7,7 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0C.80
+ * @version 0D.00
  * @since 
  */
 
@@ -20,6 +20,8 @@ use GIndie\Platform\Model\Attribute;
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
  * @edit 18-03-22
+ * @edit 19-04-13
+ * - Added TYPE_COLOR
  */
 class Input
 {
@@ -34,6 +36,8 @@ class Input
      *      - Se actualizó el marcado para input checkbox
      * @edit 18-12-11
      * - Added change trigger on enum
+     * @edit 19-02-20
+     * - Removed note DIRECT visualization
      */
     public static function constructFromAttribute(\GIndie\Platform\Model\Attribute $attribute, $value, $recordId)
     {
@@ -129,7 +133,7 @@ class Input
                             setTimeout(function () {
                                 $("#<?= $attribute->getName(); ?>").change();
                             }, 50);
-                            //$("#<?= ""; //$attribute->getName();              ?>").change();
+                            //$("#<?= ""; //$attribute->getName();                  ?>").change();
                         });
                     </script>
                     <?php
@@ -150,7 +154,23 @@ class Input
                 $form_element = "<input class='form-control' type='number' id='{$attribute->getName()}' name='{$attribute->getName()}' value='" .
                     $value . "' " . $required . $restrictions . " >";
                 break;
+//            case Attribute::TYPE_FILE:
+//                $form_element = new \GIndie\ScriptGenerator\HTML5\Category\FormInput\Input\File();
+//                $form_element->addClass("form-control");
+//                $form_element->setId("fileToUpload");
+//                $form_element->setName("fileToUpload");
+//                $form_element = '<input type="hidden" name="MAX_FILE_SIZE" value="30000" />' . $form_element;
+//                break;
+            case Attribute::TYPE_COLOR:
+                $form_element = new \GIndie\ScriptGenerator\HTML5\Category\FormInput\Input\Color();
+                $form_element->addClass("form-control");
+                $form_element->setId($attribute->getName());
+                $form_element->setName($attribute->getName());
+                $form_element->setValue($value);
+                break;
             default:
+                \trigger_error("Unrecognized type " . $attribute->getType() . " using text",
+                    \E_USER_WARNING);
                 $form_element = "<input class='form-control' type='text' id='{$attribute->getName()}' name='{$attribute->getName()}' value='" .
                     $value . "' " . $required . " >";
                 break;
@@ -177,9 +197,9 @@ class Input
                 }
                 $rtnStr .= $attribute->getLabel() . "</label>";
                 $rtnStr .= $form_element;
-                if (!\is_null($attribute->getHelp())) {
-                    $rtnStr .= "<i>Nota: " . $attribute->getHelp() . "</i>";
-                }
+//                if (!\is_null($attribute->getHelp())) {
+//                    $rtnStr .= "<i>Nota: " . $attribute->getHelp() . "</i>";
+//                }
                 $rtnStr .= '</div>';
                 break;
         }
@@ -340,7 +360,7 @@ class Input
                     setTimeout(function () {
                         $("#<?= $attribute->getName(); ?>").change();
                     }, 50);
-                    //$("#<?= ""; //$attribute->getName();              ?>").change();
+                    //$("#<?= ""; //$attribute->getName();                  ?>").change();
                 });
             </script>
             <?php

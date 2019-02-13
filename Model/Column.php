@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform
  *
- * @version 0C.70
+ * @version DEPRECATED
  * @since 17-04-23
  * @todo Upgrade class
  */
@@ -17,6 +17,8 @@ namespace GIndie\Platform\Model;
 
 /**
  * Description of Attribute
+ * 
+ * @todo check deprecated
  * 
  * @edit 17-04-23
  */

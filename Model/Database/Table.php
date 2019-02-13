@@ -25,4 +25,5 @@ use GIndie\Platform\Current;
 abstract class Table extends \GIndie\Platform\Model\Table
 {
     
+    
 }

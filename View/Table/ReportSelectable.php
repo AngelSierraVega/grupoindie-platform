@@ -7,7 +7,7 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0C.00
+ * @version 0C.80
  * @since 18-03-30
  */
 

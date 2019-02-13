@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\Controller\Instance
  *
- * @version 0D.00
+ * @version 0D.10
  * @since 18-06-24
  */
 

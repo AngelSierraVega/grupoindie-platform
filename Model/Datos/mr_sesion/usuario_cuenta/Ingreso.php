@@ -6,7 +6,7 @@
  *
  * @package GIndie\Platform\Model\Datos
  *
- * @version 0C.00
+ * @version DEPRECATED
  * @todo Move class into DataModel
  */
 

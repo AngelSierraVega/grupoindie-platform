@@ -56,9 +56,11 @@ class Record extends \GIndie\Platform\View\Widget
         if (\GIndie\Platform\Current::hasRole($record->getValidRolesFor("gip-delete"))) {
             $this->addButtonDelete(\urlencode(\get_class($record)), $record->getId());
         }
-        if (\GIndie\Platform\Current::hasRole($record->getValidRolesFor("gip-state"))) {
-            $this->addButtonState($record->getState(), \urlencode(\get_class($record)),
-                $record->getId());
+        if (!\is_null($record::STATE_ATTRIBUTE)) {
+            if (\GIndie\Platform\Current::hasRole($record->getValidRolesFor("gip-state"))) {
+                $this->addButtonState($record->getState(), \urlencode(\get_class($record)),
+                    $record->getId());
+            }
         }
     }
 
