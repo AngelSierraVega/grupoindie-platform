@@ -10,7 +10,7 @@ namespace GIndie\Platform;
  *
  * @package GIndie\Platform
  *
- * @version 0C.A6
+ * @version 0C.A7
  * 
  * @edit 18-02-24
  * - Added code from GI-DBH
@@ -58,6 +58,13 @@ class ProjectHandler extends \GIndie\ProjectHandler\AbstractProjectHandler
         $rtnArray[\hexdec("0C.A6")]["description"] = "Platform for GI-MPRSRL-AREACLIE";
         $rtnArray[\hexdec("0C.A6")]["code"] = "AREACLIE";
         $rtnArray[\hexdec("0C.A6")]["threshold"] = "0C.A6";
+        
+        /**
+         * 0C.A7: 191104_AREACLIE
+         */
+        $rtnArray[\hexdec("0C.A7")]["description"] = "2019-11-04 Platform for GI-MPRSRL-AREACLIE";
+        $rtnArray[\hexdec("0C.A7")]["code"] = "191104_AREACLIE";
+        $rtnArray[\hexdec("0C.A7")]["threshold"] = "0C.A7";
         
         
         //Two

@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\Components\Example
  *
- * @version 0B.FF
+ * @version 0C.A7
  * @since 18-11-29
  */
 
@@ -29,6 +29,7 @@ class Instance extends \GIndie\Platform\Instance
 
     /**
      * @since 18-11-29
+     * @edit 19-11-04
      */
     public function config()
     {
@@ -36,6 +37,7 @@ class Instance extends \GIndie\Platform\Instance
         $this->setModule(Module\M02Searchs::class);
         $this->setModule(Module\M03Lists::class);
         $this->setModule(Module\M04Reports::class);
+        $this->setModule(Module\FormInputExample::class);
     }
 
 }

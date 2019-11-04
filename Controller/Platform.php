@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\Controller\Instance
  * 
- * @version 0C.F8
+ * @version 0C.FB
  * @since 17-05-22
  */
 
@@ -106,6 +106,10 @@ abstract class Platform
      * - Removed use of deprecated libs
      * - Removed Straffsa\SII dependancy
      * @edit 19-04-08
+     * @edit 19-06-10
+     * - Use of Node->removeContents()
+     * @edit 19-07-25
+     * - Default use of password
      */
     protected function load($id)
     {
@@ -117,12 +121,13 @@ abstract class Platform
                 $document = new \GIndie\Platform\View\Document();
                 if (\GIndie\Platform\Current::User()->getValueOf("password_su") !== \NULL) {
                     $document->addScriptOnDocumentReady("$('#gip-modal').modal('show');");
-                    $document->getGIPModal()->removeContent();
+                    $document->getGIPModal()->removeContents();
                     switch (\get_class(Current::Instance()))
                     {
                         case "GIndie\Empresarial\AreaClientes\Controlador":
                         case "MunicipioMineralReforma\Predial":
                         case "GIndie\FrameworkInstance\ProjectHandler\Instance":
+                        default:
 //                            $record = \MunicipioMineralReforma\Predial\ModeloDatos\Plataforma\Compuesto\UsuarioContrasenaFinal::findById(\GIndie\Platform\Current::User()->getId());
                             $record = \GIndie\Platform\DataModel\Platform\UserFinalPassword::findById(\GIndie\Platform\Current::User()->getId());
                             $form = new \GIndie\Platform\View\Form($record);
@@ -130,9 +135,9 @@ abstract class Platform
                             $form->setAttribute("gip-action", "gip-edit");
                             $form->setAttribute("gip-action-class", \GIndie\Platform\DataModel\Platform\UserFinalPassword::class);
                             break;
-                        default:
-                            \trigger_error("To handle single_use for class " . \get_class(Current::Instance()), \E_USER_ERROR);
-                            break;
+//                        default:
+//                            \trigger_error("To handle single_use for class " . \get_class(Current::Instance()), \E_USER_ERROR);
+//                            break;
                     }
                     $form->setAttribute("gip-action-id", \GIndie\Platform\Current::User()->getId());
                     $btn = new Bootstrap3\Component\Button("Definir contraseña", Bootstrap3\Component\Button::TYPE_SUBMIT);

@@ -7,7 +7,7 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0D.40
+ * @version 0D.80
  * 
  * @todo
  * - Funcional class with node
@@ -180,10 +180,12 @@ class Container extends Bootstrap3\Grid
      * - Moved divs to tmpContent()
      * @edit 18-12-07
      * - Added content from cnstrctCustomPlaceholders()
+     * @edit 19-05-15
+     * - Use removeContents()
      */
     public function __toString()
     {
-        $this->removeContent();
+        $this->removeContents();
         $this->addContent($this->tmpContent());
         $this->addContent($this->cnstrctCustomPlaceholders());
         return parent::__toString();
