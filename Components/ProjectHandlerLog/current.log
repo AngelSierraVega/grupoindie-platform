@@ -1,9 +1,12 @@
 19-11-04 a 19-??-??
 
+19-11-06
+- Revisión de modelo de datos para reasignar contraseña única.
+
 -------------------------------PROJECT---------------------------------|
 \GIndie\Platform
-19-11-04 v:0C.A7 LOC:18652
-ABS(13) CLA(117) INT(6) SCR(1) TRA(10) LOG(0) NDF(0) 
+19-11-06 v:0C.A8 LOC:18705
+ABS(13) CLA(118) INT(6) SCR(1) TRA(10) LOG(0) NDF(0) 
 -------------------------------VERSIONS--------------------------------|
 [0A.00] AlphaCero....| Functional project
 [0B.00] BetaCero.....| Main funcionality
@@ -85,6 +88,7 @@ ABS(13) CLA(117) INT(6) SCR(1) TRA(10) LOG(0) NDF(0)
 [CLA] DataModel\Resources\GIPTable\UserRole.php..................|DOING|
 [CLA] DataModel\TmpDatabasePredial.php...........................|DPRCT|
 [CLA] DataModel\Platform\UserFinalPassword.php...................|0D.00|
+[CLA] DataModel\Platform\UserResetPassword.php...................|0D.00|
 [CLA] Model\Attribute.php........................................|0C.80|
 [CLA] Model\Database\Connection\SessionHandler.php...............|0C.10|
 [CLA] Model\Database\Connection\SystemAdministrator.php..........|0C.10|
@@ -165,4 +169,4 @@ ABS(13) CLA(117) INT(6) SCR(1) TRA(10) LOG(0) NDF(0)
 [CLA] View\Widgets\Table.php.....................................|0C.A7|
 [TRA] WidgetsDefinition.php......................................|0D.00|
 -----------------------------------------------------------------------|
- \GIndie\Platform v 0C.A7
+ \GIndie\Platform v 0C.A8

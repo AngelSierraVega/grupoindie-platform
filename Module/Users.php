@@ -70,7 +70,7 @@ class Users extends \GIndie\Platform\Controller\Module
         $this->placeholder("i-iii-ii")->typeRecordDynamic(\GIndie\Platform\DataModel\Platform\User::class);
         $this->placeholder("i-iii-ii")->addButton(Buttons::$COLOR_PRIMARY, "Contraseña",
             "form-reestablecer-contraseña", "gip-selected-id", true,
-            urlencode(Compuesto\UsuarioContrasena::class));
+            urlencode(\GIndie\Platform\DataModel\Platform\UserResetPassword::class));
         $this->placeholder("i-iii-ii")->addButton(Buttons::$COLOR_PRIMARY, "Roles",
             "mr-asignar-rol", "gip-selected-id", \TRUE,
             urlencode(\GIndie\Platform\DataModel\Platform\UserRole::class));
