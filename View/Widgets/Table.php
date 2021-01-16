@@ -4,8 +4,9 @@
  * GI-Platform-DVLP - Table
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
- *
+ * @copyright (CC) 2020 Angel Sierra Vega. Grupo INDIE.
+ * @license file://LICENSE
+ * 
  * @package GIndie\Platform\View
  *
  * @version 0C.A7

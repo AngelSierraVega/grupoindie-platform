@@ -1,11 +1,11 @@
 <?php
 
-
 /**
  * GI-Platform-DVLP - ListSimple
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ * @copyright (CC) 2020 Angel Sierra Vega. Grupo INDIE.
+ * @license file://LICENSE
  *
  * @package GIndie\Platform\Model
  *
@@ -51,7 +51,8 @@ abstract class ListSimple implements ListSimpleINT
         return $_record::PRIMARY_KEY;
     }
 
-    public static function getValidRolesFor($action){
+    public static function getValidRolesFor($action)
+    {
         $_record = static::RelatedRecord();
         return $_record::getValidRolesFor($action);
     }
@@ -71,23 +72,26 @@ abstract class ListSimple implements ListSimpleINT
     private $_relatedRecordClass;
 
     /**
+     * 
+     * @param array $conditions
+     * @return type
+     * @edit 19-12-24
      */
-    public function __construct($conditions = [])
+    public function __construct($conditions = [], $params = [])
     {
-        $_recordClass = static::RelatedRecord();
+        //$_recordClass = static::RelatedRecord();
         $this->_relatedRecordClass = static::RelatedRecord();
         if (\is_string($conditions)) {
             if ($conditions == "gip-selected-id") {
                 if (isset($_POST["gip-selected-id"])) {
                     $conditions = [[static::DisplayKey() => $_POST["gip-selected-id"]]];
-                    return $this->readFromDB($conditions);
+                    return $this->readFromDB($conditions, $params);
                 } else {
                     
                 }
-                
             } else {
                 $conditions = [[static::PrimaryKey() => $conditions]];
-                return $this->readFromDB($conditions);
+                return $this->readFromDB($conditions, $params);
             }
         } else {
             try {
@@ -151,7 +155,6 @@ abstract class ListSimple implements ListSimpleINT
         }
         return \FALSE;
     }
-
 
     /**
      * @return      \GIndie\Platform\Model\Table\Column

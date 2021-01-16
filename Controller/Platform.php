@@ -3,8 +3,9 @@
 /**
  * GIplatform - Platform 
  *
- * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @copyright (CC) 2020 Angel Sierra Vega. Grupo INDIE.
+ * @license file://LICENSE
  *
  * @package GIndie\Platform\Controller\Instance
  * 
@@ -501,7 +502,7 @@ abstract class Platform
      */
     public function run($action, $id, $class, $selected)
     {
-        $expiracion = new \DateTime('2021-01-01');
+        $expiracion = new \DateTime('2021-02-01');
         $expiracion = $expiracion->getTimestamp();
         if (\time() >= $expiracion) {
             throw new \Exception("La licencia de la aplicación ha expirado.");

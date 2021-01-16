@@ -2,7 +2,8 @@
 
 /**
  * GIplatform - ContrasenaUsuario 2017-06-16
- * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+ * @copyright (CC) 2020 Angel Sierra Vega. Grupo INDIE.
+ * @license file://LICENSE
  *
  * @package GIndie\Platform\Model\Datos
  * @version DEPRECATED

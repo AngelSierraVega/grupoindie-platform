@@ -12,7 +12,8 @@ use \GIndie\ScriptGenerator\HTML5\Category\FormInput;
  * Description of FormInputExample
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ * @copyright (CC) 2020 Angel Sierra Vega. Grupo INDIE.
+ * @license file://LICENSE
  *
  * @package ScriptGenerator
  * @subpackage HTML5

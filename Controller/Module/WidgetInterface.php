@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @copyright (C) 2017 Angel Sierra Vega. Grupo INDIE.
+ * @copyright (CC) 2020 Angel Sierra Vega. Grupo INDIE.
+ * @license file://LICENSE
  *
  * @package GIndie\Platform\Controller\Instance\Module
  *

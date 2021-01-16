@@ -1,10 +1,11 @@
 <?php
 
 /**
- * MMR-PRDL0-DVLP - ModeloDatos
+ * ModeloDatos
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @copyright (c) 2018 Dirección de Informática. Municipio Mineral de la Reforma.
+ *  @copyright (CC) 2020 Angel Sierra Vega. Grupo INDIE.
+ * @license file://LICENSE
  *
  * @package MunicipioMineralReforma\Predial\Modulo\Sistema
  *

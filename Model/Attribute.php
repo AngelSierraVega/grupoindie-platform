@@ -4,7 +4,8 @@
  * GI-Platform-DVLP - Attribute
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ * @copyright (CC) 2020 Angel Sierra Vega. Grupo INDIE.
+ * @license file://LICENSE
  *
  * @package GIndie\Platform\Model
  *
@@ -295,6 +296,35 @@ class Attribute //extends ColumnDefinition
         return $this->_notNull;
     }
 
+    /**
+     *
+     * @var string
+     * @since 19-12-26 
+     */
+    private $defaultValue;
+
+    /**
+     * 
+     * @param string $value
+     * @return \Self
+     * @since 19-12-26 
+     */
+    public function setDefaultValue($value)
+    {
+        $this->defaultValue = $value;
+        return $this;
+    }
+
+    /**
+     * 
+     * @return string|null
+     * @since 19-12-26 
+     */
+    public function getDefaultValue()
+    {
+        return $this->defaultValue;
+    }
+
     public function getRestrictions()
     {
         return $this->_restrictions;
@@ -418,6 +448,8 @@ class Attribute //extends ColumnDefinition
      * @param array $restrictions
      * @return $this
      * @edit 18-12-16
+     * @edit 19-12-24
+     * - Cannot remove subclass restriction
      */
     public function setTypeFK($listClass, array $restrictions = [])
     {

@@ -1,9 +1,8 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: dfkuro
+ * 
  * Date: 01/06/2017
- * Time: 01:57
+ * @license file://LICENSE
  */
 
 namespace GIndie\Platform\Model\Session;

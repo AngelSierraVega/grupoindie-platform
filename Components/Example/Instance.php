@@ -4,7 +4,8 @@
  * GI-Platform-DVLP - Instance
  *
  * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
- * @copyright (c) 2018 Angel Sierra Vega. Grupo INDIE.
+ * @copyright (CC) 2020 Angel Sierra Vega. Grupo INDIE.
+ * @license file://LICENSE
  *
  * @package GIndie\Platform\Components\Example
  *
@@ -25,7 +26,7 @@ class Instance extends \GIndie\Platform\Instance
      * Nombre del sistema.
      * @since 18-11-29
      */
-    const BRAND_NAME = "MMR-PRDL";
+    const BRAND_NAME = "INSTANCE EXAMPLE";
 
     /**
      * @since 18-11-29
