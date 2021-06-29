@@ -9,7 +9,7 @@
  *
  * @package GIndie\Platform\Controller\Instance
  * 
- * @version 0C.FB
+ * @version 0C.FC
  * @since 17-05-22
  */
 
@@ -212,7 +212,10 @@ abstract class Platform
                         $modalContent = View\Modal\Content::primary("Bitácora de actividades", $bitacora);
                         break;
                     default:
-                        \trigger_error("To handle log for class " . \get_class(Current::Instance()), \E_USER_ERROR);
+                        $bitacora = new View\Tables\Table(\GIndie\Platform\DataModel\Platform\LogUser::class);
+                        $bitacora->readFromDB(\GIndie\Platform\DataModel\Platform\LogUser::getSelectorsDisplay(), [$restrictions], ["ORDER BY timestamp DESC"]);
+                        $modalContent = View\Modal\Content::primary("Bitácora de actividades", $bitacora);
+//                        \trigger_error("To handle log for class " . \get_class(Current::Instance()), \E_USER_ERROR);
                         break;
                 }
                 return $modalContent;
@@ -284,6 +287,7 @@ abstract class Platform
             case "mr-asignar-caja-usuario":
             case "@selectRow":
             case "REQUEST-PHAR":
+            case "setController":
                 break;
             default:
                 $data = [];
@@ -502,11 +506,11 @@ abstract class Platform
      */
     public function run($action, $id, $class, $selected)
     {
-        $expiracion = new \DateTime('2021-02-01');
-        $expiracion = $expiracion->getTimestamp();
-        if (\time() >= $expiracion) {
-            throw new \Exception("La licencia de la aplicación ha expirado.");
-        }
+//        $expiracion = new \DateTime('2021-02-01');
+//        $expiracion = $expiracion->getTimestamp();
+//        if (\time() >= $expiracion) {
+//            throw new \Exception("La licencia de la aplicación ha expirado.");
+//        }
         switch ($action)
         {
             case "config-sesion":

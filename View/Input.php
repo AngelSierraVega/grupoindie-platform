@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0D.00
+ * @version 0D.10
  * @since 
  */
 
@@ -68,7 +68,14 @@ class Input
                 $form_element = static::Checkbox($attribute->getName(), $value);
                 break;
             case Attribute::TYPE_DATE:
-                $form_element = "<input class='form-control dateinputtext' type='text' id='{$attribute->getName()}' name='{$attribute->getName()}' value='" .
+                $form_element = "<input class='form-control' type='date' id='{$attribute->getName()}' name='{$attribute->getName()}' value='" .
+                    $value . "' " . $required . $restrictions . " >";
+                break;
+            case Attribute::TYPE_DATETIME:
+//                $value = \date("d/m/Y H:i:s", \strtotime($value)); 
+                $value = \date("Y-m-d\TH:i:s", \strtotime($value)); 
+//                $value
+                $form_element = "<input class='form-control' type='datetime-local' id='{$attribute->getName()}' name='{$attribute->getName()}' value='" .
                     $value . "' " . $required . $restrictions . " >";
                 break;
 

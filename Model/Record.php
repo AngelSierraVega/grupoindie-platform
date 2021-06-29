@@ -8,7 +8,7 @@
  *
  * @package GIndie\Platform\Model
  *
- * @version 0D.7A
+ * @version 0D.80
  * @since 17-04-23
  */
 
@@ -330,9 +330,13 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
                     static::attribute($attr)->setType(Attribute::TYPE_STRING);
                     break;
                 case DataType::DATATYPE_TIME:
-                case DataType::DATATYPE_DATE:
-                case DataType::DATATYPE_DATETIME:
                     static::attribute($attr)->setType(Attribute::TYPE_STRING);
+                    break;
+                case DataType::DATATYPE_DATETIME:
+                    static::attribute($attr)->setType(Attribute::TYPE_DATETIME);
+                    break;
+                case DataType::DATATYPE_DATE:
+                    static::attribute($attr)->setType(Attribute::TYPE_DATE);
                     break;
                 case DataType::DATATYPE_TIMESTAMP:
                     static::attribute($attr)->setType(Attribute::TYPE_TIMESTAMP);
@@ -456,16 +460,26 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
      * @param string $recordId
      * @return \GIndie\Platform\Model\Record
      */
-    public static function findBy($attribute, $value)
+    public static function findBy($attribute, $value,$params = ["Limit 1"])
     {
         static::configAttributes();
         $table = static::TABLE;
         $schema = static::SCHEMA;
         $selectors = [static::PRIMARY_KEY, $attribute];
         $connection = Current::Connection();
-        $conditions = ["`{$table}`.`{$attribute}`='{$value}'"];
+        $conditions = [];
+        if(\is_array($attribute)){
+            $idx=0;
+            foreach ($attribute as $attr) {
+                $conditions[] = "`{$table}`.`{$attr}`='{$value[$idx]}'";
+                $idx++;
+            }
+        }else{
+            $conditions = ["`{$table}`.`{$attribute}`='{$value}'"];
+        }
+        
         $_resultSet = $connection->select(static::getAttributeNames(), $schema, $table,
-            $conditions, ["Limit 1"]);
+            $conditions, $params);
         //var_dump($_resultSet);
         if ($_resultSet->num_rows != 0) {
             return static::instance($_resultSet->fetch_assoc());
@@ -892,7 +906,7 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
                         return "";
                         break;
                     default:
-                        return "<a href='" . $this->getValueOf($attributeName) . "' download>Click para descargar</a>";
+                        return "<a href='" . $this->getValueOf($attributeName) . "' download>" . $this->getValueOf($attributeName) . "</a>";
                         break;
                 }
             case Attribute::TYPE_PASSWORD:
@@ -922,7 +936,12 @@ abstract class Record extends MySQL57\Instance\Table implements RecordINT
                 }
 
             case Attribute::TYPE_TIMESTAMP:
+                return $this->getValueOf($attributeName);
                 return \date("Y-m-d H:i:s", $this->getValueOf($attributeName));
+            case Attribute::TYPE_DATETIME:
+                $date = \date("d/m/Y H:i:s", \strtotime($this->getValueOf($attributeName))); 
+//                var_dump($date);
+                return $date;
 //                return \date(\DateTime::COOKIE,
 //                             $this->getValueOf($attributeName));
             case Attribute::TYPE_BOOLEAN:

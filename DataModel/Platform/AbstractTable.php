@@ -9,7 +9,7 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0D.00
+ * @version 0D.10
  * @since 18-11-02
  */
 
@@ -28,7 +28,7 @@ abstract class AbstractTable extends Model\Record
     /**
      * @since 18-11-03
      */
-    const SCHEMA = "u278724529_t1";
+    const SCHEMA = "grupoind_pltfrm";
 
     /**
      * 

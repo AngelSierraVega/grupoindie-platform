@@ -9,7 +9,7 @@
  *
  * @package GIndie\Platform\Model
  *
- * @version 0C.40
+ * @version 0C.50
  * @since 17-01-15
  * @todo Upgrade class
  */
@@ -307,12 +307,15 @@ abstract class Connection
             } else {
                 $attr = "`{$table}`.`" . $attribute . "`";
                 $value = $newRecordData->getValueOf($attribute);
-                if ($value == "NULL") {
-                    $attribute_pairs[] = "$attr=$value";
-                } elseif ($value == "NOW()") {
-                    $attribute_pairs[] = "$attr=$value";
-                } else {
-                    $attribute_pairs[] = "$attr='$value'";
+                switch ($value) {
+                    case "NULL":
+                    case "NOW()":
+                    case "CURRENT_TIMESTAMP()":
+                        $attribute_pairs[] = "$attr=$value";
+                        break;
+                    default:
+                        $attribute_pairs[] = "$attr='$value'";
+                        break;
                 }
             }
         }
@@ -392,13 +395,16 @@ abstract class Connection
                 $key = $newRecordData->getAttribute($attribute)->getName();
                 $key = $attribute;
                 $key = "`{$table}`.`{$key}`";
-                $value = $newRecordData->getValueOf($attribute);
-                if ($value == "NULL") {
-                    $attribute_pairs[$key] = $value;
-                } elseif ($value == "NOW()") {
-                    $attribute_pairs[$key] = $value;
-                } else {
-                    $attribute_pairs[$key] = "'{$value}'";
+                $value = $newRecordData->getValueOf($attribute);//
+                switch ($value) {
+                    case "NULL":
+                    case "NOW()":
+                    case "CURRENT_TIMESTAMP()":
+                        $attribute_pairs[$key] = $value;
+                        break;
+                    default:
+                        $attribute_pairs[$key] = "'{$value}'";
+                        break;
                 }
             }
         }
@@ -418,7 +424,7 @@ abstract class Connection
 //        if (strcmp($table, "orden_pago") == 0) {
 //            var_dump($_strQuery);
 //        }
-        //var_dump($_strQuery);
+//        var_dump($_strQuery);
         $result = $this->query($_strQuery);
 
 //        var_dump($this->insert_id());

@@ -108,6 +108,11 @@ class Attribute //extends ColumnDefinition
      * @since 19-04-13
      */
     const TYPE_COLOR = 14;
+    
+    /**
+     * @since 21-05-29
+     */
+    const TYPE_DATETIME = 15;
 
     /**
      * @version     GIP.00.03

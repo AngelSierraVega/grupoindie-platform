@@ -9,7 +9,7 @@
  *
  * @package GIndie\Platform\View
  * 
- * @version 0D.00
+ * @version 0D.01
  * @since 
  */
 
@@ -39,6 +39,7 @@ class Login extends Bootstrap3\Document
 
     function __construct($logoAplicacion, $slogan, $urlAssets, $logoInstitucion)
     {
+        $logoInstitucion= \GIndie\Platform\INIHandler::getValue("Instance", "logo");
         $assetsFolder = $urlAssets;
         $pathToCSS = $assetsFolder . "css/libs/bootstrap.min.css";
         $pathToTheme = $assetsFolder . "css/libs/bootstrap-flaty.css";

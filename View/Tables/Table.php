@@ -187,6 +187,7 @@ class Table extends \GIndie\ScriptGenerator\Dashboard\Tables\Table
     public function readFromDB(array $selectors, array $conditions = [], array $params = [])
     {
         $this->queryRows = $this->recordInstance->fetchAssoc($selectors, $conditions, $params);
+        
         if (\count($this->queryRows) > 110000) {
             $this->addContent(\GIndie\Platform\View\Alert::warning("No se puede visualizar la tabla completa pues contiene más de 110000 registros: " . \count($this->queryRows) . "."));
             $this->queryRows = \array_slice($this->queryRows, 0, 110000, true);

@@ -9,7 +9,7 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0C.D0
+ * @version 0C.D1
  * @since 18-09-24
  */
 
@@ -33,7 +33,7 @@ class Platform extends MySQL57\Instance\Database
      */
     public static function name()
     {
-        return "u278724529_t1";
+        return "grupoind_pltfrm";
     }
 
     /**
