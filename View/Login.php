@@ -9,7 +9,7 @@
  *
  * @package GIndie\Platform\View
  * 
- * @version 0D.01
+ * @version 0D.10
  * @since 
  */
 
@@ -39,7 +39,6 @@ class Login extends Bootstrap3\Document
 
     function __construct($logoAplicacion, $slogan, $urlAssets, $logoInstitucion)
     {
-        $logoInstitucion= \GIndie\Platform\INIHandler::getValue("Instance", "logo");
         $assetsFolder = $urlAssets;
         $pathToCSS = $assetsFolder . "css/libs/bootstrap.min.css";
         $pathToTheme = $assetsFolder . "css/libs/bootstrap-flaty.css";
@@ -74,7 +73,7 @@ class Login extends Bootstrap3\Document
 
         $img = StylesSemantics::Span();
         $img->setTag("img");
-        $img->setAttribute("src", $logoInstitucion);
+        $img->setAttribute("src", $logoAplicacion);
         $img->setAttribute("width", "120");
         $img->addClass("center-block");
         $divColLogo->addContent($img);
@@ -176,7 +175,7 @@ class Login extends Bootstrap3\Document
 //                           "background-color:#122b40;");
         $img = StylesSemantics::Span();
         $img->setTag("img");
-        $img->setAttribute("src", $logoInstitucion);
+        $img->setAttribute("src", $logoAplicacion);
         $img->setAttribute("width", "150");
         $img->addClass("center-block");
         $img->setAttribute("style", "vertical-align: middle;");

@@ -1,4 +1,21 @@
-21-07-07 a 21-??-??
+19-11-04 a 21-07-07
+
+19-11-06
+- Revisión de modelo de datos para reasignar contraseña única.
+
+20-01-16
+- Revisión de docblock
+
+21-06
+- DataModel\Comun creado
+- Functional TYPE_DATETIME on attribute
+- Functional Record:findBy() with multiple parameters
+- Connection: Handle CURRENT_TIMESTAMP() on create and update
+- DOING: Pdf
+- View: Input handles DATETIME
+
+21-07-07
+- Use of user IP for session authentication
 
 -------------------------------PROJECT---------------------------------|
 \GIndie\Platform

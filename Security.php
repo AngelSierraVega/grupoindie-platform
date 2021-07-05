@@ -9,7 +9,7 @@
  *
  * @package GIndie\Platform
  *
- * @version 0D.00
+ * @version 0D.10
  * @since
  */
 
@@ -21,7 +21,8 @@ use Model\Datos;
  * Abstraction layer for the security functions used in the Platform.
  * @category Helpers
  * @since GIP.00.03
- * @author Angel Sierra Vega <angel.sierra@grupoindie.com>
+ * @edit 21-07-07
+ * - Use of user IP for session authentication
  */
 class Security
 {
@@ -200,34 +201,32 @@ class Security
     }
 
     /**
-     * 
+     * @edit 21-07-07
      * @param string $userKey
      * @return boolean
      */
     public static function startAuthenticatedSession($userKey)
     {
-//        var_dump("startAuthenticatedSession");
         $_SESSION["gip-connection"] = new Model\Database\Connection\SessionHandler();
-        //$session = new Model\Datos\mr_sesion\sesion\Registro($userKey);
-        $session = Model\Datos\mr_sesion\sesion\Registro::findById($userKey);
+        $session = DataModel\Platform\Session::findById($userKey);
         switch (\strcmp($session->getId(), $userKey))
         {
             case 0:
                 $session->setValueOf("php_sess_id", \session_id());
+                $session->setValueOf(DataModel\Platform\Session::CLM_USER_IP, \filter_input(\INPUT_SERVER, "REMOTE_ADDR"));
                 if ($session->run("gip-edit") !== \TRUE) {
                     throw new Platform\ExceptionLogin("Security: startAuthenticatedSession");
                     return \FALSE;
                 }
                 break;
             default:
-                $data = ["pltfrm_cta_fk" => $userKey,
-                    "php_sess_id" => \session_id()];
-                $session = Model\Datos\mr_sesion\sesion\Registro::instance($data);
-                //$session = $session->getAttribute("fk_usuario_cuenta")->setValue($userKey);
-                //$session->getAttribute("php_sess_id")->setValue(\session_id());
-//                var_dump("attempt to create session");
+                $data = [
+                    "pltfrm_cta_fk" => $userKey
+                    ,"php_sess_id" => \session_id()
+                    ,DataModel\Platform\Session::CLM_USER_IP => \filter_input(\INPUT_SERVER, "REMOTE_ADDR")
+                    ];
+                $session = DataModel\Platform\Session::instance($data);
                 if ($session->run("gip-create") !== \TRUE) {
-                    //var_dump("successfull create session");
                     throw new Platform\ExceptionLogin("Security: startAuthenticatedSession");
                     return \FALSE;
                 }
@@ -237,33 +236,19 @@ class Security
         //return static::startAuthenticatedConnection();
     }
 
-    /**
-     * @deprecated since GIP.00.05
-     * @return      boolean
-     */
-    private static function startAuthenticatedConnectionDPR()
-    {
-        if (isset($_SESSION["gip-connection"])) {
-            $_SESSION["gip-connection"]->close();
-        }
-        if (Current::hasRole("AS")) {
-            $_SESSION["gip-connection"] = new Model\Database\Connection\SystemAdministrator();
-        } else {
-            $_SESSION["gip-connection"] = new Model\Database\Connection\UserDefault();
-        }
-        return $_SESSION["gip-connection"] !== \NULL ? \TRUE : \FALSE;
-    }
 
     /**
-     * 
+     * @edit 21-07-07
      * @param string $userKey
      * @return boolean
      */
     public static function verifyUniqueSession($userKey)
     {
+        
         $sessionList = new Model\Datos\mr_sesion\sesion\Lista([
-            ["pltfrm_cta_fk" => $userKey],
-            ["php_sess_id" => \session_id()]
+            ["pltfrm_cta_fk" => $userKey]
+            ,["php_sess_id" => \session_id()]
+            ,[DataModel\Platform\Session::CLM_USER_IP => \filter_input(\INPUT_SERVER, "REMOTE_ADDR")]
         ]);
         return $sessionList->getElementAt($userKey) !== \FALSE ? \TRUE : \FALSE;
     }

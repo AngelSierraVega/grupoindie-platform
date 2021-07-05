@@ -11,7 +11,7 @@ namespace GIndie\Platform;
  *
  * @package GIndie\Platform
  *
- * @version 0C.A7
+ * @version 0C.AA
  * 
  * @edit 18-02-24
  * - Added code from GI-DBH
@@ -68,10 +68,12 @@ class ProjectHandler extends \GIndie\ProjectHandler\AbstractProjectHandler
         $rtnArray[\hexdec("0C.A7")]["threshold"] = "0C.A7";
         
         
-        //Two
-        $rtnArray[\hexdec("0D.00")]["description"] = "Platform for MMR-PRDL";
-        $rtnArray[\hexdec("0D.00")]["code"] = "Two";
-        $rtnArray[\hexdec("0D.00")]["threshold"] = "0D.00";
+        /**
+         * 0C.AA: SEC_UPGRD
+         */
+        $rtnArray[\hexdec("0C.AA")]["description"] = "Security upgrade";
+        $rtnArray[\hexdec("0C.AA")]["code"] = "SEC_UPGRD";
+        $rtnArray[\hexdec("0C.AA")]["threshold"] = "0C.AA";
         
         
 

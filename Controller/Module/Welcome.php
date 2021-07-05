@@ -7,7 +7,7 @@
  * 
  * @package GIndie\Platform\Module
  * 
- * @version 0D.70
+ * @version 0D.80
  * @since 17-06-13
  */
 
@@ -65,7 +65,7 @@ class Welcome extends \GIndie\Platform\Controller\Module
     public function wdgtModuleInfo()
     {
 
-        $imageBRAND = Current::Instance()->logoAplicacion();
+        $imageBRAND = Current::Instance()->urlLogoApp();
         $heading = date("d-m-Y");
         $row = new Div("", ["class" => "row text-center"]);
 

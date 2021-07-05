@@ -9,7 +9,7 @@
  *
  * @package GIndie\Platform\DataModel
  *
- * @version 0D.00
+ * @version 0D.10
  * @since 18-08-27
  */
 
@@ -22,6 +22,8 @@ use GIndie\DBHandler\MySQL57\Instance\DataType;
  * Description of Session
  * @edit 18-11-11
  * - Upgraded column definition
+ * @edit 21-07-07
+ * - Added column for user ip
  */
 class Session extends AbstractTable
 {
@@ -50,14 +52,21 @@ class Session extends AbstractTable
      * @since 18-08-26
      */
     const DISPLAY_KEY = "php_sess_id";
+    
+    /**
+     * @since 21-07-07
+     */
+    const CLM_USER_IP = "user_ip";
 
     /**
      * @since 18-08-26
+     * @edit 21-07-07
      */
     public static function configAttributes()
     {
         static::attribute("pltfrm_cta_fk");
         static::attribute("php_sess_id");
+        static::attribute(static::CLM_USER_IP);
     }
 
     /**
@@ -66,18 +75,12 @@ class Session extends AbstractTable
      */
     protected static function tableDefinition()
     {
-        /**
-         * Column id
-         */
         static::columnDefinition("id", DataType::serial());
-        /**
-         * Column pltfrm_cta_fk
-         */
         static::columnDefinition("pltfrm_cta_fk", static::getPKDataType(User::class));
-        /**
-         * Column php_sess_id
-         */
         static::columnDefinition("php_sess_id", DataType::char(255));
+        static::columnDefinition("php_sess_id")->setNotNull();
+        static::columnDefinition(static::CLM_USER_IP, DataType::char(15));
+//        static::columnDefinition(static::CLM_USER_IP)->setNotNull();
 
         /**
          * Reference Definition

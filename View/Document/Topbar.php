@@ -9,7 +9,7 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0D.10
+ * @version 0D.20
  * @since 17-01-05
  */
 
@@ -115,7 +115,7 @@ class Topbar extends Div
         $img = StylesSemantics::Span();
         $img->setTag("img");
         $img->setAttribute("src",
-                           Current::Instance()->logoAplicacion());
+                           Current::Instance()->urlLogoApp());
         $img->setAttribute("width", "30");
 //        $img->addContent('<a gip-action="setController" gip-action-id="' .
 //                urlencode(\GIndie\Platform\Controller\Module\Welcome::class) .

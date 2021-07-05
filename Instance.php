@@ -9,7 +9,7 @@
  *
  * @package GIndie\Platform
  *
- * @version 0D.78
+ * @version 0D.80
  * @since 17-05-23
  * @todo Upgrade class
  */
@@ -34,7 +34,7 @@ use GIndie\ScriptGenerator\HTML5;
  * - Removed use of deprecated libs
  * - Removed \Straffsa\SistemaIntegralIngresos dependency
  */
-abstract class Instance
+abstract class Instance implements DataDefinition\Instance
 {
 
     /**
@@ -177,10 +177,10 @@ abstract class Instance
      * URL al logotipo de la aplicación
      * @edit 17-12-27
      */
-    public function logoAplicacion()
-    {
-        return \GIndie\Platform\INIHandler::getCategoryValue("Instance", "logo");
-    }
+//    public function logoAplicacion()
+//    {
+//        return \GIndie\Platform\INIHandler::getCategoryValue("Instance", "logo");
+//    }
 
     /**
      * URL al logotipo de la institución
@@ -206,10 +206,12 @@ abstract class Instance
     /**
      * Slogan
      * @edit 17-12-27
+     * @edit 21-07-04
      */
     public function sloganAplicacion()
     {
-        return \GIndie\Platform\INIHandler::getCategoryValue("Config", "slogan");
+        return static::BRAND_NAME;
+//        return \GIndie\Platform\INIHandler::getCategoryValue("Config", "slogan");
     }
 
     /**
@@ -511,7 +513,7 @@ abstract class Instance
         }
         if (\session_status() == \PHP_SESSION_NONE) {
             $instance = new static();
-            return new View\Login($instance->logoAplicacion(), $instance->sloganAplicacion(),
+            return new View\Login($instance->urlLogoApp(), $instance->sloganAplicacion(),
                 $instance->urlAssets(), $instance->logoInstitucion());
         }
         try {
