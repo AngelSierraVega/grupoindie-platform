@@ -9,7 +9,7 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0D.10
+ * @version 0D.20
  * @since 17-02-08
  */
 
@@ -33,7 +33,8 @@ class Footbar extends HTML5\Category\StylesSemantics\Footer
 
     public function __construct($content)
     {
-        parent::__construct([], "footer navbar-fixed-bottom");
+        parent::__construct([], "navbar navbar-default footer navbar-fixed-bottom");
+        $this->setTag("nav");
         $this->_container = parent::addContent(new Footbar\Content());
     }
 

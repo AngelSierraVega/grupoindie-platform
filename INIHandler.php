@@ -9,7 +9,7 @@
  *
  * @package GIndie\Platform
  *
- * @version 0D.00
+ * @version 0D.50
  * @since 17-12-26
  */
 
@@ -27,6 +27,8 @@ namespace GIndie\Platform;
  * @edit 18-01-16
  * @edit 18-01-23
  * - Updated requiredVars()
+ * @edit 23-05-14
+ * - Removed unnecesary requierements for vars
  */
 class INIHandler extends \GIndie\INIHandler
 {
@@ -57,14 +59,15 @@ class INIHandler extends \GIndie\INIHandler
      * @since 17-12-26
      * @return array
      * @edit 18-01-23
+     * @edit 23-05-14
      */
     public static function requiredVars()
     {
         return [
-            "Config" => ["host", "assets_url", "slogan"],
-            "Instance" => ["logo"],
-            "Vendor" => ["logo", "url"],
-            "PHPMailer" => ["SMTPDebug", "Host","Port","Username","Password","FromName"]
+            "Config" => ["host", "assets_url"],
+//            "Instance" => ["logo"],
+            //"Vendor" => ["logo", "url"],
+//            "PHPMailer" => ["SMTPDebug", "Host","Port","Username","Password","FromName"]
         ];
     }
 

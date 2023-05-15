@@ -7,7 +7,7 @@
  * 
  * @package GIndie\Platform\Module
  * 
- * @version 0D.80
+ * @version 0D.90
  * @since 17-06-13
  */
 
@@ -65,7 +65,7 @@ class Welcome extends \GIndie\Platform\Controller\Module
     public function wdgtModuleInfo()
     {
 
-        $imageBRAND = Current::Instance()->urlLogoApp();
+        $imageBRAND = Current::Instance()->urlAppLogo();
         $heading = date("d-m-Y");
         $row = new Div("", ["class" => "row text-center"]);
 
@@ -86,7 +86,7 @@ class Welcome extends \GIndie\Platform\Controller\Module
         $h1 = StylesSemantics::Span();
         $h1->setTag("h1");
         $h1->addContent("<b>" . \GIndie\Platform\INIHandler::getCategoryValue("Instance", "name") . "</b>");
-        $h1->addContent(Current::Instance()->appNombre());
+        $h1->addContent(Current::Instance()->appName());
         $col->addContent($h1);
 
         $h2 = StylesSemantics::Span();
@@ -118,7 +118,7 @@ class Welcome extends \GIndie\Platform\Controller\Module
         $div2->addContent($media);
         $img = StylesSemantics::Span();
         $img->setTag("img");
-        $img->setAttribute("src", Current::Instance()->logoInstitucion());
+        $img->setAttribute("src", Current::Instance()->urlVendorLogo());
         $img->setAttribute("width", "150");
         $media->addContent($img);
 
@@ -128,9 +128,9 @@ class Welcome extends \GIndie\Platform\Controller\Module
         $footer = new Div("", ["class" => "row"]);
 
         $footer1 = new Div("", ["class" => "col-xs-12 text-center"]);
-        $url1 = new Anchor(Current::Instance()->urlInstitucion());
+        $url1 = new Anchor(Current::Instance()->urlVendor());
         $url1->setAttribute("target", "_blank");
-        $url1->setAttribute("href", Current::Instance()->urlInstitucion());
+        $url1->setAttribute("href", Current::Instance()->urlVendor());
         $footer1->addContent($url1);
         $footer->addContent($footer1);
 

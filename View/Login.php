@@ -9,7 +9,7 @@
  *
  * @package GIndie\Platform\View
  * 
- * @version 0D.10
+ * @version 0D.20
  * @since 
  */
 
@@ -37,11 +37,11 @@ use GIndie\Platform\Model\Datos\mr_sesion\usuario_cuenta;
 class Login extends Bootstrap3\Document
 {
 
-    function __construct($logoAplicacion, $slogan, $urlAssets, $logoInstitucion)
+    function __construct($logoAplicacion, $slogan, $urlAssets, $urlVendor)
     {
         $assetsFolder = $urlAssets;
         $pathToCSS = $assetsFolder . "css/libs/bootstrap.min.css";
-        $pathToTheme = $assetsFolder . "css/libs/bootstrap-flaty.css";
+        $pathToTheme = $assetsFolder . "css/libs/bootstrap-theme.css";
 
         $pathToJquery = $assetsFolder . "js/libs/jquery.min.js";
         $pathToJS = $assetsFolder . "js/libs/bootstrap.min.js";
@@ -51,7 +51,7 @@ class Login extends Bootstrap3\Document
         $this->addLink($pathToStyle, "stylesheet");
 
         $this->addScript($assetsFolder . 'js/libs/jquery.form.js', true);
-        $this->addScript($assetsFolder . 'js/libs/jquery.validate.js', true);
+        $this->addScript($assetsFolder . 'js/libs/jqueryValidate/jquery.validate.js', true);
 
         $container = new Div("");
         $container->addClass("container");
@@ -214,7 +214,8 @@ class Login extends Bootstrap3\Document
         $subtext1->addClass("text-center");
         $divsm6->addContent($subtext1);
 
-        $link = \GIndie\Platform\INIHandler::getCategoryValue("Vendor", "url");
+//        $link = \GIndie\Platform\INIHandler::getCategoryValue("Vendor", "url");
+        $link = $urlVendor;
         $subtext2 = Basic::Header(6, Links::hyperlink($link, $link, "_blank"));
         $subtext2->addClass("text-center");
         $divsm6->addContent($subtext2);

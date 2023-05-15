@@ -1,4 +1,7 @@
-23-05-15 a 23-??-??
+21-07-07 a 23-05-15
+- Removed most Config.ini requirements
+- Updated Instance structure for consistency
+- Updated libs for front-end
 
 -------------------------------PROJECT---------------------------------|
 \GIndie\Platform

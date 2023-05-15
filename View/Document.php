@@ -9,7 +9,7 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0D.30
+ * @version 0D.50
  * @since 17-01-05
  */
 
@@ -70,21 +70,25 @@ class Document extends Bootstrap3\Document
         $assetsFolder = \GIndie\Platform\Current::Instance()->urlAssets();
         $cnt = \GIndie\Platform\Current::Module();
         $pathToCSS = $assetsFolder . "css/libs/bootstrap.min.css";
-        $pathToTheme = $assetsFolder . "css/libs/bootstrap-pan.css";
+//        $pathToTheme = $assetsFolder . "css/libs/bootstrap-panDPR.css";
+        $pathToTheme = $assetsFolder . "css/libs/bootstrap-theme.css";
+//        $pathToTheme = $assetsFolder . "css/libs/bootstrap_theme_flatly.css";
+//        $pathToTheme = $assetsFolder . "css/libs/bootstrap-flatyDPR.css";
         $pathToJquery = $assetsFolder . "js/libs/jquery.min.js";
         $pathToJS = $assetsFolder . "js/libs/bootstrap.min.js";
-        parent::__construct(\GIndie\Platform\Current::Instance()->appNombre(), "es", $pathToCSS, $pathToTheme, $pathToJquery, $pathToJS);
-
+        
+        parent::__construct(\GIndie\Platform\Current::Instance()->appName(), "es", $pathToCSS, $pathToTheme, $pathToJquery, $pathToJS);
         $this->addLink($assetsFolder . 'css/gip-stylesheet.css?version=3', "stylesheet");
+        
 //        $this->addLink($assetsFolder . '/js/libs/font-awesome/css/font-awesome.min.css',
 //                "stylesheet");
         $this->addLink($assetsFolder . 'css/libs/bootstrap-select.min.css', "stylesheet");
-        $this->addLink($assetsFolder . 'css/libs/dataTables.bootstrap.min.css', "stylesheet");
-        $this->addLink($assetsFolder . 'css/libs/select.dataTables.min.css', "stylesheet");
-        $this->addLink($assetsFolder . 'css/libs/datatables.net-buttons/buttons.bootstrap.min.css', "stylesheet");
+        $this->addLink($assetsFolder . 'css/libs/dataTables/dataTables.bootstrap.min.css', "stylesheet");
+        $this->addLink($assetsFolder . 'css/libs/dataTables/select.dataTables.min.css', "stylesheet");
+        $this->addLink($assetsFolder . 'css/libs/dataTables/datatables.net-buttons/buttons.bootstrap.min.css', "stylesheet");
 
         $this->addLink($assetsFolder . 'css/libs/bootstrap-datetimepicker.min.css', "stylesheet");
-        $this->addLink($assetsFolder . 'css/libs/bootstrap-treeview.css', "stylesheet");
+//        $this->addLink($assetsFolder . 'css/libs/bootstrap-treeview.css', "stylesheet");
         $this->addLink($assetsFolder . 'css/libs/bootstrap-switch.min.css', "stylesheet");
         $this->addLink($assetsFolder . 'js/libs/jstree-themes/proton/style.min.css', "stylesheet");
 
@@ -133,8 +137,8 @@ class Document extends Bootstrap3\Document
     private function addScripts($assetsFolder)
     {
         $this->addScript($assetsFolder . 'js/libs/jquery.form.js', true);
-        $this->addScript($assetsFolder . 'js/libs/jquery.validate.js?version=4', true);
-        $this->addScript($assetsFolder . 'js/libs/additional-methods.js?version=4', true);
+        $this->addScript($assetsFolder . 'js/libs/jqueryValidate/jquery.validate.js?version=4', true);
+        $this->addScript($assetsFolder . 'js/libs/jqueryValidate/additional-methods.js?version=4', true);
         $this->addScript($assetsFolder . 'js/libs/jquery.blockUI.js', true);
         $this->addScript($assetsFolder . 'js/libs/jquery.form.js', true); //otra vez?
         $this->addScript($assetsFolder . 'js/libs/bootstrap-select.min.js', true);
@@ -147,21 +151,20 @@ class Document extends Bootstrap3\Document
         $this->addScript($assetsFolder . 'js/libs/bootstrap-datetimepicker.js', true);
         $this->addScript($assetsFolder . 'js/libs/jstree.min.js', true);
 
-        $treeview = $this->addScript($assetsFolder . 'js/libs/bootstrap-treeview.js', true);
-        $treeview->setAttribute('async');
+//        $treeview = $this->addScript($assetsFolder . 'js/libs/bootstrap-treeview.js', true);
+//        $treeview->setAttribute('async');
 
         $treeview = $this->addScript($assetsFolder . 'js/libs/bootstrap-switch.min.js', true);
         $treeview->setAttribute('async');
 
         // Librerias de datatables
-        $this->addScript($assetsFolder . 'js/libs/jquery.dataTables.min.js', true);
-        $this->addScript($assetsFolder . 'js/libs/dataTables.select.min.js', true);
-        $this->addScript($assetsFolder . 'js/libs/dataTables.bootstrap.min.js', true);
-
-        $this->addScript($assetsFolder . 'js/libs/datatables.net-buttons/dataTables.buttons.min.js', true);
-
-        $this->addScript($assetsFolder . 'js/libs/datatables.net-buttons/buttons.html5.min.js', true);
-        $this->addScript($assetsFolder . 'js/libs/datatables.net-buttons/buttons.flash.min.js', true);
+        $this->addScript($assetsFolder . 'js/libs/dataTables/jquery.dataTables.min.js', true);
+        $this->addScript($assetsFolder . 'js/libs/dataTables/dataTables.select.min.js', true);
+        $this->addScript($assetsFolder . 'js/libs/dataTables/dataTables.bootstrap.min.js', true);
+        $this->addScript($assetsFolder . 'js/libs/dataTables/datatables.net-buttons/dataTables.buttons.min.js', true);
+        $this->addScript($assetsFolder . 'js/libs/dataTables/datatables.net-buttons/buttons.html5.min.js', true);
+        $this->addScript($assetsFolder . 'js/libs/dataTables/datatables.net-buttons/buttons.flash.min.js', true);
+        
         $this->addScript($assetsFolder . 'js/libs/jszip/jszip.min.js', true);
         $this->addScript($assetsFolder . 'js/libs/pdfmake/pdfmake.min.js', true);
         $this->addScript($assetsFolder . 'js/libs/pdfmake/vfs_fonts.js', true);

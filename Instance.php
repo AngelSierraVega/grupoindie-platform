@@ -9,7 +9,7 @@
  *
  * @package GIndie\Platform
  *
- * @version 0D.80
+ * @version 0D.90
  * @since 17-05-23
  * @todo Upgrade class
  */
@@ -33,32 +33,12 @@ use GIndie\ScriptGenerator\HTML5;
  * @edit 18-11-05
  * - Removed use of deprecated libs
  * - Removed \Straffsa\SistemaIntegralIngresos dependency
+ * @edit 23-05-13
+ * - Removed some Config.ini dependencies
+ * - Removed deprecated methods and variables
  */
 abstract class Instance implements DataDefinition\Instance
 {
-
-    /**
-     * 
-     */
-    const CONFIG_CLASS = \NULL;
-
-    /**
-     * Nombre de la aplicación mas el nombre de la instancia.
-     * @edit 18-01-14
-     */
-    public function appNombre()
-    {
-        return static::BRAND_NAME;
-    }
-
-    /**
-     * Ruta real a las facturas
-     * @edit 17-12-27
-     */
-    public function urlInstitucion()
-    {
-        return \GIndie\Platform\INIHandler::getCategoryValue("Vendor", "url");
-    }
 
     /**
      * 
@@ -71,72 +51,15 @@ abstract class Instance implements DataDefinition\Instance
     }
 
     /**
-     * Host de las facturas (ruta real)
-     * @deprecated since 17-12-26
-     */
-    public function hostFacturas()
-    {
-        \trigger_error("hostFacturas is to be removed", \E_USER_DEPRECATED);
-        $configClass = static::CONFIG_CLASS;
-        return $configClass::hostFacturas();
-    }
-
-    /**
-     * Host de los respaldos (ruta real)
-     * @deprecated since 17-12-26
-     */
-    public function hostRespaldos()
-    {
-        \trigger_error("hostRespaldos is to be removed", \E_USER_DEPRECATED);
-        $configClass = static::CONFIG_CLASS;
-        return $configClass::hostRespaldos();
-    }
-
-    /**
-     * Ruta a la carpeta que almacena los assets de la aplicación
+     * {@inheritdoc}
+     * 
      * @edit 17-12-27
      */
-    public function urlAssets()
+    public static function urlAssets()
     {
         return \GIndie\Platform\INIHandler::getCategoryValue("Config", "assets_url");
     }
 
-    /**
-     * URL a la carpeta que almacena las facturas
-     * @deprecated since 17-12-26
-     */
-    public function urlFacturas()
-    {
-        \trigger_error("urlFacturas is to be removed", \E_USER_DEPRECATED);
-        $configClass = static::CONFIG_CLASS;
-        return $configClass::urlFacturas();
-    }
-
-    /**
-     * URL a la carpeta que almacena los recibos
-     * @edit 18-01-14
-     * - Not deprecated 
-     */
-    public function urlRecibos()
-    {
-        return $this->rutaRecibos();
-//        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
-//        $configClass = static::CONFIG_CLASS;
-//        return $configClass::urlRecibos();
-    }
-
-    /**
-     * Ruta real a las facturas
-     * @edit 18-01-14
-     * - Not deprecated 
-     */
-    public function rutaFacturas()
-    {
-        return $this->rutaRecibos();
-//        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
-//        $configClass = static::CONFIG_CLASS;
-//        return $configClass::rutaFacturas();
-    }
 
     /**
      * Ruta real a los respaldos
@@ -144,6 +67,7 @@ abstract class Instance implements DataDefinition\Instance
      * @edit 18-03-23
      * - Not deprecated 
      * @edit 18-03-23
+     * @deprecated since 23-05-14
      */
     public function rutaRespaldos()
     {
@@ -158,22 +82,6 @@ abstract class Instance implements DataDefinition\Instance
     }
 
     /**
-     * Ruta real a los recibos
-     * @NOTdeprecated since 18-01-14
-     * @todo 
-     * - Verificar ruta automática
-     */
-    public function rutaRecibos()
-    {
-        $ini = \GIndie\Platform\INIHandler::getCategoryValue("Path", "generatedFiles");
-        if ($ini) {
-            return $ini;
-        } else {
-            return \dirname($_SERVER['SCRIPT_FILENAME']) . "/private/generado/";
-        }
-    }
-
-    /**
      * URL al logotipo de la aplicación
      * @edit 17-12-27
      */
@@ -181,127 +89,31 @@ abstract class Instance implements DataDefinition\Instance
 //    {
 //        return \GIndie\Platform\INIHandler::getCategoryValue("Instance", "logo");
 //    }
-
+    
     /**
-     * URL al logotipo de la institución
-     * @edit 17-12-27
+     * {@inheritdoc}
+     * @since 23-05-12
      */
-    public function logoInstitucion()
-    {
-        return \GIndie\Platform\INIHandler::getCategoryValue("Vendor", "logo");
+    public static function vendorMessage(){
+        return "Éste sistema ha sido desarrollado utilizando la Plataforma de Grupo INDIE.";
+    }
+    
+    /**
+     * {@inheritdoc}
+     * @since 23-05-12
+     */
+    public static function urlVendor(){
+        return "https://grupoindie.com";
+    }
+    
+    /**
+     * {@inheritdoc}
+     * @since 23-05-12
+     */
+    public static function urlVendorLogo(){
+        return static::urlAssets(). "img\\LogoIndie.png";
     }
 
-    /**
-     * URL al logotipo de las facturas
-     * @deprecated since 17-12-26
-     */
-    public function logoFacturas()
-    {
-        throw new \Exception("Deprecated. Use INIHandler instead");
-        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
-        $configClass = static::CONFIG_CLASS;
-        return $configClass::logoFacturas();
-    }
-
-    /**
-     * Slogan
-     * @edit 17-12-27
-     * @edit 21-07-04
-     */
-    public function sloganAplicacion()
-    {
-        return static::BRAND_NAME;
-//        return \GIndie\Platform\INIHandler::getCategoryValue("Config", "slogan");
-    }
-
-    /**
-     * Define el nombre de la instancia actual
-     * @since GIP.00.01
-     */
-    const NAME = \NULL;
-
-    /**
-     * Obtiene el <b>slogan</b> declarado para la <b>Instancia</b> actual.
-     * @author Izmir Sanchez Juarez <izmirreffi@gmail.com>
-     * @since 17-12-26
-     * @edit 17-06-17 <angel.sierra@grupoindie.com>
-     *      - Se redeclaró la función desde GIndie\Platform.
-     *      - Se redeclaró el método de estático a dinámico.
-     *      - La constante es accesada desde el archivo de configuración instanciado
-     */
-    public function getSloganDPR()
-    {
-        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
-        $configClass = static::CONFIG_CLASS;
-        return $configClass::getSlogan();
-    }
-
-    /**
-     * Obtiene la <b>ruta del logo</b> declarada para la <b>Instancia</b> actual.
-     * @author Izmir Sanchez Juarez <izmirreffi@gmail.com>
-     * @since GIndie\Platform::17-12-26
-     * @edit 2017-06-17 <angel.sierra@grupoindie.com>
-     *      - Se redeclaró la función desde GIndie\Platform.
-     *      - Se redeclaró el método de estático a dinámico.
-     *      - La constante es accesada desde el archivo de configuración instanciado
-     */
-    public function getImageBrandDPR()
-    {
-        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
-        $configClass = static::CONFIG_CLASS;
-        return $configClass::getPathToBrand();
-    }
-
-    /**
-     * Obtiene la <b>ruta del proyecto</b>.
-     */
-    public static function getProjectPathDPR()
-    {
-        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
-        $configClass = static::CONFIG_CLASS;
-        $assetsFolder = $configClass::HOST . $configClass::PATH_TO_PROJECT;
-        return $assetsFolder;
-    }
-
-    /**
-     * Ruta a la carpeta que almacena las facturas
-     */
-    public static function hostDPR()
-    {
-        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
-        $configClass = static::CONFIG_CLASS;
-        return $configClass::HOST;
-    }
-
-    /**
-     * Ruta a la carpeta que almacena las facturas
-     */
-    public static function pathToFacturasDPR()
-    {
-        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
-        $configClass = static::CONFIG_CLASS;
-        return $configClass::pathToFacturas();
-    }
-
-    /**
-     * Ruta a la carpeta que almacena los recibos
-     */
-    public static function pathToRecibosDPR()
-    {
-        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
-        $configClass = static::CONFIG_CLASS;
-        return $configClass::pathToRecibos();
-    }
-
-    /**
-     */
-    public static function getAssetsPathDPR()
-    {
-        \trigger_error("Use INIHandler insted", \E_USER_DEPRECATED);
-        $configClass = static::CONFIG_CLASS;
-        return $configClass::PATH_TO_ASSETS;
-        //return $assetsFolder;
-    }
 
     /**
      * @todo Definir links desde el archivo global de configuración
@@ -321,9 +133,6 @@ abstract class Instance implements DataDefinition\Instance
      */
     final private function __construct()
     {
-        static::BRAND_NAME !== \NULL ?: trigger_error("Constant BRAND_NAME must be defined inside class definition of: " . get_called_class(),
-                    \E_USER_ERROR);
-        //static::CONFIG_CLASS !== \NULL ?: trigger_error("Constant CONFIG_CLASS must be defined inside class definition of: " . get_called_class(), \E_USER_ERROR);
         if (Current::Instance() !== \NULL) {
             static::config();
         }
@@ -512,9 +321,8 @@ abstract class Instance implements DataDefinition\Instance
             }
         }
         if (\session_status() == \PHP_SESSION_NONE) {
-            $instance = new static();
-            return new View\Login($instance->urlLogoApp(), $instance->sloganAplicacion(),
-                $instance->urlAssets(), $instance->logoInstitucion());
+            return new View\Login(static::urlAppLogo(), static::appName() ,
+                static::urlAssets(), static::urlVendor());
         }
         try {
             switch ($_SERVER["REQUEST_METHOD"])

@@ -9,7 +9,7 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0D.10
+ * @version 0D.20
  * @since 
  */
 
@@ -55,7 +55,7 @@ class Content extends Div
         $div2->addContent($media);
         $img = StylesSemantics::Span();
         $img->setTag("img");
-        $img->setAttribute("src", Current::Instance()->logoInstitucion());
+        $img->setAttribute("src", Current::Instance()->urlVendorLogo());
         $img->setAttribute("width", "45");
         $media->addContent($img);
 

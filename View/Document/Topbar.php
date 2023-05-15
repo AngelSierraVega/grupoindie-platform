@@ -9,7 +9,7 @@
  *
  * @package GIndie\Platform\View
  *
- * @version 0D.20
+ * @version 0D.30
  * @since 17-01-05
  */
 
@@ -114,8 +114,7 @@ class Topbar extends Div
         
         $img = StylesSemantics::Span();
         $img->setTag("img");
-        $img->setAttribute("src",
-                           Current::Instance()->urlLogoApp());
+        $img->setAttribute("src",Current::Instance()->urlAppLogo());
         $img->setAttribute("width", "30");
 //        $img->addContent('<a gip-action="setController" gip-action-id="' .
 //                urlencode(\GIndie\Platform\Controller\Module\Welcome::class) .
@@ -127,7 +126,7 @@ class Topbar extends Div
         if ($brand == \NULL) {
             $brand = "ERROR";
         } else {
-            $brand = $brand::BRAND_NAME;
+            $brand = \GIndie\Platform\Current::Instance()->appName();
         }
         $this->_brand = new Bootstrap3\Component\Dropdown($brand, []);
         $this->_brand->addClass("navbar-brand");

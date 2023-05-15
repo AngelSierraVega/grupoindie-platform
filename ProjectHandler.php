@@ -11,7 +11,7 @@ namespace GIndie\Platform;
  *
  * @package GIndie\Platform
  *
- * @version 0C.AA
+ * @version 0C.AD
  * 
  * @edit 18-02-24
  * - Added code from GI-DBH
@@ -74,6 +74,13 @@ class ProjectHandler extends \GIndie\ProjectHandler\AbstractProjectHandler
         $rtnArray[\hexdec("0C.AA")]["description"] = "Security upgrade";
         $rtnArray[\hexdec("0C.AA")]["code"] = "SEC_UPGRD";
         $rtnArray[\hexdec("0C.AA")]["threshold"] = "0C.AA";
+        
+        /**
+         * 0C.AD: FRT_REV
+         */
+        $rtnArray[\hexdec("0C.AD")]["description"] = "Front-end revision";
+        $rtnArray[\hexdec("0C.AD")]["code"] = "FRT_REV";
+        $rtnArray[\hexdec("0C.AD")]["threshold"] = "0C.AD";
         
         
 
